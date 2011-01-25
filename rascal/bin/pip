@@ -1,0 +1,9 @@
+#!/home/root/rascal/bin/python
+# EASY-INSTALL-ENTRY-SCRIPT: 'pip==0.8.2','console_scripts','pip'
+__requires__ = 'pip==0.8.2'
+import sys
+from pkg_resources import load_entry_point
+
+sys.exit(
+   load_entry_point('pip==0.8.2', 'console_scripts', 'pip')()
+)

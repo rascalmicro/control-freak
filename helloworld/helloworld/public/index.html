@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="description" content="Real good little computers" />
+    <title>Rascal Micro</title>
+    <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Droid+Sans|Molengo">
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <link rel="stylesheet" href="http://code.jquery.com/mobile/1.0a2/jquery.mobile-1.0a2.min.css" />
+    <script src="http://code.jquery.com/jquery-1.4.4.min.js"></script>
+    <script src="http://code.jquery.com/mobile/1.0a2/jquery.mobile-1.0a2.min.js"></script>
+    <script type="text/javascript" src="/test.js"></script>
+</head>
+<body>
+    <div data-role="page">
+        <div data-role="header">
+            <h1>Rascal demo</h1>
+        </div>
+        <div data-role="content"> 
+            <form id="relay-form">
+                <div data-role="fieldcontain">
+                    <label for="relay-toggle">Toggle relay</label>
+                    <select name="relay-toggle" id="relay-toggle" data-role="slider">
+                        <option value="off">Off</option>
+                        <option value="on">On</option>
+                    </select>
+                </div>                
+                <p>Acknowledge the victory of your robot overlords.</p>
+            </form>                
+        </div>
+    </div>
+</body>
+</html>

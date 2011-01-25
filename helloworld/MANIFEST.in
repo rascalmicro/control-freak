@@ -1,0 +1,3 @@
+include helloworld/config/deployment.ini_tmpl
+recursive-include helloworld/public *
+recursive-include helloworld/templates *

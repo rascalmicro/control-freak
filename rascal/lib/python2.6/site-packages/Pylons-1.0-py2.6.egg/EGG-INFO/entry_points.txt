@@ -1,0 +1,14 @@
+
+    [paste.paster_command]
+    controller = pylons.commands:ControllerCommand
+    restcontroller = pylons.commands:RestControllerCommand
+    routes = pylons.commands:RoutesCommand
+    shell = pylons.commands:ShellCommand
+
+    [paste.paster_create_template]
+    pylons = pylons.util:PylonsTemplate
+    pylons_minimal = pylons.util:MinimalPylonsTemplate
+
+    [nose.plugins]
+    pylons = pylons.test:PylonsPlugin
+    
