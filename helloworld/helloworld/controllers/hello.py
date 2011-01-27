@@ -13,6 +13,7 @@ class HelloController(BaseController):
     def index(self):
         c.sourcefile = "index.mako"
         c.fileurl = "/hello/index"
+        c.pin = rascal.read_pin(66)
         return render('/index.mako')
 
     def editor(self):
@@ -23,7 +24,7 @@ class HelloController(BaseController):
     def form(self):
         return render('/form.mako')
 
-    def email(self):
+    def toggle(self):
         if(request.params['target_state'] == '1'):
             rascal.set_pin_high(66)
             rascal.set_pin_high(71)
@@ -35,7 +36,6 @@ class HelloController(BaseController):
         else:
             result = 'target_state is screwed up'
         return result 
-        #return 'Your email is: %s' % request.params['email']
 
     def save(self):
         path = '/home/root/helloworld/helloworld/templates/'
