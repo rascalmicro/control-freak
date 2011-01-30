@@ -1,7 +1,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <script src="/codemirror/js/codemirror.js" type="text/javascript"></script>
-    <title>CodeMirror: HTML mixed-mode demonstration</title>
+    <title>Rascal demo</title>
     <link rel="stylesheet" type="text/css" href="/codemirror/css/docs.css"/>
     <link rel="stylesheet" type="text/css" href="/style.css">
   </head>
