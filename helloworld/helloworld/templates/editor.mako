@@ -31,7 +31,11 @@ Test of the Rascal web-based code editor using <a href="http://codemirror.net">C
     height: "600px",
     parserfile: ["parsexml.js", "parsecss.js", "tokenizejavascript.js", "parsejavascript.js", "parsehtmlmixed.js"],
     stylesheet: ["/codemirror/css/xmlcolors.css", "/codemirror/css/jscolors.css", "/codemirror/css/csscolors.css"],
-    path: "/codemirror/js/"
+    path: "/codemirror/js/",
+    tabMode: "spaces",
+    indentUnit: "4",
+    enterMode: "keep",
+    electricChars: false
   });
 </script>
   </body>

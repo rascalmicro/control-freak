@@ -34,7 +34,7 @@ class HelloController(BaseController):
             rascal.set_pin_low(71)
             result = 'Pins set low'
         else:
-            result = 'target_state is screwed up'
+            result = 'Target_state is screwed up'
         return result 
 
     def save(self):
@@ -44,4 +44,8 @@ class HelloController(BaseController):
         f = open(path + str(c.sourcefile), 'w')
         f.write(request.params['text'])
         f.close()
-        return render('/editor.mako') 
+        return render('/editor.mako')
+
+    def write_serial(self):
+        rascal.send_serial(request.params['serial_text'])
+        return 'Text sent to serial port' 

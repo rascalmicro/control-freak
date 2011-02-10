@@ -1,4 +1,4 @@
-import subprocess
+import serial, subprocess
 
 def set_pin_high(pin):
     command = 'echo 1 > /sys/class/gpio/gpio' + str(pin) + '/value'
@@ -13,3 +13,8 @@ def read_pin(pin):
     state = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE)
     return state.communicate()[0].strip() # The [0] selects stdout
                                           # ([1] would access stderr)
+
+def send_serial(text):
+    ser = serial.Serial('/dev/ttyS1', 19200, timeout=1)
+    ser.write(str(text[0:80]))
+    ser.close()
