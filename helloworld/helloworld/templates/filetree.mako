@@ -12,29 +12,31 @@
     <script language="javascript" type="text/javascript"> 
     </script>
     <p>
-    Test of the filetree
-    </p>
-    <div id="filetree"></div>
-
-    <p>
     Test of the Rascal web-based code editor using <a href="http://codemirror.net">CodeMirror</a>.
     </p>
 
-    <form method="POST" action="/hello/save">
-        <input type="submit" value="Save">
-        <div style="border: 1px solid black; padding: 3px;">
-    <%
-            text_to_edit = 'No file selected'
-            if(hasattr(c, 'sourcefile')): 
-                path = '/home/root/helloworld/helloworld/templates/'
-                f = open(path + c.sourcefile, 'r')
-                text_to_edit = f.read()
-                f.close()
-    %>
-            <textarea id="code" cols="120" rows="30" name="text">${text_to_edit}</textarea>
-        </div>
-    </form>
-
+    <div id="filetree" style="float: left"></div>
+    <div id="editor" style="margin-left: 350px">
+        <form method="POST" action="/hello/save">
+            <input type="submit" value="Save">
+            <div style="border: 1px solid black; padding: 3px;">
+        <%
+                text_to_edit = 'No file selected'
+                if(hasattr(c, 'sourcefile')):
+                    path = '/home/root/helloworld/helloworld/templates/'
+                    f = open(path + c.sourcefile, 'r')
+                    text_to_edit = f.read()
+                    f.close()
+                else:
+                    c.sourcefile = 'no-file-selected'
+                    c.fileurl = 'no-file-url-yet'
+        %>
+                <textarea id="code" cols="120" rows="30" name="text">${text_to_edit}</textarea>
+            </div>
+            <input type="hidden" name="fileurl" value="${c.fileurl}">
+            <input type="hidden" name="sourcefile" value="${c.sourcefile}">
+        </form>
+    </div>
     <script type="text/javascript">
     var editor = CodeMirror.fromTextArea('code', {
         height: "600px",
@@ -50,12 +52,14 @@
     function openFile(path) {
         $.get(path, function(result) {
             editor.setCode(result);
+            $('#fileurl').val(path);
+            $('#sourcefile').val(path);
         });
     };
 
     $(document).ready( function() {
         $('#filetree').fileTree({ root: '/home/root/helloworld/helloworld/public', script: '/hello/get_dirlist' }, function(path) { 
-            openFile(path);
+            openFile(path.split('/home/root/helloworld/helloworld/public')[1]);
         });
     });
     </script>
