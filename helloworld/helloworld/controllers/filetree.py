@@ -22,4 +22,4 @@ def dirlist(request):
    except Exception,e:
        r.append('Could not load directory: %s' % str(e))
    r.append('</ul>')
-   return HttpResponse(''.join(r))
+   return ''.join(r)
