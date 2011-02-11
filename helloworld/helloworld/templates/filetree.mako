@@ -23,7 +23,7 @@
         <%
                 text_to_edit = 'No file selected'
                 if(hasattr(c, 'sourcefile')):
-                    path = '/home/root/helloworld/helloworld/templates/'
+                    path = '/home/root/helloworld/helloworld/public'
                     f = open(path + c.sourcefile, 'r')
                     text_to_edit = f.read()
                     f.close()
@@ -33,8 +33,8 @@
         %>
                 <textarea id="code" cols="120" rows="30" name="text">${text_to_edit}</textarea>
             </div>
-            <input type="hidden" name="fileurl" value="${c.fileurl}">
-            <input type="hidden" name="sourcefile" value="${c.sourcefile}">
+            <input id="fileurl" type="hidden" name="fileurl" value="${c.fileurl}">
+            <input id="sourcefile" type="hidden" name="sourcefile" value="${c.sourcefile}">
         </form>
     </div>
     <script type="text/javascript">

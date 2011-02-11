@@ -32,13 +32,13 @@ class HelloController(BaseController):
         return render('/index.mako')
 
     def save(self):
-        path = '/home/root/helloworld/helloworld/templates/'
+        path = '/home/root/helloworld/helloworld/public/'
         c.fileurl = request.params['fileurl']
         c.sourcefile = request.params['sourcefile']
         f = open(path + str(c.sourcefile), 'w')
         f.write(request.params['text'])
         f.close()
-        return render('/editor.mako')
+        return render('/filetree.mako')
 
     def toggle(self):
         if(request.params['target_state'] == '1'):
