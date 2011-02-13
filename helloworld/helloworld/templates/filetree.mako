@@ -49,9 +49,23 @@
         electricChars: false
     });
 
+    function pickParser(ext) {
+        switch(ext.toLowerCase()) {
+            case "css":
+                return "CSSParser";
+            case "js":
+                return "JSParser";
+            default:
+                return "HTMLMixedParser";
+        }    
+    }
+
     function openFile(path) {
         $.get(path, function(result) {
             editor.setCode(result);
+            a = path.split(".");
+            ext = a[a.length - 1];
+            editor.setParser(pickParser(ext));
             $('#fileurl').val(path);
             $('#sourcefile').val(path);
         });
