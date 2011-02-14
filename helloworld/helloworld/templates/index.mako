@@ -53,13 +53,27 @@
         </form>
     </div>
     <script language="javascript" type="text/javascript">
-    $.jqplot("chart1",[[[1, 2],[3,5.12],[5,13.1],[7,33.6],[9,85.9],[11,73],[9,65],[8.5,90]]], {
+    line0 = ${c.chan0}
+    line1 = ${c.chan1}
+    line2 = ${c.chan2}
+    line3 = ${c.chan3}
+    $.jqplot("chart1", [line0, line1, line2, line3], {
+        legend: {show:true},
+        title: 'Rascal voltage readings',
+        series: [
+            {label: 'Channel 0', lineWidth:1, showMarker:false},
+            {label: 'Channel 1', lineWidth:1, showMarker:false},
+            {label: 'Channel 2', lineWidth:1, showMarker:false},
+            {label: 'Channel 3', lineWidth:1, showMarker:false}
+        ],
         axes: {
             xaxis: {
                 label: 'time' },
             yaxis: {
                 label: 'sensor' } 
-        }
+        },
+        seriesColors: [ "#4bb2c5", "#cd2820", "#EAA228", "#579575", "#839557", "#958c12",
+                "#953579", "#4b5de4", "#d8b83f", "#ff5800", "#0085cc"]
     });
     </script>
 </body>

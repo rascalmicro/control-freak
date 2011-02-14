@@ -29,6 +29,7 @@ class HelloController(BaseController):
         c.sourcefile = "index.mako"
         c.fileurl = "/hello/index"
         c.pin = rascal.read_pin(66)
+        (c.chan0, c.chan1, c.chan2, c.chan3) = rascal.summarize_analog_data() 
         return render('/index.mako')
 
     def save(self):
