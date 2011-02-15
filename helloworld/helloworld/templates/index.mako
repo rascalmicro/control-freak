@@ -58,7 +58,9 @@
     line2 = ${c.chan2}
     line3 = ${c.chan3}
     $.jqplot("chart1", [line0, line1, line2, line3], {
-        legend: {show:true},
+        legend: {
+            show:true,
+            location: 'nw' },
         title: 'Rascal voltage readings',
         series: [
             {label: 'Channel 0', lineWidth:1, showMarker:false},
@@ -70,7 +72,9 @@
             xaxis: {
                 label: 'time' },
             yaxis: {
-                label: 'sensor' } 
+                label: 'voltage',
+                min: 0,
+                max: 3.3 } 
         },
         seriesColors: [ "#4bb2c5", "#cd2820", "#EAA228", "#579575", "#839557", "#958c12",
                 "#953579", "#4b5de4", "#d8b83f", "#ff5800", "#0085cc"]
