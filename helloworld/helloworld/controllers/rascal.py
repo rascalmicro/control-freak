@@ -28,11 +28,15 @@ def set_pin_low(pin):
     subprocess.Popen(command, shell=True)
 
 def summarize_analog_data():
-    # min_bytes = 10
+    import time
+
+# TODO: Figure out how the byte rounding works below to conserve RAM
     f = open('/home/root/ana.log', 'r')
-    data = f.readlines()[-100:-1]
+    f.seek(-10000, 2) # seek 10000 bytes before the end of the file
+    data = f.readlines(100000)[-100:-1] # try to read 100000 bytes
     f.close()
-    times = [line.strip().split(',')[0] for line in data]
+    cur_time = time.time()
+    times = [str(float(line.strip().split(',')[0]) - cur_time) for line in data]
     r1 = [line.strip().split(',')[1] for line in data]
     r2 = [line.strip().split(',')[2] for line in data]
     r3 = [line.strip().split(',')[3] for line in data]
