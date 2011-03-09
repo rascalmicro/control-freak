@@ -31,7 +31,10 @@ def summarize_analog_data():
     import time
 
 # TODO: Figure out how the byte rounding works below to conserve RAM
-    f = open('/home/root/ana.log', 'r')
+    try:
+        f = open('/home/root/ana.log', 'r')
+    except:
+        return [[0],[0],[0],[0]]
     f.seek(-10000, 2) # seek 10000 bytes before the end of the file
     data = f.readlines(100000)[-100:-1] # try to read 100000 bytes
     f.close()
