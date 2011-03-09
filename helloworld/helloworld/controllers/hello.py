@@ -10,20 +10,38 @@ log = logging.getLogger(__name__)
 
 class HelloController(BaseController):
 
-    def index(self):
-        c.sourcefile = "index.mako"
-        c.fileurl = "/hello/index"
-        return render('/index.mako')
-
     def editor(self):
         c.fileurl = request.params['fileurl']
         c.sourcefile = request.params['sourcefile']
         return render('/editor.mako')
 
+    def filetree(self):
+        return render('/filetree.mako')
+
     def form(self):
         return render('/form.mako')
 
-    def email(self):
+    def get_dirlist(self):
+        import filetree
+        return filetree.dirlist(request)
+
+    def index(self):
+        c.sourcefile = "index.mako"
+        c.fileurl = "/hello/index"
+        c.pin = rascal.read_pin(66)
+        (c.chan0, c.chan1, c.chan2, c.chan3) = rascal.summarize_analog_data() 
+        return render('/index.mako')
+
+    def save(self):
+        path = '/home/root/helloworld/helloworld/public/'
+        c.fileurl = request.params['fileurl']
+        c.sourcefile = request.params['sourcefile']
+        f = open(path + str(c.sourcefile), 'w')
+        f.write(request.params['text'])
+        f.close()
+        return render('/filetree.mako')
+
+    def toggle(self):
         if(request.params['target_state'] == '1'):
             rascal.set_pin_high(66)
             rascal.set_pin_high(71)
@@ -33,15 +51,9 @@ class HelloController(BaseController):
             rascal.set_pin_low(71)
             result = 'Pins set low'
         else:
-            result = 'target_state is screwed up'
+            result = 'Target_state is screwed up'
         return result 
-        #return 'Your email is: %s' % request.params['email']
 
-    def save(self):
-        path = '/home/root/helloworld/helloworld/templates/'
-        c.fileurl = request.params['fileurl']
-        c.sourcefile = request.params['sourcefile']
-        f = open(path + str(c.sourcefile), 'w')
-        f.write(request.params['text'])
-        f.close()
-        return render('/editor.mako') 
+    def write_serial(self):
+        rascal.send_serial(request.params['serial_text'])
+        return 'Text sent to serial port' 
