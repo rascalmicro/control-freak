@@ -1,4 +1,5 @@
 import serial, subprocess
+from time import sleep, time
 
 ### MOST OF THESE FUNCTIONS ARE VULNERABLE TO SHELL INJECTION! BAD! FIX! ###
 
@@ -52,3 +53,15 @@ def summarize_analog_data():
 
     summary = ('[' + ','.join(p1) + ']', '[' + ','.join(p2) + ']', '[' + ','.join(p3) + ']', '[' + ','.join(p4) + ']')
     return summary
+
+def analogger():
+    while(1):
+        reading0 = str(float(read_analog(0)) * 3.3 / 1024.0)
+        reading1 = str(float(read_analog(1)) * 3.3 / 1024.0)
+        reading2 = str(float(read_analog(2)) * 3.3 / 1024.0)
+        reading3 = str(float(read_analog(3)) * 3.3 / 1024.0)
+        f = open('/home/root/ana.log', 'a')
+        f.write(','.join([str(time()), reading0, reading1, reading2, reading3]) + '\n')
+        f.close()
+        sleep(1)
+
