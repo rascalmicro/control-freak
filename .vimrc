@@ -32,4 +32,5 @@ nnoremap <silent> <expr> $ ScreenMovement("$")
 
 augroup mkd
     autocmd BufRead *.mkd  set ai formatoptions=tcroqn2 comments=n:&gt;
+    au BufRead,BufNewFile *.mako setfiletype mako
 augroup END
