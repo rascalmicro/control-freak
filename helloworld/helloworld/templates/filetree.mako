@@ -4,6 +4,7 @@
     <link rel="stylesheet" type="text/css" href="/jquery.filetree.css"/>
     <link rel="stylesheet" type="text/css" href="/codemirror/css/docs.css"/>
     <link rel="stylesheet" type="text/css" href="/style.css">
+    <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Droid+Sans|Molengo">
     <script src="/codemirror/js/codemirror.js" type="text/javascript"></script>
     <script src="http://code.jquery.com/jquery-1.5.js"></script>
     <script language="javascript" type="text/javascript" src="/jquery.filetree.js"></script>
