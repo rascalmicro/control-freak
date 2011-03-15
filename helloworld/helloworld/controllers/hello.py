@@ -25,6 +25,10 @@ class HelloController(BaseController):
         import filetree
         return filetree.dirlist(request)
 
+    def read_contents(self):
+        f = open('/home/root/helloworld/helloworld' + request.params['filepath'], 'r')
+        return f.read()
+
     def index(self):
         c.sourcefile = "index.mako"
         c.fileurl = "/hello/index"
@@ -33,7 +37,7 @@ class HelloController(BaseController):
         return render('/index.mako')
 
     def save(self):
-        path = '/home/root/helloworld/helloworld/public/'
+        path = '/home/root/helloworld/helloworld/'
         c.fileurl = request.params['fileurl']
         c.sourcefile = request.params['sourcefile']
         f = open(path + str(c.sourcefile), 'w')
@@ -57,3 +61,4 @@ class HelloController(BaseController):
     def write_serial(self):
         rascal.send_serial(request.params['serial_text'])
         return 'Text sent to serial port' 
+

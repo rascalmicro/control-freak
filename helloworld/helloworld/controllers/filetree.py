@@ -7,7 +7,7 @@ import os
 import urllib
 
 def dirlist(request):
-    editable = ["css", "htm", "html", "js", "xhtml"]
+    editable = ["css", "htm", "html", "js", "mako", "py", "xhtml"]
     r=['<ul class="jqueryFileTree" style="display: none;">']
     try:
         r=['<ul class="jqueryFileTree" style="display: none;">']
@@ -25,3 +25,4 @@ def dirlist(request):
         r.append('Could not load directory: %s' % str(e))
     r.append('</ul>')
     return ''.join(r)
+

@@ -24,7 +24,7 @@
         <%
                 text_to_edit = 'No file selected'
                 if(hasattr(c, 'sourcefile')):
-                    path = '/home/root/helloworld/helloworld/public'
+                    path = '/home/root/helloworld/helloworld'
                     f = open(path + c.sourcefile, 'r')
                     text_to_edit = f.read()
                     f.close()
@@ -41,8 +41,8 @@
     <script type="text/javascript">
     var editor = CodeMirror.fromTextArea('code', {
         height: "600px",
-        parserfile: ["parsexml.js", "parsecss.js", "tokenizejavascript.js", "parsejavascript.js", "parsehtmlmixed.js"],
-        stylesheet: ["/codemirror/css/xmlcolors.css", "/codemirror/css/jscolors.css", "/codemirror/css/csscolors.css"],
+        parserfile: ["parsexml.js", "parsecss.js", "tokenizejavascript.js", "parsejavascript.js", "parsehtmlmixed.js", "../contrib/python/js/parsepython.js"],
+        stylesheet: ["/codemirror/css/xmlcolors.css", "/codemirror/css/jscolors.css", "/codemirror/css/csscolors.css", "/codemirror/contrib/python/css/pythoncolors.css"],
         path: "/codemirror/js/",
         tabMode: "spaces",
         indentUnit: "4",
@@ -56,27 +56,30 @@
                 return "CSSParser";
             case "js":
                 return "JSParser";
+            case "py":
+                return "PythonParser";
             default:
                 return "HTMLMixedParser";
         }    
     }
 
     function openFile(path) {
-        $.get(path, function(result) {
+        $.get('read_contents', {filepath: path}, function(result) {
             editor.setCode(result);
             a = path.split(".");
             ext = a[a.length - 1];
             editor.setParser(pickParser(ext));
             $('#fileurl').val(path);
             $('#sourcefile').val(path);
-        });
+        }); 
     };
 
     $(document).ready( function() {
-        $('#filetree').fileTree({ root: '/home/root/helloworld/helloworld/public', script: '/hello/get_dirlist' }, function(path) { 
-            openFile(path.split('/home/root/helloworld/helloworld/public')[1]);
+        $('#filetree').fileTree({ root: '/home/root/helloworld/helloworld', script: '/hello/get_dirlist' }, function(path) { 
+            openFile(path.split('/home/root/helloworld/helloworld')[1]);
         });
     });
     </script>
 </body>
 </html>
+
