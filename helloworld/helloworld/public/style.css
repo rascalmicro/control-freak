@@ -11,6 +11,11 @@ body {
     margin-left: 410px;
 }
 
+ul.jqueryfiletree {
+    font-family: "Molengo","URW Gothic L",sans-serif;
+    font-size: 1em;
+}
+
 #ft-background {
     background: #E7E8E9;
     border: 1px solid black;

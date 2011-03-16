@@ -20,7 +20,7 @@
 </head>
 <body>
     <p>
-    Test of the Rascal web-based code editor using <a href="http://codemirror.net">CodeMirror</a>.
+    Test of the Rascal web-based code editor
     </p>
 
     <div id="ft-background">
