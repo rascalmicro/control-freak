@@ -1,0 +1,38 @@
+body {
+    font-family: "Molengo","URW Gothic L",sans-serif;
+    font-size: 1em;
+    line-height: 1.4em;
+    background: #414243;
+    color: #E7E8E9;
+    padding: 20px;
+}
+
+#editor {
+    margin-left: 410px;
+}
+
+ul.jqueryfiletree {
+    font-family: "Molengo","URW Gothic L",sans-serif;
+    font-size: 1em;
+}
+
+#ft-background {
+    background: #E7E8E9;
+    border: 1px solid black;
+    float: left;
+    height: 600px;
+    width: 400px;
+}
+
+.rascalcontent { /* named to avoid conflict with phpBB .content rules */
+    width: 950px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#textfield {
+    background: #E7E8E9;
+    border: 1px solid black;
+    color: #414243;
+    padding: 3px;
+}
