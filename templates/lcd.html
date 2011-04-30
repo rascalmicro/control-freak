@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Rascal demo</title>
+    <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Droid+Sans|Molengo">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}"> 
+    <script src="http://code.jquery.com/jquery-1.5.js"></script>
+</head>
+<body>
+    <div class="rascalcontent">
+        <h1>LCD demo</h1>
+        <form id="serial_form" method="POST" action="lcd.html">
+            <label for="serial_text">Text to send to LCD display</label><br />
+            <input id="serial_text" name="serial_text" type="textarea" style="height:100px;width:600px;border:0px"><br />
+            <input type="submit" value="Send text"><br />
+        </form>
+        <form id="clear" method="POST" action="clear">
+            <input type="submit" value="Clear LCD">
+        </form>
+    </div>
+</body>
+</html>

@@ -13,6 +13,10 @@ def read_contents(self):
     f = open('/home/root/helloworld/helloworld' + request.params['filepath'], 'r')
     return f.read()
 
+@app.route('/lcd.html')
+def lcd():
+    return render_template('/lcd.html')
+
 @app.route('/sensors.html')
 def index():
     pin = rascal.read_pin(66)
@@ -51,9 +55,15 @@ def toggle():
         result = 'Target_state is screwed up'
     return result 
 
-def write_serial(self):
-    rascal.send_serial(request.params['serial_text'])
-    return 'Text sent to serial port'
+@app.route('/lcd.html', methods=['POST'])
+def write_serial():
+    rascal.send_serial(request.form['serial_text'])
+    return render_template('/lcd.html')
+
+@app.route('/clear', methods=['POST'])
+def clear_lcd():
+    rascal.send_serial(chr(0xFE) + chr(0x01))
+    return render_template('/lcd.html')
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', debug=True)

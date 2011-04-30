@@ -1,5 +1,4 @@
 .*
 *.pyo
-helloworld/data/*
-paster.pid
+*.pyc
 *.log
