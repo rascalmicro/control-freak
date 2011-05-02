@@ -7,6 +7,11 @@ body {
     padding: 20px;
 }
 
+h1 a {
+    color:#A4211A;
+    text-decoration: none;
+}
+
 #editor {
     margin-left: 410px;
 }
@@ -36,3 +41,57 @@ ul.jqueryfiletree {
     color: #414243;
     padding: 3px;
 }
+
+/* Zurb awesome buttons */
+.awesome, .awesome:visited {
+    display: inline-block;
+    font-size: 16px;
+    padding: 8px 14px 9px;
+    color: #fff;
+    text-decoration: none;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -moz-box-shadow: 0 1px 3px rgba(0,0,0,0.5);
+    -webkit-box-shadow: 0 1px 3px rgba(0,0,0,0.5);
+    text-shadow: 0 -1px 1px rgba(0,0,0,0.25);
+    border-bottom: 1px solid rgba(0,0,0,0.25);
+    border-style: none;
+    position: relative;
+    cursor: pointer;
+}
+
+.awesome:hover {
+    background-color: #111; color: #fff;
+}
+
+.awesome:active {
+    top: 1px;
+}
+
+.small.awesome, .small.awesome:visited {
+    font-size: 11px;
+
+}
+.medium.awesome, .medium.awesome:visited {
+    font-size: 13px; font-weight: bold; line-height: 1; text-shadow: 0 -1px 1px rgba(0,0,0,0.25);
+}
+
+.large.awesome, .large.awesome:visited {
+    font-size: 16px; padding: 8px 14px 9px;
+}
+
+.blue.awesome, .blue.awesome:visited {
+    background-color: #51A8CB;
+}
+
+.blue.awesome:hover {
+    background-color: #475373;
+}
+.red.awesome, .red.awesome:visited {
+    background-color: #EF4A42;
+}
+
+.red.awesome:hover {
+    background-color: #872300;
+}
+/* end Zurb awesome buttons */

@@ -3,21 +3,25 @@
 <head>
     <meta charset="utf-8">
     <title>Rascal demo</title>
-    <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Droid+Sans|Molengo">
+    <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Droid+Sans|Molengo|VT323">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
     <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}"> 
     <script src="http://code.jquery.com/jquery-1.5.js"></script>
 </head>
 <body>
     <div class="rascalcontent">
-        <h1>LCD demo</h1>
-        <form id="serial_form" method="POST" action="lcd.html">
-            <label for="serial_text">Text to send to LCD display</label><br />
-            <input id="serial_text" name="serial_text" type="textarea" style="height:100px;width:600px;border:0px"><br />
-            <input type="submit" value="Send text"><br />
+        <h1><a href="/lcd.html">LCD demo</a></h1>
+        <form id="serial_form" method="POST" action="lcd.html" style="float:left">
+            <label for="serial_text">Enter some text to send to the LCD display</label><br />
+            <textarea rows="2" cols="16" id="serial_text" name="serial_text" type="textarea" style="border:10px;border-color:#E7E8E9;border-style:solid;margin-top:10px;margin-bottom:10px;font-family:'VT323', 'Courier', sans-serif;font-size:100px;background-color:#111111;color:#A4211A"></textarea><br />
+            <button type="submit" class="large blue awesome" alt="Send to LCD" style="margin-left:590px">
+                Send to LCD
+            </button>
         </form>
-        <form id="clear" method="POST" action="clear">
-            <input type="submit" value="Clear LCD">
+        <form id="clear" method="POST" action="clear" style="position:absolute;margin-top:292px">
+            <button type="submit" class="large red awesome" alt="Clear LCD">
+                Clear LCD
+            </button>
         </form>
     </div>
 </body>
