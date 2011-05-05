@@ -7,7 +7,7 @@ body {
     padding: 20px;
 }
 
-h1 a {
+a {
     color:#A4211A;
     text-decoration: none;
 }
@@ -30,7 +30,7 @@ ul.jqueryfiletree {
 }
 
 .rascalcontent { /* named to avoid conflict with phpBB .content rules */
-    width: 950px;
+    width: 1280px;
     margin-left: auto;
     margin-right: auto;
 }
