@@ -12,6 +12,10 @@ a {
     text-decoration: none;
 }
 
+li {
+    list-style-type: none;
+}
+
 #editor {
     margin-left: 410px;
 }
