@@ -17,11 +17,11 @@ def read_contents(self):
 def lcd():
     return render_template('/lcd.html')
 
-@app.route('/sensors.html')
+@app.route('/relay.html')
 def index():
     pin = rascal.read_pin(66)
     (chan0, chan1, chan2, chan3) = rascal.summarize_analog_data() 
-    return render_template('/sensors.html', chan0=chan0, chan1=chan1, chan2=chan2, chan3=chan3, pin=pin)
+    return render_template('/relay.html', chan0=chan0, chan1=chan1, chan2=chan2, chan3=chan3, pin=pin)
 
 def save(self):
     path = '/home/root/helloworld/helloworld/'
