@@ -95,3 +95,25 @@ ul.jqueryfiletree {
     background-color: #872300;
 }
 /* end Zurb awesome buttons */
+
+@font-face {
+  font-family: 'DroidSans';
+  font-style: normal;
+  font-weight: normal;
+  src: url('DroidSans.ttf');
+}
+
+@font-face {
+  font-family: 'Molengo';
+  font-style: normal;
+  font-weight: normal;
+  src: url('Molengo-Regular.ttf');
+}
+
+@font-face {
+  font-family: 'VT323';
+  font-style: normal;
+  font-weight: normal;
+  src: url('VT323.ttf');
+}
+
