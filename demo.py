@@ -19,8 +19,8 @@ def lcd():
 
 @app.route('/relay.html')
 def index():
-    pin = rascal.read_pin(66)
-    (chan0, chan1, chan2, chan3) = rascal.summarize_analog_data() 
+    pin = rascal.read_pin(2)
+    (chan0, chan1, chan2, chan3) = rascal.summarize_analog_data()
     return render_template('/relay.html', chan0=chan0, chan1=chan1, chan2=chan2, chan3=chan3, pin=pin)
 
 def save(self):
@@ -34,26 +34,24 @@ def save(self):
 
 @app.route('/toggle-relay')
 def toggle_relay():
-    if (rascal.read_pin(71) == '1'):
-        rascal.set_pin_low(71)
+    if (rascal.read_pin(2) == '1'):
+        rascal.set_pin_low(2)
         return "low"
     else:
-        rascal.set_pin_high(71)
+        rascal.set_pin_high(2)
     return "high"
 
 @app.route('/toggle', methods=['POST'])
 def toggle():
     if(request.form['target_state'] == '1'):
-        rascal.set_pin_high(66)
-        rascal.set_pin_high(71)
+        rascal.set_pin_high(2)
         result = 'Pins set high'
     elif(request.form['target_state'] == '0'):
-        rascal.set_pin_low(66)
-        rascal.set_pin_low(71)
+        rascal.set_pin_low(2)
         result = 'Pins set low'
     else:
         result = 'Target_state is screwed up'
-    return result 
+    return result
 
 @app.route('/lcd.html', methods=['POST'])
 def write_serial():
