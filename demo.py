@@ -2,15 +2,26 @@ import rascal
 from flask import Flask, render_template, request, url_for
 app = Flask(__name__)
 
-def filetree(self):
-    return render_template('/filetree.html')
+@app.route('/edit')
+def editor():
+    return render_template('/editor.html', text_to_edit='No file selected')
 
-def get_dirlist(self):
-    import filetree
-    return filetree.dirlist(request)
+@app.route('/get_dirlist', methods=['POST'])
+def get_dirlist():
+    try:
+        import filetree
+    except ImportError:
+        print("Import error: can't find filetree")
+    try:
+        request.form['dir']
+    except KeyError:
+        print("Key error in attempt to list directory contents.")
+    return str(filetree.dirlist(request.form['dir']))
 
-def read_contents(self):
-    f = open('/home/root/helloworld/helloworld' + request.params['filepath'], 'r')
+
+@app.route('/read_contents' , methods=['POST'])
+def read_contents():
+    f = open('/var/www/' + request.form['filepath'], 'r')
     return f.read()
 
 @app.route('/lcd.html')
@@ -23,14 +34,14 @@ def index():
     (chan0, chan1, chan2, chan3) = rascal.summarize_analog_data()
     return render_template('/relay.html', chan0=chan0, chan1=chan1, chan2=chan2, chan3=chan3, pin=pin)
 
-def save(self):
-    path = '/home/root/helloworld/helloworld/'
-    c.fileurl = request.params['fileurl']
-    c.sourcefile = request.params['sourcefile']
-    f = open(path + str(c.sourcefile), 'w')
-    f.write(request.params['text'])
+@app.route('/save', methods=['POST'])
+def save():
+    path = '/var/www/'
+    sourcefile = request.form['sourcefile']
+    f = open(path + str(sourcefile), 'w')
+    f.write(request.form['text'])
     f.close()
-    return render_template('/filetree.html')
+    return render_template('/editor.html', sourcefile=sourcefile)
 
 @app.route('/toggle-relay')
 def toggle_relay():

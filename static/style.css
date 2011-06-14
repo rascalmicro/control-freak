@@ -44,6 +44,11 @@ ul.jqueryfiletree {
     border: 1px solid black;
     color: #414243;
     padding: 3px;
+    height: 600px;
+}
+
+.CodeMirror-scroll {
+    height: 600px !important;
 }
 
 /* Zurb awesome buttons */
