@@ -20,18 +20,36 @@
     <script src="{{ url_for('static', filename='jquery.filetree.js') }}"></script>
 </head>
 <body>
-    <div id="ft-background">
-        <div id="filetree"></div>
+    <div id="topbar">
+        <div class="rascalcontent">
+            <img id="rascallogo" src="{{ url_for('static', filename='rm-logo-words-only-light.png') }}">
+            <ul id="nav">
+                <li>log | </li>
+                <li>config | </li>
+                <li>monitor</li>
+            </ul>
+        </div>
     </div>
-    <div id="editor">
-        <form method="POST" action="/save">
-            <input id="save" type="submit" value="Save" class="large red awesome" alt="Save">
-            <input id="fileurl" type="hidden" name="fileurl" value="{{fileurl}}">
-            <input id="sourcefile" type="hidden" name="sourcefile" value="{{sourcefile}}">
-            <div id="textfield">
-                <textarea id="code" cols="100" rows="120" name="text">{{text_to_edit}}</textarea>
-            </div>
-        </form>
+    <div class="rascalcontent">
+        <input id="reload" value="Reload pytronics" class="large red awesome" alt="Reload pytronics">
+        <textarea id="message-panel" class="cm-s-night">In theory, there will be console messages here.</textarea>
+        <div id="editor">
+            <form method="POST" action="/save">
+                <div id="button-bar">
+                    <input id="new-file" value="New file" class="large red awesome" alt="New file">
+                    <input id="new-folder" value="New folder" class="large red awesome" alt="New folder">
+                    <input id="save" type="submit" value="Save" class="large red awesome" alt="Save">
+                    <input id="fileurl" type="hidden" name="fileurl" value="{{fileurl}}">
+                    <input id="sourcefile" type="hidden" name="sourcefile" value="{{sourcefile}}">
+                </div>
+                <div id="textfield">
+                    <textarea id="code" cols="100" rows="120" name="text">{{text_to_edit}}</textarea>
+                </div>
+            </form>
+        </div>
+        <div id="ft-background">
+            <div id="filetree" class="cm-s-night"></div>
+        </div>
     </div>
     <script type="text/javascript">
     var editor = CodeMirror.fromTextArea(document.getElementById('code'), {
@@ -67,14 +85,8 @@
     };
 
     $(document).ready( function() {
-        $('#filetree').fileTree({ root: '/var/www/', script: '/get_dirlist' }, function(path) {
-            openFile(path.split('/var/www')[1]);
-        });
-    });
-
-    $(function() {
-        $('#ft-background').click(function() {
-            $('#ft-background').animate({width: 0}, 'slow');
+        $('#filetree').fileTree({ root: '/var/www/editable/', script: '/get_dirlist' }, function(path) {
+            openFile(path.split('/var/www/editable/')[1]);
         });
     });
     </script>
