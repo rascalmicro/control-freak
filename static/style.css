@@ -79,8 +79,15 @@ input {
     background: #0A001F !important;
     border: 3px solid #414243;
     margin-top: -619px;
-    height: 600px;
+    height: 547px;
     width: 350px;
+}
+
+#new-file-folder-bar {
+    background: #0A001F !important;
+    border: 3px solid #414243;
+    padding: 5px;
+    width: 340px;
 }
 
 .rascalcontent { /* named to avoid conflict with phpBB .content rules */

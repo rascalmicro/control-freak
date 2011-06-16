@@ -36,8 +36,6 @@
         <div id="editor">
             <form method="POST" action="/save">
                 <div id="button-bar">
-                    <input id="new-file" value="New file" class="large red awesome" alt="New file">
-                    <input id="new-folder" value="New folder" class="large red awesome" alt="New folder">
                     <input id="save" type="submit" value="Save" class="large red awesome" alt="Save">
                     <input id="fileurl" type="hidden" name="fileurl" value="{{fileurl}}">
                     <input id="sourcefile" type="hidden" name="sourcefile" value="{{sourcefile}}">
@@ -49,6 +47,10 @@
         </div>
         <div id="ft-background">
             <div id="filetree" class="cm-s-night"></div>
+        </div>
+        <div id="new-file-folder-bar">
+            <img src="{{ url_for('static', filename='oxygen-new-file-32x32.png') }}">
+            <img src="{{ url_for('static', filename='oxygen-new-folder-32x32.png') }}">
         </div>
     </div>
     <script type="text/javascript">
