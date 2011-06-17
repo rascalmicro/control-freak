@@ -7,7 +7,7 @@ import os
 import urllib
 
 def dirlist(d):
-   editable = ["css", "htm", "html", "js", "mako", "py", "xhtml"]
+   editable = ["css", "htm", "html", "js", "mako", "py", "txt", "xhtml"]
    r=['<ul class="jqueryFileTree" style="display: none;">']
    try:
        r=['<ul class="jqueryFileTree" style="display: none;">']

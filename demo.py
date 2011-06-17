@@ -2,8 +2,11 @@ import rascal
 from flask import Flask, render_template, request, url_for
 app = Flask(__name__)
 
+# Routes for editor #
+# ----------------- #
+
 @app.route('/edit')
-def editor():
+def edit():
     return render_template('/editor.html', text_to_edit='No file selected')
 
 @app.route('/get_dirlist', methods=['POST'])
@@ -18,11 +21,43 @@ def get_dirlist():
         print("Key error in attempt to list directory contents.")
     return str(filetree.dirlist(request.form['dir']))
 
+@app.route('/new_file', methods=['POST'])
+def new_file():
+    import subprocess
+    subprocess.Popen(['touch', '/var/www/editable/' + request.form['name']])
+    return 0
 
-@app.route('/read_contents' , methods=['POST'])
+@app.route('/new_folder', methods=['POST'])
+def new_folder():
+    import subprocess
+    #command = 'mkdir /var/www/editable/' + request.form['name']
+    result = subprocess.Popen(['mkdir', '/var/www/editable/' + request.form['name']])
+    print result
+    return 0
+
+@app.route('/read_contents', methods=['POST'])
 def read_contents():
     f = open('/var/www/editable/' + request.form['filepath'], 'r')
     return f.read()
+
+@app.route('/reload', methods=['POST'])
+def reload():
+    import subprocess
+    #command = '/etc/init.d/rascal-webserver reload'
+    subprocess.Popen(['/etc/init.d/rascal-webserver.sh', 'reload'])
+    return 0
+
+@app.route('/save', methods=['POST'])
+def save():
+    path = '/var/www/editable/'
+    sourcefile = request.form['sourcefile']
+    f = open(path + str(sourcefile), 'w')
+    f.write(request.form['text'])
+    f.close()
+    return render_template('/editor.html', sourcefile=sourcefile)
+
+# Routes for demo pages #
+# --------------------- #
 
 @app.route('/lcd.html')
 def lcd():
@@ -34,16 +69,6 @@ def index():
     (chan0, chan1, chan2, chan3) = rascal.summarize_analog_data()
     return render_template('/relay.html', chan0=chan0, chan1=chan1, chan2=chan2, chan3=chan3, pin=pin)
 
-@app.route('/save', methods=['POST'])
-def save():
-    path = '/var/www/editable/'
-    sourcefile = request.form['sourcefile']
-    f = open(path + str(sourcefile), 'w')
-    f.write(request.form['text'])
-    f.close()
-    return render_template('/editor.html', sourcefile=sourcefile)
-
-@app.route('/toggle-relay')
 def toggle_relay():
     if (rascal.read_pin(2) == '1'):
         rascal.set_pin_low(2)
@@ -73,6 +98,9 @@ def write_serial():
 def clear_lcd():
     rascal.send_serial(chr(0xFE) + chr(0x01))
     return render_template('/lcd.html')
+
+# Main app #
+# -------- #
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', debug=True)
