@@ -1,5 +1,6 @@
 import rascal
 from flask import Flask, render_template, request, url_for
+from werkzeug import secure_filename
 app = Flask(__name__)
 
 # Routes for editor #
@@ -24,34 +25,34 @@ def get_dirlist():
 @app.route('/new_file', methods=['POST'])
 def new_file():
     import subprocess
-    subprocess.Popen(['touch', '/var/www/editable/' + request.form['name']])
-    return 0
+    subprocess.Popen(['touch', '/var/www/editable/' + secure_filename(request.form['filename'])])
+    return render_template('/editor.html', sourcefile=sourcefile)
 
 @app.route('/new_folder', methods=['POST'])
 def new_folder():
     import subprocess
-    #command = 'mkdir /var/www/editable/' + request.form['name']
-    result = subprocess.Popen(['mkdir', '/var/www/editable/' + request.form['name']])
+    result = subprocess.Popen(['mkdir', '/var/www/editable/' + secure_filename(request.form['name'])])
     print result
-    return 0
+    return render_template('/editor.html', sourcefile=sourcefile)
 
 @app.route('/read_contents', methods=['POST'])
 def read_contents():
-    f = open('/var/www/editable/' + request.form['filepath'], 'r')
+    f = open('/var/www/editable/' + secure_filename(request.form['filepath']), 'r')
     return f.read()
 
 @app.route('/reload', methods=['POST'])
 def reload():
     import subprocess
-    #command = '/etc/init.d/rascal-webserver reload'
-    subprocess.Popen(['/etc/init.d/rascal-webserver.sh', 'reload'])
-    return 0
+    f = open('/etc/uwsgi.reload', 'w')
+    f.write(request.form['text'])
+    f.close()
+    return render_template('/editor.html', sourcefile=sourcefile)
 
 @app.route('/save', methods=['POST'])
 def save():
     path = '/var/www/editable/'
     sourcefile = request.form['sourcefile']
-    f = open(path + str(sourcefile), 'w')
+    f = open(path + secure_filename(str(sourcefile)), 'w')
     f.write(request.form['text'])
     f.close()
     return render_template('/editor.html', sourcefile=sourcefile)

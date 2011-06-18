@@ -9,6 +9,9 @@
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='codemirror2/theme/night.css') }}">
     <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Droid+Sans|Molengo'">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='jquery.filetree.css') }}">
+    <link rel="stylesheet" type="text/css" href="/static/base.css">
+    <link rel="stylesheet" type="text/css" href="/static/jquery-ui.css">
+    <link rel="stylesheet" type="text/css" href="/static/jquery-ui-dialog.css">
 
     <script src="{{ url_for('static', filename='codemirror2/lib/codemirror.js') }}"></script>
     <script src="{{ url_for('static', filename='codemirror2/mode/css/css.js') }}"></script>
@@ -18,6 +21,7 @@
     <script src="{{ url_for('static', filename='codemirror2/mode/xml/xml.js') }}"></script>
     <script src="http://code.jquery.com/jquery-1.5.js"></script>
     <script src="{{ url_for('static', filename='jquery.filetree.js') }}"></script>
+    <script src="/static/jquery-ui-1.8.13.min.js"></script>
 </head>
 <body>
     <div id="topbar">
@@ -52,6 +56,15 @@
             <img id="new-file" src="{{ url_for('static', filename='oxygen-new-file-32x32.png') }}">
             <img id="new-folder" src="{{ url_for('static', filename='oxygen-new-folder-32x32.png') }}">
         </div>
+        <div id="dialog-form" title="Create new file"> 
+            <p class="validateTips">Funny characters will be stripped out.</p> 
+            <form> 
+                <fieldset> 
+                    <label for="filename">Filename</label> 
+                    <input type="text" name="filename" id="filename" class="text ui-widget-content ui-corner-all" /> 
+                </fieldset> 
+            </form> 
+        </div> 
     </div>
     <script type="text/javascript">
     var editor = CodeMirror.fromTextArea(document.getElementById('code'), {
@@ -96,14 +109,59 @@
         $.post('reload', '', alert('Pytronics reload has begun.'));
     });
 
-    $('#new-file').bind('click', function(event) {
-        $.post('new_file', {name: 'newfile.txt'}, alert('Pytronics reload has begun.'));
-    });
+//    $('#new-file').bind('click', function(event) {
+//        $.post('new_file', {name: 'newfile.txt'});
+//    });
 
     $('#new-folder').bind('click', function(event) {
         $.post('new_folder', {name: 'newfolder'}, alert('Pytronics reload has begun.'));
     });
 
+    $(function() {
+        
+        var filename = $( "#filename" );
+        var allFields = $( [] ).add( name );
+        var tips = $( ".validateTips" );
+ 
+        function updateTips( t ) {
+            tips
+                .text( t )
+                .addClass( "ui-state-highlight" );
+            setTimeout(function() {
+                tips.removeClass( "ui-state-highlight", 1500 );
+            }, 500 );
+        }
+        
+        $( "#dialog-form" ).dialog({
+            autoOpen: false,
+            height: 300,
+            width: 350,
+            modal: true,
+            buttons: {
+                "Create file": function() {
+                    var bValid = true;
+                    allFields.removeClass( "ui-state-error" );
+ 
+                    if ( bValid ) {
+                        $.post("new_file", {filename: filename.val()});
+                        $( this ).dialog( "close" );
+                    }
+                },
+                Cancel: function() {
+                    $( this ).dialog( "close" );
+                }
+            },
+            close: function() {
+                allFields.val( "" ).removeClass( "ui-state-error" );
+            }
+        });
+ 
+        $( "#new-file" )
+            .button()
+            .click(function() {
+                $( "#dialog-form" ).dialog( "open" );
+        });
+    });
     </script>
 </body>
 </html>
