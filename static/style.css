@@ -23,6 +23,8 @@ li {
 
 #nav {
     margin: 0;
+    padding-top: 15px;
+    padding-right: 5px;
 }
 
 #nav li {
@@ -51,7 +53,7 @@ input {
     color: #EF4A42;
     margin: 5px;
     height: 40px;
-    width: 642px;
+    width: 741px;
 }
 
 #reload {
@@ -103,7 +105,7 @@ input {
 }
 
 .CodeMirror-scroll {
-    height: 600px !important;
+    height: 603px !important;
     border: 3px solid #414243;
 }
 
