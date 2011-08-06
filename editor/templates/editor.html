@@ -100,8 +100,8 @@
     };
 
     $(document).ready( function() {
-        $('#filetree').fileTree({ root: '/var/www/editable/', script: '/get_dirlist' }, function(path) {
-            openFile(path.split('/var/www/editable/')[1]);
+        $('#filetree').fileTree({ root: '/var/www/public/', script: '/get_dirlist' }, function(path) {
+            openFile(path.split('/var/www/public/')[1]);
         });
     });
 
