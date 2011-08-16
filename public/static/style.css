@@ -4,6 +4,7 @@ body {
     line-height: 1.4em;
     margin: 0;
     color: #E7E8E9;
+    background: #616263;
 }
 
 a {
@@ -16,17 +17,23 @@ li {
 }
 
 #topbar {
-    background: #414243;
     height: 50px;
     text-align: right;
+    background-color: #414243;
 }
 
 #nav {
     margin: 0;
+    font-family: "Molengo","URW Gothic L",sans-serif;
+    font-size: 1em;
 }
 
 #nav li {
     display: inline;
+}
+
+#nav a {
+    color: #E7E8E9;
 }
 
 #rascallogo {

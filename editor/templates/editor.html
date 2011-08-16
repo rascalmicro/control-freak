@@ -26,11 +26,11 @@
 <body>
     <div id="topbar">
         <div class="rascalcontent">
-            <img id="rascallogo" src="{{ url_for('static', filename='rm-logo-words-only-light.png') }}">
+            <a href="/edit"><img id="rascallogo" src="/static/rm-logo-words-only-light.png"></a>
             <ul id="nav">
-                <li>log | </li>
-                <li>config | </li>
-                <li>monitor</li>
+                <li><a href="log">log</a> | </li>
+                <li><a href="config">config</a> | </li>
+                <li><a href="monitor">monitor</a></li>
             </ul>
         </div>
     </div>
