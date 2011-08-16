@@ -41,8 +41,7 @@
             <form method="POST" action="/save">
                 <div id="button-bar">
                     <input id="save" type="submit" value="Save" class="large red awesome" alt="Save">
-                    <input id="fileurl" type="hidden" name="fileurl" value="{{fileurl}}">
-                    <input id="sourcefile" type="hidden" name="sourcefile" value="{{sourcefile}}">
+                    <input id="path" type="hidden" name="path" value="{{ path }}">
                 </div>
                 <div id="textfield">
                     <textarea id="code" cols="100" rows="120" name="text">{{text_to_edit}}</textarea>
@@ -90,16 +89,11 @@
     }
 
     function openFile(path) {
-        $.post('read_contents', {filepath: path}, function(result) {
-            editor.setValue(result);
-            a = path.split(".");
-            ext = a[a.length - 1];
-            editor.setOption('mode', pickMode(ext));
-            $("#sourcefile").val(path);
-        });
+        window.location = "/edit/" + path;
     };
 
     $(document).ready( function() {
+        editor.setOption('mode', pickMode('{{ fileext }}'));
         $('#filetree').fileTree({ root: '/var/www/public/', script: '/get_dirlist' }, function(path) {
             openFile(path.split('/var/www/public/')[1]);
         });

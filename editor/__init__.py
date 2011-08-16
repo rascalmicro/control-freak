@@ -31,10 +31,20 @@ def log():
     except TemplateNotFound:
         abort(404)
 
-@editor.route('/edit')
-def edit():
+@editor.route('/edit/')
+def start_edit():
     try:
         return render_template('editor.html', text_to_edit='No file selected')
+    except TemplateNotFound:
+        abort(404)
+
+@editor.route('/edit/<path:path>')
+def edit(path):
+    try:
+        path = secure_path(path)
+        f = open('/var/www/public/' + path, 'r')
+        print '/var/www/public/' + path
+        return render_template('editor.html', text_to_edit=f.read(), path=path, fileext=path.split('.').pop())
     except TemplateNotFound:
         abort(404)
 
@@ -63,15 +73,8 @@ def new_folder():
     print result
     return render_template('editor.html', sourcefile=sourcefile)
 
-@editor.route('/read_contents' , methods=['POST'])
-def read_contents():
-    f = open('/var/www/public/' + request.form['filepath'], 'r')
-#    return render_template('editor.html', sourcefile=sourcefile, text_to_edit=f.read())
-    return f.read()
-
 @editor.route('/reload', methods=['POST'])
 def reload():
-    import subprocess
     f = open('/etc/uwsgi.reload', 'w')
     f.write(request.form['text'])
     f.close()
@@ -79,9 +82,9 @@ def reload():
 
 @editor.route('/save', methods=['POST'])
 def save():
-    path = '/var/www/public/'
-    sourcefile = request.form['sourcefile']
-    f = open(path + secure_path(str(sourcefile)), 'w')
+    root = '/var/www/public/'
+    path = request.form['path']
+    f = open(root + secure_path(str(path)), 'w')
     f.write(request.form['text'])
     f.close()
-    return render_template('editor.html', sourcefile=sourcefile)
+    return redirect('/edit', 200)
