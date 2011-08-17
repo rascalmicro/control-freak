@@ -13,14 +13,37 @@
         <div class="rascalcontent">
             <a href="/edit"><img id="rascallogo" src="/static/rm-logo-words-only-light.png"></a>
             <ul id="nav">
-                <li><a href="log">log</a> | </li>
-                <li><a href="config">config</a> | </li>
-                <li><a href="monitor">monitor</a></li>
+                <li><a href="/log">log</a> | </li>
+                <li><a href="/config">config</a> | </li>
+                <li><a href="/monitor">monitor</a></li>
             </ul>
         </div>
     </div>
     <div class="rascalcontent">
-    This is the log page.
+        App server (interprets Python and fills templates)
+        <div class="log-display">
+            <table class="zebra">
+                <tr><td>{{ app | safe }}</td></tr>
+            </table>
+        </div>
+        Webserver access log (serves static files)
+        <div class="log-display">
+            <table class="zebra">
+                <tr><td>{{ access | safe }}</td></tr>
+            </table>
+        </div>
+        Webserver error log
+        <div class="log-display">
+            <table class="zebra">
+                <tr><td>{{ error | safe }}</td></tr>
+            </table>
+        </div>
     </div>
+     <script type="text/javascript">
+ $(document).ready(function(){
+   $(".zebra tr").mouseover(function(){$(this).addClass("over");}).mouseout(function(){$(this).removeClass("over");});
+   $(".zebra tr:even").addClass("alt");
+ });
+     </script>
 </body>
 </html>

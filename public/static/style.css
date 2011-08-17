@@ -114,6 +114,27 @@ input {
     border: 3px solid #414243;
 }
 
+.log-display {
+    border: 2px solid #414243;
+    background-color: black;
+    font-family:'Courier', sans-serif;
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+
+.zebra {
+    font-size: 0.8em;
+    line-height: 2em;
+}
+
+tr.alt td {
+    background: #212223;
+}
+
+tr.over td {
+    color: #00ff00;
+}
+
 /* Zurb awesome buttons */
 .awesome, .awesome:visited {
     display: inline-block;
