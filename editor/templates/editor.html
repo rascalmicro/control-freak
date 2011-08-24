@@ -1,32 +1,32 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <title>Rascal demo</title>
-    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <link rel="shortcut icon" href="/editor/static/favicon.ico">
 
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='codemirror2/lib/codemirror.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='codemirror2/theme/default.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='codemirror2/theme/night.css') }}">
+    <link rel="stylesheet" type="text/css" href="/editor/static/style.css">
+    <link rel="stylesheet" type="text/css" href="/editor/static/codemirror2/lib/codemirror.css">
+    <link rel="stylesheet" type="text/css" href="/editor/static/codemirror2/theme/default.css">
+    <link rel="stylesheet" type="text/css" href="/editor/static/codemirror2/theme/night.css">
     <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Droid+Sans|Molengo'">
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='jquery.filetree.css') }}">
-    <link rel="stylesheet" type="text/css" href="/static/base.css">
-    <link rel="stylesheet" type="text/css" href="/static/jquery-ui.css">
-    <link rel="stylesheet" type="text/css" href="/static/jquery-ui-dialog.css">
+    <link rel="stylesheet" type="text/css" href="/editor/static/jquery.filetree.css">
+    <link rel="stylesheet" type="text/css" href="/editor/static/base.css">
+    <link rel="stylesheet" type="text/css" href="/editor/static/jquery-ui.css">
+    <link rel="stylesheet" type="text/css" href="/editor/static/jquery-ui-dialog.css">
 
-    <script src="{{ url_for('static', filename='codemirror2/lib/codemirror.js') }}"></script>
-    <script src="{{ url_for('static', filename='codemirror2/mode/css/css.js') }}"></script>
-    <script src="{{ url_for('static', filename='codemirror2/mode/htmlmixed/htmlmixed.js') }}"></script>
-    <script src="{{ url_for('static', filename='codemirror2/mode/javascript/javascript.js') }}"></script>
-    <script src="{{ url_for('static', filename='codemirror2/mode/python/python.js') }}"></script>
-    <script src="{{ url_for('static', filename='codemirror2/mode/xml/xml.js') }}"></script>
+    <script src="/editor/static/codemirror2/lib/codemirror.js"></script>
+    <script src="/editor/static/codemirror2/mode/css/css.js"></script>
+    <script src="/editor/static/codemirror2/mode/htmlmixed/htmlmixed.js"></script>
+    <script src="/editor/static/codemirror2/mode/javascript/javascript.js"></script>
+    <script src="/editor/static/codemirror2/mode/python/python.js"></script>
+    <script src="/editor/static/codemirror2/mode/xml/xml.js"></script>
     <script src="http://code.jquery.com/jquery-1.5.js"></script>
-    <script src="{{ url_for('static', filename='jquery.filetree.js') }}"></script>
-    <script src="/static/jquery-ui-1.8.13.min.js"></script>
+    <script src="/editor/static/jquery.filetree.js"></script>
+    <script src="/editor/static/jquery-ui-1.8.13.min.js"></script>
 </head>
 <body>
     <div id="topbar">
         <div class="rascalcontent">
-            <a href="/edit"><img id="rascallogo" src="/static/rm-logo-words-only-light.png"></a>
+            <a href="/edit"><img id="rascallogo" src="/editor/static/rm-logo-words-only-light.png"></a>
             <ul id="nav">
                 <li><a href="/log">log</a> | </li>
                 <li><a href="/config">config</a> | </li>
@@ -52,8 +52,8 @@
             <div id="filetree" class="cm-s-night"></div>
         </div>
         <div id="new-file-folder-bar">
-            <img id="new-file" src="{{ url_for('static', filename='oxygen-new-file-32x32.png') }}">
-            <img id="new-folder" src="{{ url_for('static', filename='oxygen-new-folder-32x32.png') }}">
+            <img id="new-file" src="/editor/static/oxygen-new-file-32x32.png">
+            <img id="new-folder" src="/editor/static/oxygen-new-folder-32x32.png">
         </div>
         <div id="dialog-form" title="Create new file"> 
             <p class="validateTips">Funny characters will be stripped out.</p> 
@@ -103,9 +103,9 @@
         $.post('reload', '', alert('Pytronics reload has begun.'));
     });
 
-//    $('#new-file').bind('click', function(event) {
-//        $.post('new_file', {name: 'newfile.txt'});
-//    });
+    $('#new-file').bind('click', function(event) {
+        $.post('new_file', {name: 'newfile.txt'});
+    });
 
     $('#new-folder').bind('click', function(event) {
         $.post('new_folder', {name: 'newfolder'}, alert('Pytronics reload has begun.'));
