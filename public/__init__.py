@@ -8,6 +8,7 @@ def lcd():
 
 @public.route('/relay.html')
 def index():
+    import rascal
     pin = rascal.read_pin(2)
     (chan0, chan1, chan2, chan3) = rascal.summarize_analog_data()
     return render_template('/relay.html', chan0=chan0, chan1=chan1, chan2=chan2, chan3=chan3, pin=pin)
