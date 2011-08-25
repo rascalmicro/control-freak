@@ -101,14 +101,13 @@ def get_dirlist():
 def new_file():
     import subprocess
     subprocess.Popen(['touch', '/var/www/public/' + secure_path(request.form['filename'])])
-    return render_template('editor.html', sourcefile=sourcefile)
+    return render_template('editor.html')
 
 @editor.route('/new_folder', methods=['POST'])
 def new_folder():
     import subprocess
-    result = subprocess.Popen(['mkdir', '/var/www/public/' + secure_path(request.form['name'])])
-    print result
-    return render_template('editor.html', sourcefile=sourcefile)
+    result = subprocess.Popen(['mkdir', '/var/www/public/' + secure_path(request.form['filename'])])
+    return render_template('editor.html')
 
 @editor.route('/reload', methods=['POST'])
 def reload():

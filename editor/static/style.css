@@ -97,6 +97,25 @@ input {
     width: 340px;
 }
 
+#overlay {
+     visibility: hidden;
+     position: absolute;
+     left: 0px;
+     top: 0px;
+     width:100%;
+     height:100%;
+     text-align:center;
+     z-index: 1000;
+}
+
+#new-file-dialog {
+     width:300px;
+     margin: 300px auto;
+     background-color: #414243;
+     border: 3px solid #616263;
+     padding:15px;
+}
+
 .rascalcontent { /* named to avoid conflict with phpBB .content rules */
     width: 1280px;
     margin-left: auto;

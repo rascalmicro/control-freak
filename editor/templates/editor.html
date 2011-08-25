@@ -9,9 +9,6 @@
     <link rel="stylesheet" type="text/css" href="/editor/static/codemirror2/theme/night.css">
     <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Droid+Sans|Molengo'">
     <link rel="stylesheet" type="text/css" href="/editor/static/jquery.filetree.css">
-    <link rel="stylesheet" type="text/css" href="/editor/static/base.css">
-    <link rel="stylesheet" type="text/css" href="/editor/static/jquery-ui.css">
-    <link rel="stylesheet" type="text/css" href="/editor/static/jquery-ui-dialog.css">
 
     <script src="/editor/static/codemirror2/lib/codemirror.js"></script>
     <script src="/editor/static/codemirror2/mode/css/css.js"></script>
@@ -21,7 +18,6 @@
     <script src="/editor/static/codemirror2/mode/xml/xml.js"></script>
     <script src="http://code.jquery.com/jquery-1.5.js"></script>
     <script src="/editor/static/jquery.filetree.js"></script>
-    <script src="/editor/static/jquery-ui-1.8.13.min.js"></script>
 </head>
 <body>
     <div id="topbar">
@@ -55,15 +51,19 @@
             <img id="new-file" src="/editor/static/oxygen-new-file-32x32.png">
             <img id="new-folder" src="/editor/static/oxygen-new-folder-32x32.png">
         </div>
-        <div id="dialog-form" title="Create new file"> 
-            <p class="validateTips">Funny characters will be stripped out.</p> 
-            <form> 
-                <fieldset> 
-                    <label for="filename">Filename</label> 
-                    <input type="text" name="filename" id="filename" class="text ui-widget-content ui-corner-all" /> 
-                </fieldset> 
-            </form> 
-        </div> 
+        <div id="overlay">
+            <div id="new-file-dialog">
+                Create a new file
+                <form method="POST" action="/new_file">
+                    <fieldset>
+                        <label for="filename">Filename</label>
+                        <input type="text" name="filename" id="filename"/>
+                        <input id="create" type="submit" value="Create" class="large red awesome" alt="Create">
+                        <input id="cancel" type="submit" value="Cancel" class="large red awesome" alt="Cancel">
+                    </fieldset>
+                </form>
+            </div>
+        </div>
     </div>
     <script type="text/javascript">
     var editor = CodeMirror.fromTextArea(document.getElementById('code'), {
@@ -103,57 +103,16 @@
         $.post('reload', '', alert('Pytronics reload has begun.'));
     });
 
-    $('#new-file').bind('click', function(event) {
-        $.post('new_file', {name: 'newfile.txt'});
-    });
-
     $('#new-folder').bind('click', function(event) {
-        $.post('new_folder', {name: 'newfolder'}, alert('Pytronics reload has begun.'));
+        $.post('/new_folder', {filename: 'newfolder'});
     });
 
     $(function() {
         
         var filename = $( "#filename" );
-        var allFields = $( [] ).add( name );
-        var tips = $( ".validateTips" );
  
-        function updateTips( t ) {
-            tips
-                .text( t )
-                .addClass( "ui-state-highlight" );
-            setTimeout(function() {
-                tips.removeClass( "ui-state-highlight", 1500 );
-            }, 500 );
-        }
-        
-        $( "#dialog-form" ).dialog({
-            autoOpen: false,
-            height: 300,
-            width: 350,
-            modal: true,
-            buttons: {
-                "Create file": function() {
-                    var bValid = true;
-                    allFields.removeClass( "ui-state-error" );
- 
-                    if ( bValid ) {
-                        $.post("new_file", {filename: filename.val()});
-                        $( this ).dialog( "close" );
-                    }
-                },
-                Cancel: function() {
-                    $( this ).dialog( "close" );
-                }
-            },
-            close: function() {
-                allFields.val( "" ).removeClass( "ui-state-error" );
-            }
-        });
- 
-        $( "#new-file" )
-            .button()
-            .click(function() {
-                $( "#dialog-form" ).dialog( "open" );
+        $( "#new-file" ).click(function() {
+                $( "#overlay" ).css("visibility", "visible");
         });
     });
     </script>
