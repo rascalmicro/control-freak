@@ -2,6 +2,10 @@ from flask import Blueprint, render_template, request
 
 public = Blueprint('public', __name__, static_folder='static', template_folder='templates')
 
+@public.route('/arduino.html')
+def arduino():
+    return render_template('/arduino.html')
+
 @public.route('/lcd.html')
 def lcd():
     return render_template('/lcd.html')
@@ -27,10 +31,12 @@ def toggle():
 
 @public.route('/lcd.html', methods=['POST'])
 def write_serial():
-    rascal.send_serial(request.form['serial_text'])
+    import rascal
+    rascal.send_serial(request.form['serial_text'], 9600)
     return render_template('/lcd.html')
 
 @public.route('/clear', methods=['POST'])
 def clear_lcd():
+    import rascal
     rascal.send_serial(chr(0xFE) + chr(0x01))
     return render_template('/lcd.html')

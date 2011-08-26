@@ -39,6 +39,9 @@
                     <input id="save" type="submit" value="Save" class="large red awesome" alt="Save">
                     <input id="path" type="hidden" name="path" value="{{ path }}">
                 </div>
+                <div id="location-bar">
+                    &nbsp;<a href="/{{ target }}">{{ path }}</a>
+                </div>
                 <div id="textfield">
                     <textarea id="code" cols="100" rows="120" name="text">{{text_to_edit}}</textarea>
                 </div>
@@ -100,7 +103,7 @@
     });
 
     $('#reload').bind('click', function(event) {
-        $.post('reload', '', alert('Pytronics reload has begun.'));
+        $.post('/reload', "text");
     });
 
     $('#new-folder').bind('click', function(event) {

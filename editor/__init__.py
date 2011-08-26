@@ -80,8 +80,11 @@ def edit(path):                            # of redirects from /save route POSTs
     try:
         path = secure_path(path)
         f = open('/var/www/public/' + path, 'r')
-        print '/var/www/public/' + path
-        return render_template('editor.html', text_to_edit=f.read(), path=path, fileext=path.split('.').pop())
+        if path.startswith('templates'):
+            target = path[10:]
+        else:
+            target= path
+        return render_template('editor.html', text_to_edit=f.read(), path=path, target=target, fileext=path.split('.').pop())
     except TemplateNotFound:
         abort(404)
 
@@ -100,8 +103,9 @@ def get_dirlist():
 @editor.route('/new_file', methods=['POST'])
 def new_file():
     import subprocess
-    subprocess.Popen(['touch', '/var/www/public/' + secure_path(request.form['filename'])])
-    return render_template('editor.html')
+    name = secure_path(request.form['filename'])
+    subprocess.Popen(['touch', '/var/www/public/' + name])
+    return redirect('/edit/' + name, 302)
 
 @editor.route('/new_folder', methods=['POST'])
 def new_folder():
@@ -111,10 +115,9 @@ def new_folder():
 
 @editor.route('/reload', methods=['POST'])
 def reload():
-    f = open('/etc/uwsgi.reload', 'w')
-    f.write(request.form['text'])
-    f.close()
-    return render_template('editor.html', sourcefile=sourcefile)
+    import subprocess
+    subprocess.Popen(['touch', '/etc/uwsgi.reload'])
+    return render_template('editor.html')
 
 @editor.route('/save', methods=['POST'])
 def save():

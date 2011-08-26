@@ -85,8 +85,8 @@ input {
 #ft-background {
     background: #0A001F !important;
     border: 3px solid #414243;
-    margin-top: -619px;
-    height: 547px;
+    margin-top: -656px;
+    height: 584px;
     width: 350px;
 }
 
@@ -120,6 +120,17 @@ input {
     width: 1280px;
     margin-left: auto;
     margin-right: auto;
+}
+
+#location-bar {
+    background: #0A001F !important;
+    margin-left: 360px;
+    padding: 3px;
+    border: 3px solid #414243;
+}
+
+#location-bar a {
+    color: #EF4A42;
 }
 
 #textfield {
