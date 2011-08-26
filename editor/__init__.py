@@ -80,11 +80,15 @@ def edit(path):                            # of redirects from /save route POSTs
     try:
         path = secure_path(path)
         f = open('/var/www/public/' + path, 'r')
+        target = path
         if path.startswith('templates'):
-            target = path[10:]
+            target = path[10:] # strip out 'templates/' to make relative link match template routes
+            folder = 'templates'
+        elif path.startswith('static'):
+            folder = 'static'
         else:
-            target= path
-        return render_template('editor.html', text_to_edit=f.read(), path=path, target=target, fileext=path.split('.').pop())
+            folder = ''
+        return render_template('editor.html', text_to_edit=f.read(), folder=folder, path=path, target=target, fileext=path.split('.').pop())
     except TemplateNotFound:
         abort(404)
 
