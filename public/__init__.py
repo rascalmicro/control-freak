@@ -38,5 +38,5 @@ def write_serial():
 @public.route('/clear', methods=['POST'])
 def clear_lcd():
     import rascal
-    rascal.send_serial(chr(0xFE) + chr(0x01))
+    rascal.send_serial(chr(0xFE) + chr(0x01), 9600)
     return render_template('/lcd.html')
