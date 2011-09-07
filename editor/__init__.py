@@ -4,6 +4,27 @@ from werkzeug import secure_filename
 
 editor = Blueprint('editor', __name__, static_url_path='/editor/', static_folder='static', template_folder='templates')
 
+def dirlist(d): # This function heavily based on Martin Skou's connector script for jQuery File Tree
+    import os
+    noneditable = ["pyc", "pyo"]
+    r=['<ul class="jqueryFileTree" style="display: none;">']
+    try:
+        r=['<ul class="jqueryFileTree" style="display: none;">']
+        for f in os.listdir(d):
+            ff=os.path.join(d,f)
+            if os.path.isdir(ff):
+                r.append('<li class="directory collapsed"><a href="#" rel="%s/">%s</a></li>' % (ff,f))
+            else:
+                e=os.path.splitext(f)[1][1:] # get .ext and remove dot
+                if (e not in noneditable):
+                    r.append('<li class="file ext_%s"><a href="#" rel="%s">%s</a></li>' % (e,ff,f))
+        r.append('</ul>')
+    except Exception,e:
+        r.append('Could not load directory: %s' % str(e))
+        print 'Error: ' + str(e)
+    r.append('</ul>')
+    return ''.join(r)
+
 def secure_path(path): # Version of Werkzeug's secure_filename trimmed to allow paths through (could be a bad idea)
     if isinstance(path, unicode):
         from unicodedata import normalize
@@ -95,14 +116,10 @@ def edit(path):                            # of redirects from /save route POSTs
 @editor.route('/get_dirlist', methods=['POST'])
 def get_dirlist():
     try:
-        import filetree
-    except ImportError:
-        print("Import error: can't find filetree")
-    try:
         request.form['dir']
     except KeyError:
         print("Key error in attempt to list directory contents.")
-    return str(filetree.dirlist(request.form['dir']))
+    return str(dirlist(request.form['dir']))
 
 @editor.route('/new_file', methods=['POST'])
 def new_file():
