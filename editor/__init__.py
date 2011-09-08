@@ -13,11 +13,11 @@ def dirlist(d): # This function heavily based on Martin Skou's connector script 
         for f in os.listdir(d):
             ff=os.path.join(d,f)
             if os.path.isdir(ff):
-                r.append('<li class="directory collapsed"><a href="#" rel="%s/">%s</a></li>' % (ff,f))
+                r.append('<li class="directory collapsed"><img class="delete" src="/editor/static/file-icons/delete.png"><a href="#" rel="%s/">%s</a></li>' % (ff,f))
             else:
                 e=os.path.splitext(f)[1][1:] # get .ext and remove dot
                 if (e not in noneditable):
-                    r.append('<li class="file ext_%s"><a href="#" rel="%s">%s</a></li>' % (e,ff,f))
+                    r.append('<li class="file ext_%s"><img class="delete" src="/editor/static/file-icons/delete.png"><a href="#" rel="%s">%s</a></li>' % (e,ff,f))
         r.append('</ul>')
     except Exception,e:
         r.append('Could not load directory: %s' % str(e))
@@ -112,6 +112,18 @@ def edit(path):                            # of redirects from /save route POSTs
         return render_template('editor.html', text_to_edit=f.read(), folder=folder, path=path, target=target, fileext=path.split('.').pop())
     except TemplateNotFound:
         abort(404)
+
+@editor.route('/file_delete', methods=['POST'])
+def file_delete():
+    import subprocess
+    subprocess.Popen(['rm', request.form['filename']])
+    return redirect('/edit/', 302)
+
+@editor.route('/file_rename', methods=['POST'])
+def file_rename():
+    import subprocess
+    subprocess.Popen(['mv', request.form['old_filename'], request.form['new_filename']])
+    return redirect('/edit/', 302)
 
 @editor.route('/get_dirlist', methods=['POST'])
 def get_dirlist():

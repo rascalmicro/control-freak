@@ -116,6 +116,19 @@ input {
      padding:15px;
 }
 
+.delete {
+    visibility: hidden;
+    float: right;
+    margin-right: 3px;
+    margin-top: 4px;
+    width: 14px;
+    opacity: 0.6;
+}
+
+.delete:hover {
+    opacity: 1.0;
+}
+
 .rascalcontent { /* named to avoid conflict with phpBB .content rules */
     width: 1280px;
     margin-left: auto;
