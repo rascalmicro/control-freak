@@ -17,7 +17,7 @@ def dirlist(d): # This function heavily based on Martin Skou's connector script 
             else:
                 e=os.path.splitext(f)[1][1:] # get .ext and remove dot
                 if (e not in noneditable):
-                    r.append('<li class="file ext_%s"><img class="delete" src="/editor/static/file-icons/delete.png"><a href="#" rel="%s">%s</a></li>' % (e,ff,f))
+                    r.append('<li class="file ext_%s"><img class="delete" src="/editor/static/file-icons/delete.png" rel="%s"><a href="#" rel="%s">%s</a></li>' % (e,ff,ff,f))
         r.append('</ul>')
     except Exception,e:
         r.append('Could not load directory: %s' % str(e))
@@ -116,13 +116,13 @@ def edit(path):                            # of redirects from /save route POSTs
 @editor.route('/file_delete', methods=['POST'])
 def file_delete():
     import subprocess
-    subprocess.Popen(['rm', request.form['filename']])
+    # subprocess.Popen(['rm', request.form['filename']])
     return redirect('/edit/', 302)
 
 @editor.route('/file_rename', methods=['POST'])
 def file_rename():
     import subprocess
-    subprocess.Popen(['mv', request.form['old_filename'], request.form['new_filename']])
+    # subprocess.Popen(['mv', request.form['old_filename'], request.form['new_filename']])
     return redirect('/edit/', 302)
 
 @editor.route('/get_dirlist', methods=['POST'])
