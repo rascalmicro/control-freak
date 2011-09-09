@@ -12,18 +12,18 @@ def lcd():
 
 @public.route('/relay.html')
 def index():
-    import rascal
-    pin = rascal.read_pin(2)
-    (chan0, chan1, chan2, chan3) = rascal.summarize_analog_data()
+    import pytronics
+    pin = pytronics.read_pin(2)
+    (chan0, chan1, chan2, chan3) = pytronics.summarize_analog_data()
     return render_template('/relay.html', chan0=chan0, chan1=chan1, chan2=chan2, chan3=chan3, pin=pin)
 
 @public.route('/toggle', methods=['POST'])
 def toggle():
     if(request.form['target_state'] == '1'):
-        rascal.set_pin_high(2)
+        pytronics.set_pin_high(2)
         result = 'Pins set high'
     elif(request.form['target_state'] == '0'):
-        rascal.set_pin_low(2)
+        pytronics.set_pin_low(2)
         result = 'Pins set low'
     else:
         result = 'Target_state is screwed up'
@@ -31,12 +31,12 @@ def toggle():
 
 @public.route('/lcd.html', methods=['POST'])
 def write_serial():
-    import rascal
-    rascal.send_serial(request.form['serial_text'], 9600)
+    import pytronics
+    pytronics.send_serial(request.form['serial_text'], 9600)
     return render_template('/lcd.html')
 
 @public.route('/clear', methods=['POST'])
 def clear_lcd():
-    import rascal
-    rascal.send_serial(chr(0xFE) + chr(0x01), 9600)
+    import pytronics
+    pytronics.send_serial(chr(0xFE) + chr(0x01), 9600)
     return render_template('/lcd.html')
