@@ -10,26 +10,14 @@
     <!--[if IE]><script language="javascript" type="text/javascript" src="/excanvas.js"></script><![endif]-->
     <script language="javascript" type="text/javascript" src="/static/jquery.jqplot.js"></script>
     <link rel="stylesheet" type="text/css" href="/static/jquery.jqplot.css" />
-    <script language="javascript" type="text/javascript">
-    function tellRascal() {
-        $.ajax({
-            type: "POST",
-            url: "toggle",
-            data: "target_state=" + $("#target_state").val(),
-            success: function(resp){},
-            error: function(e){
-                alert('Error: ' + e);
-            }
-        });
-    }
-    </script>
 </head>
 <body>
     <div class="rascalcontent">
         <h1>Relay demo</h1>
         <form id="relay-form">
             <label for="target_state">Toggle relay to charge and discharge capacitor:</label>
-            <select id="target_state" onchange="tellRascal();">
+            <input id="save" type="submit" value="Toggle relay" class="large red awesome" alt="Toggle relay">
+            <select id="target_state">
                 {% if pin == '1' %}
                 <option value="0">Off</option>
                 <option value="1" selected="selected">On</option>
@@ -42,11 +30,11 @@
         <div id="chart1" style="height:600px;width:900px;"></div>
     </div>
     <script language="javascript" type="text/javascript">
-    line0 = {{chan0}}
-    line1 = {{chan1}}
-    line2 = {{chan2}}
-    line3 = {{chan3}}
-    $.jqplot("chart1", [line0, line1, line2, line3], {
+    $('#target_state').change(function() {
+        $.post("toggle", "target_state=" + $("#target_state").val());
+    });
+
+    chartOptions = {
         legend: {
             show: true,
             location: 'nw' },
@@ -60,17 +48,39 @@
         axes: {
             xaxis: {
                 label: 'Time [seconds ago]',
-                min: -120,
-                max: 0,
+                min: 0,
+                max: 120,
                 pad: 0 },
             yaxis: {
                 label: 'Voltage [V]',
                 min: 0,
-                max: 18.0 },
+                max: 4.0 },
         },
         seriesColors: [ "#4bb2c5", "#cd2820", "#EAA228", "#579575", "#839557", "#958c12",
                 "#953579", "#4b5de4", "#d8b83f", "#ff5800", "#0085cc"]
-    });
+    };
+
+    a0 = new Array();
+    a1 = new Array();
+    a2 = new Array();
+    a3 = new Array();
+
+    setInterval(function() {
+        $.post("analog", function(response) {
+            data = $.parseJSON(response);
+            if(a0.length > chartOptions.axes.xaxis.max) {
+                a0.shift();
+                a1.shift();
+                a2.shift();
+                a3.shift();
+            }
+            a0.push(data.A0);
+            a1.push(data.A1);
+            a2.push(data.A2);
+            a3.push(data.A3);
+            $.jqplot("chart1", [a0, a1, a2, a3], chartOptions).replot();
+        });
+    }, 200);
     </script>
 </body>
 </html>

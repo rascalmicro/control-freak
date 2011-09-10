@@ -19,6 +19,7 @@ def index():
 
 @public.route('/toggle', methods=['POST'])
 def toggle():
+    import pytronics
     if(request.form['target_state'] == '1'):
         pytronics.set_pin_high(2)
         result = 'Pins set high'
@@ -28,6 +29,19 @@ def toggle():
     else:
         result = 'Target_state is screwed up'
     return result
+
+@public.route('/analog', methods=['POST'])
+def analog():
+    from pytronics import read_analog
+    import json, time
+    data = {
+        "time" : float(time.time()),
+        "A0" : float(read_analog('A0')) * 3.3 / 1024.0,
+        "A1" : float(read_analog('A1')) * 3.3 / 1024.0,
+        "A2" : float(read_analog('A2')) * 3.3 / 1024.0,
+        "A3" : float(read_analog('A3')) * 3.3 / 1024.0
+    }
+    return json.dumps(data)
 
 @public.route('/lcd.html', methods=['POST'])
 def write_serial():
