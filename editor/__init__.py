@@ -16,7 +16,7 @@ def dirlist(d): # This function heavily based on Martin Skou's connector script 
                 r.append('<li class="directory collapsed"><img class="delete" src="/editor/static/file-icons/delete.png"><a href="#" rel="%s/">%s</a></li>' % (ff,f))
             else:
                 e=os.path.splitext(f)[1][1:] # get .ext and remove dot
-                if (e not in noneditable):
+                if (e not in noneditable and f != '__init__.py'):
                     r.append('<li class="file ext_%s"><img class="delete" src="/editor/static/file-icons/delete.png" rel="%s"><a href="#" rel="%s">%s</a></li>' % (e,ff,ff,f))
         r.append('</ul>')
     except Exception,e:
