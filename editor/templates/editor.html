@@ -91,14 +91,10 @@
         }
     }
 
-    function openFile(path) {
-        window.location = "/edit/" + path;
-    };
-
     $(document).ready( function() {
         editor.setOption('mode', pickMode('{{ fileext }}'));
         $('#filetree').fileTree({ root: '/var/www/public/', script: '/get_dirlist', multiFolder: false }, function(path) {
-            openFile(path.split('/var/www/public/')[1]);
+            window.location = "/edit/" + path.split('/var/www/public/')[1];
         });
         if("{{ folder }}" !== "") { // If we're editing a file, expand the directory it's in and list the contents
             $.post("/get_dirlist", {dir: "/var/www/public/{{ folder }}"}, function(response) {
