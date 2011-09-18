@@ -1,6 +1,19 @@
-{% extends "layout.html" %}
+<!doctype html>
+<title>Login Demo</title>
+<link rel="stylesheet" type="text/css" href="/editor/static/style.css">
 
-{% block body %}
+<div class=page>
+  <h1>Login Demo</h1>
+  <div class=metanav>
+  {% if current_user.is_authenticated() %}
+    Welcome, {{ current_user.name }} | <a href="/logout">log out</a>
+  {% else %}
+    You are not logged in | <a href="/login">log in</a>
+  {% endif %}
+  </div>
+  {% for message in get_flashed_messages() %}
+    <div class=flash>{{ message }}</div>
+  {% endfor %}
   <h2>Login</h2>
   <form action="" method=post>
     <dl>
@@ -11,4 +24,4 @@
       <dd><input type=submit value=Login>
     </dl>
   </form>
-{% endblock %}
+</div>

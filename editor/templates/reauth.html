@@ -1,8 +1,21 @@
-{% extends "layout.html" %}
 
-{% block body %}
+<!doctype html>
+<title>Login Demo</title>
+<link rel="stylesheet" type="text/css" href="/editor/static/style.css">
+
+<div class=page>
+  <div class=metanav>
+  {% if current_user.is_authenticated() %}
+    Welcome, {{ current_user.name }} | <a href="/logout">log out</a>
+  {% else %}
+    You are not logged in | <a href="/login">log in</a>
+  {% endif %}
+  </div>
+  {% for message in get_flashed_messages() %}
+    <div class=flash>{{ message }}</div>
+  {% endfor %}
   <h2>Reauthenticate</h2>
   <form action="" method=post>
     <p>Click this button to reauthenticate: <input type=submit value=Reauthenticate>
   </form>
-{% endblock %}
+</div>
