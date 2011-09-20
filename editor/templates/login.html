@@ -1,27 +1,39 @@
-<!doctype html>
-<title>Login Demo</title>
-<link rel="stylesheet" type="text/css" href="/editor/static/style.css">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Rascal demo</title>
+    <link rel="shortcut icon" href="/editor/static/favicon.ico">
 
-<div class=page>
-  <h1>Login Demo</h1>
-  <div class=metanav>
-  {% if current_user.is_authenticated() %}
-    Welcome, {{ current_user.name }} | <a href="/logout">log out</a>
-  {% else %}
-    You are not logged in | <a href="/login">log in</a>
-  {% endif %}
-  </div>
-  {% for message in get_flashed_messages() %}
-    <div class=flash>{{ message }}</div>
-  {% endfor %}
-  <h2>Login</h2>
-  <form action="" method=post>
-    <dl>
-      <dt>Username:
-      <dd><input type=text name=username>
-      <dt>Remember Me:
-      <dd><input type=checkbox name=remember value=yes>
-      <dd><input type=submit value=Login>
-    </dl>
-  </form>
-</div>
+    <link rel="stylesheet" type="text/css" href="/editor/static/style.css">
+    <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Droid+Sans|Molengo'">
+
+    <script src="http://code.jquery.com/jquery-1.5.js"></script>
+</head>
+<body>
+    <div id="topbar">
+        <div class="rascalcontent">
+            <a href="/edit"><img id="rascallogo" src="/editor/static/rm-logo-words-only-light.png"></a>
+            <div class=metanav>
+            {% if current_user.is_authenticated() %}
+              Welcome, {{ current_user.name }} | <a href="/logout">log out</a>
+            {% else %}
+              You are not logged in | <a href="/login">log in</a>
+            {% endif %}
+            </div>
+        </div>
+    </div>
+    <div class="rascalcontent">
+        <div class="centered">
+            {% for message in get_flashed_messages() %}
+            <div class=flash>{{ message }}</div>
+            {% endfor %}
+            <form action="" method=post>
+                <ul id="login-form">
+                      <li>Username:</li>
+                      <li><input id="password-field" type=text name=username><input id="login" type="submit" value="Login" class="large red awesome" alt="Login"></li>
+                      <li>Remember password: <input type=checkbox name=remember value=yes></li>
+                </ul>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

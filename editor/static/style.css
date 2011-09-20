@@ -135,6 +135,21 @@ input {
     margin-right: auto;
 }
 
+.centered {
+    width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#login-form {
+    margin-top: 300px;
+}
+
+#password-field {
+    width: 300px;
+    font-size: 2em;
+}
+
 #location-bar {
     background: #0A001F !important;
     margin-left: 363px;
