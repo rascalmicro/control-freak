@@ -21,9 +21,7 @@ class Anonymous(AnonymousUser):
 
 
 USERS = {
-    1: User(u"Notch", 1),
-    2: User(u"Steve", 2),
-    3: User(u"Creeper", 3, False),
+    1: User(u"rascal", 1),
 }
 
 USER_NAMES = dict((u.name, u) for u in USERS.itervalues())

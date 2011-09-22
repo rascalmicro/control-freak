@@ -52,6 +52,14 @@ input {
     width: 120px;
 }
 
+#template-name {
+    width: 250px;
+}
+
+.small {
+    font-size: 0.8em;
+}
+
 #message-panel {
     float: right;
     clear: none;
@@ -108,7 +116,7 @@ input {
      z-index: 1000;
 }
 
-#new-file-dialog {
+#new-template-dialog {
      width:300px;
      margin: 300px auto;
      background-color: #414243;

@@ -28,6 +28,13 @@
                 <li><a href="/config">config</a> | </li>
                 <li><a href="/monitor">monitor</a></li>
             </ul>
+            <div class=metanav>
+            {% if current_user.is_authenticated() %}
+              Welcome, {{ current_user.name }} | <a href="/logout">log out</a>
+            {% else %}
+              You are not logged in | <a href="/login">log in</a>
+            {% endif %}
+            </div>
         </div>
     </div>
     <div class="rascalcontent">
@@ -51,18 +58,17 @@
             <div id="filetree" class="cm-s-night"></div>
         </div>
         <div id="new-file-folder-bar">
-            <img id="new-file" src="/editor/static/oxygen-new-file-32x32.png">
-            <img id="new-folder" src="/editor/static/oxygen-new-folder-32x32.png">
+            <img id="new-template" src="/editor/static/oxygen-new-file-32x32.png">
         </div>
         <div id="overlay">
-            <div id="new-file-dialog">
-                Create a new file
-                <form method="POST" action="/new_file">
+            <div id="new-template-dialog">
+                Create a new template<br />
+                <div class="small">The name you type should end in .html</div>
+                <form method="POST" action="/new_template">
                     <fieldset>
-                        <label for="filename">Filename</label>
-                        <input type="text" name="filename" id="filename"/>
-                        <input id="create" type="submit" value="Create" class="large red awesome" alt="Create">
-                        <input id="cancel" type="submit" value="Cancel" class="large red awesome" alt="Cancel">
+                        <input type="text" name="template-name" id="template-name"/><br />
+                        <input id="create-template" type="submit" value="Create" class="large red awesome" alt="Create">
+                        <input id="cancel-template" type="button" value="Cancel" class="large red awesome" alt="Cancel">
                     </fieldset>
                 </form>
             </div>
@@ -93,32 +99,36 @@
 
     $(document).ready( function() {
         editor.setOption('mode', pickMode('{{ fileext }}'));
-        $('#filetree').fileTree({ root: '/var/www/public/', script: '/get_dirlist', multiFolder: false }, function(path) {
+        $('#filetree').fileTree({ root: '/var/www/public/', script: '/get_dirlist', multiFolder: false, expandedFolders: ['/static/'] }, function(path) {
             window.location = "/edit/" + path.split('/var/www/public/')[1];
         });
-        if("{{ folder }}" !== "") { // If we're editing a file, expand the directory it's in and list the contents
-            $.post("/get_dirlist", {dir: "/var/www/public/{{ folder }}"}, function(response) {
-                $('#filetree ul li a:contains({{ folder }})').parent().append(response);
-                $('.jqueryFileTree').show();
-                $('#filetree ul li a:contains({{ folder }})').parent().removeClass('collapsed').addClass('expanded');
-            });
-        }
+//        if("{{ folder }}" !== "") { // If we're editing a file, expand the directory it's in and list the contents
+//            $.post("/get_dirlist", {dir: "/var/www/public/{{ folder }}"}, function(response) {
+//                $('#filetree ul li a:contains({{ folder }})').parent().append(response);
+//                $('.jqueryFileTree').show();
+//                $('#filetree ul li a:contains({{ folder }})').parent().removeClass('collapsed').addClass('expanded');
+//            });
+//        }
+         $('.delete').click(function() {
+            $.post('/delete', "filename");
+        });
     });
 
     $('#reload').bind('click', function(event) {
         $.post('/reload', "text");
     });
 
-    $('#new-folder').bind('click', function(event) {
-        $.post('/new_folder', {filename: 'newfolder'});
-    });
-
     $(function() {
         
         var filename = $( "#filename" );
  
-        $( "#new-file" ).click(function() {
-                $( "#overlay" ).css("visibility", "visible");
+        $( "#new-template" ).click(function() {
+            $( "#overlay" ).css("visibility", "visible");
+            $( "#template-name" ).focus();
+        });
+ 
+        $( "#cancel-template" ).click(function() {
+            $( "#overlay" ).css("visibility", "hidden");
         });
     });
 

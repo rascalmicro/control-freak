@@ -17,15 +17,16 @@
                 <li><a href="/config">config</a> | </li>
                 <li><a href="/monitor">monitor</a></li>
             </ul>
+            <div class=metanav>
+            {% if current_user.is_authenticated() %}
+              Welcome, {{ current_user.name }} | <a href="/logout">log out</a>
+            {% else %}
+              You are not logged in | <a href="/login">log in</a>
+            {% endif %}
+            </div>
         </div>
     </div>
     <div class="rascalcontent">
-        App server (interprets Python and fills templates)
-        <div class="log-display">
-            <table class="zebra">
-                <tr><td>{{ app | safe }}</td></tr>
-            </table>
-        </div>
         Webserver access log (serves static files)
         <div class="log-display">
             <table class="zebra">
@@ -36,6 +37,12 @@
         <div class="log-display">
             <table class="zebra">
                 <tr><td>{{ error | safe }}</td></tr>
+            </table>
+        </div>
+        App server (interprets Python and fills templates)
+        <div class="log-display">
+            <table class="zebra">
+                <tr><td>{{ app | safe }}</td></tr>
             </table>
         </div>
     </div>

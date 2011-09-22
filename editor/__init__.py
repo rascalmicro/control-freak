@@ -20,14 +20,39 @@ class Anonymous(AnonymousUser):
 
 
 USERS = {
-    1: User(u"Notch", 1),
-    2: User(u"Steve", 2),
-    3: User(u"Creeper", 3, False),
+    1: User(u"rascal", 1),
 }
 
 USER_NAMES = dict((u.name, u) for u in USERS.itervalues())
 
 editor = Blueprint('editor', __name__, static_url_path='/editor/', static_folder='static', template_folder='templates')
+
+BOILERPLATE = """
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>New page</title>
+    <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Droid+Sans|Molengo">
+    <link rel="stylesheet" type="text/css" href="/static/demo.css">
+    <link rel="shortcut icon" href="/static/favicon.ico">
+    <script src="/static/jquery-1.5.js"></script>
+    <!--[if IE]><script language="javascript" type="text/javascript" src="/excanvas.js"></script><![endif]-->
+    <script language="javascript" type="text/javascript" src="/static/jquery.jqplot.js"></script>
+    <link rel="stylesheet" type="text/css" href="/static/jquery.jqplot.css" />
+</head>
+<body>
+    <div class="rascalcontent">
+        <h1>This is your new page.</h1>
+        You can add some text here, or use template variables: {{magic}}
+    </div>
+    <script language="javascript" type="text/javascript">
+    // You could add some Javascript between these script tags, if you want.
+    // jQuery and jqPlot are already included in the header above.
+    </script>
+</body>
+</html>
+"""
 
 def dirlist(d): # This function heavily based on Martin Skou's connector script for jQuery File Tree
     import os
@@ -159,18 +184,13 @@ def get_dirlist():
         print("Key error in attempt to list directory contents.")
     return str(dirlist(request.form['dir']))
 
-@editor.route('/new_file', methods=['POST'])
-def new_file():
-    import subprocess
-    name = secure_path(request.form['filename'])
-    subprocess.Popen(['touch', '/var/www/public/' + name])
-    return redirect('/edit/' + name, 302)
-
-@editor.route('/new_folder', methods=['POST'])
-def new_folder():
-    import subprocess
-    result = subprocess.Popen(['mkdir', '/var/www/public/' + secure_path(request.form['filename'])])
-    return render_template('editor.html')
+@editor.route('/new_template', methods=['POST'])
+def new_template():
+    name = secure_path(request.form['template-name'])
+    f = open('/var/www/public/templates/' + name, 'w')
+    f.write(BOILERPLATE)
+    f.close()
+    return redirect('/edit/templates/' + name, 302)
 
 @editor.route('/reload', methods=['POST'])
 def reload():
@@ -187,9 +207,9 @@ def save():
     f.close()
     return redirect('/edit/' + path, 302)
 
-@editor.route("/")
-def index():
-    return render_template("index.html")
+#@editor.route("/")
+#def index():
+#    return render_template("index.html")
 
 @editor.route("/login", methods=["GET", "POST"])
 def login():

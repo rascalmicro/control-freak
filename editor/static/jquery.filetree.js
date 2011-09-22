@@ -45,7 +45,8 @@ if(jQuery) (function($){
 			if( o.collapseEasing == undefined ) o.collapseEasing = null;
 			if( o.multiFolder == undefined ) o.multiFolder = true;
 			if( o.loadMessage == undefined ) o.loadMessage = 'Loading...';
-			
+            if(o.expandedFolders == undefined) o.expandedFolders = [];			
+
 			$(this).each( function() {
 				
 				function showTree(c, t) {
@@ -56,6 +57,14 @@ if(jQuery) (function($){
 						$(c).removeClass('wait').append(data);
 						if( o.root == t ) $(c).find('UL:hidden').show(); else $(c).find('UL:hidden').slideDown({ duration: o.expandSpeed, easing: o.expandEasing });
 						bindTree(c);
+                        if (o.expandedFolders != null) {
+                            $(c).find(".directory.collapsed").each(function (i,f) {
+                                if ($.inArray($(f).children().attr('rel'), $(o.expandedFolders)) != -1) {
+                                    showTree($(f), escape($(f).children().attr('rel').match(/.*\//)));
+                                    $(f).removeClass('collapsed').addClass('expanded');
+                                }
+                            });
+                        }
 					});
 				}
 				
