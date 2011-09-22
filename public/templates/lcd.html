@@ -9,6 +9,9 @@
 </head>
 <body>
     <div class="rascalcontent">
+{% if current_user.is_authenticated() %}
+    <a href="/edit" style="position: absolute; top:0; right:0; background:#414243;">| editor |</a>
+{% endif %}
         <h1><a href="/lcd.html">LCD demo</a></h1>
         <form id="serial_form" method="POST" action="lcd.html" style="float:left">
             <label for="serial_text">Enter some text to send to the LCD display</label><br />

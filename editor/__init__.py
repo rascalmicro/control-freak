@@ -115,6 +115,7 @@ def config():
         abort(404)
 
 @editor.route('/log')
+@login_required
 def log():
     try:
         f = open('/var/log/uwsgi.log', 'r')
@@ -131,6 +132,7 @@ def log():
         abort(404)
 
 @editor.route('/monitor')
+@login_required
 def monitor():
     try:
         import subprocess
@@ -141,6 +143,7 @@ def monitor():
         abort(404)
 
 @editor.route('/edit/')
+@login_required
 def start_edit():
     try:
         return render_template('editor.html', text_to_edit='No file selected')
@@ -148,7 +151,8 @@ def start_edit():
         abort(404)
 
 @editor.route('/edit/<path:path>', methods=['GET', 'POST']) # POST added because
-def edit(path):                            # of redirects from /save route POSTs
+@login_required                            # of redirects from /save route POSTs
+def edit(path):
     try:
         path = secure_path(path)
         f = open('/var/www/public/' + path, 'r')
@@ -165,18 +169,21 @@ def edit(path):                            # of redirects from /save route POSTs
         abort(404)
 
 @editor.route('/file_delete', methods=['POST'])
+@login_required
 def file_delete():
     import subprocess
     # subprocess.Popen(['rm', request.form['filename']])
     return redirect('/edit/', 302)
 
 @editor.route('/file_rename', methods=['POST'])
+@login_required
 def file_rename():
     import subprocess
     # subprocess.Popen(['mv', request.form['old_filename'], request.form['new_filename']])
     return redirect('/edit/', 302)
 
 @editor.route('/get_dirlist', methods=['POST'])
+@login_required
 def get_dirlist():
     try:
         request.form['dir']
@@ -185,6 +192,7 @@ def get_dirlist():
     return str(dirlist(request.form['dir']))
 
 @editor.route('/new_template', methods=['POST'])
+@login_required
 def new_template():
     name = secure_path(request.form['template-name'])
     f = open('/var/www/public/templates/' + name, 'w')
@@ -193,12 +201,14 @@ def new_template():
     return redirect('/edit/templates/' + name, 302)
 
 @editor.route('/reload', methods=['POST'])
+@login_required
 def reload():
     import subprocess
     subprocess.Popen(['touch', '/etc/uwsgi.reload'])
     return render_template('editor.html')
 
 @editor.route('/save', methods=['POST'])
+@login_required
 def save():
     root = '/var/www/public/'
     path = secure_path(request.form['path'])
@@ -206,10 +216,6 @@ def save():
     f.write(request.form['text'])
     f.close()
     return redirect('/edit/' + path, 302)
-
-#@editor.route("/")
-#def index():
-#    return render_template("index.html")
 
 @editor.route("/login", methods=["GET", "POST"])
 def login():
