@@ -43,11 +43,11 @@
         <div id="editor">
             <form method="POST" action="/save">
                 <div id="button-bar">
-                    <input id="save" type="submit" value="Save" class="large red awesome" alt="Save">
+                    <input id="save" type="button" value="Save" class="large red awesome" alt="Save">
                     <input id="path" type="hidden" name="path" value="{{ path }}">
                 </div>
                 <div id="location-bar">
-                    &nbsp;<a href="/{{ target }}">{{ path }}</a>
+                    &nbsp;<a></a>
                 </div>
                 <div id="textfield">
                     <textarea id="code" cols="100" rows="120" name="text">{{text_to_edit}}</textarea>
@@ -97,47 +97,65 @@
         }
     }
 
-    $(document).ready( function() {
-        editor.setOption('mode', pickMode('{{ fileext }}'));
-        $('#filetree').fileTree({ root: '/var/www/public/', script: '/get_dirlist', multiFolder: false, expandedFolders: ['/static/'] }, function(path) {
-            window.location = "/edit/" + path.split('/var/www/public/')[1];
+    function saveFile() {
+        $.post('/save', { path: $('#path').val(), text: editor.getValue() });
+    }
+
+    // Function for binding ctrl keystrokes from Ganeshji Marwaha:
+    // http://www.gmarwaha.com/blog/2009/06/16/ctrl-key-combination-simple-jquery-plugin/
+    $.ctrl = function(key, callback, args) {
+        $(document).keydown(function(e) {
+            if(!args) args=[]; // IE barks when args is null
+            if(e.keyCode == key.charCodeAt(0) && e.ctrlKey) {
+                callback.apply(this, args);
+                return false;
+            }
         });
-//        if("{{ folder }}" !== "") { // If we're editing a file, expand the directory it's in and list the contents
-//            $.post("/get_dirlist", {dir: "/var/www/public/{{ folder }}"}, function(response) {
-//                $('#filetree ul li a:contains({{ folder }})').parent().append(response);
-//                $('.jqueryFileTree').show();
-//                $('#filetree ul li a:contains({{ folder }})').parent().removeClass('collapsed').addClass('expanded');
-//            });
-//        }
-         $('.delete').click(function() {
-            $.post('/delete', "filename");
+    };
+
+    $(document).ready( function() {
+        $('#filetree').fileTree({ root: '/var/www/public/', script: '/get_dirlist', multiFolder: false }, function(path) {
+            $.post('/read', "path=" + path.split('/var/www/public/').pop(), function(response) {
+                editor.setValue(response);
+                editor.setOption('mode', pickMode(path.split('.').pop()));
+                $('#location-bar').children('a').text(path.split('/var/www/public/').pop());
+                if (path.split('/var/www/public/')[1].match(/templates/)) { // hack to fix template links. could be improved.
+                    $('#location-bar').children('a').attr('href', path.split('/var/www/public/templates').pop());
+                }
+                $('#path').val(path.split('/var/www/public/').pop());
+            });
         });
     });
 
-    $('#reload').bind('click', function(event) {
+    $('#reload').click( function() {
         $.post('/reload', "text");
     });
 
-    $(function() {
-        
-        var filename = $( "#filename" );
- 
-        $( "#new-template" ).click(function() {
-            $( "#overlay" ).css("visibility", "visible");
-            $( "#template-name" ).focus();
-        });
- 
-        $( "#cancel-template" ).click(function() {
-            $( "#overlay" ).css("visibility", "hidden");
-        });
+    $.ctrl('S', function() {
+        saveFile();
+    });
+
+    $( "#save" ).click(function() {
+        saveFile();
+    });
+
+    $( "#new-template" ).click(function() {
+        $( "#overlay" ).css("visibility", "visible");
+        $( "#template-name" ).focus();
+    });
+
+    $( "#cancel-template" ).click(function() {
+        $( "#overlay" ).css("visibility", "hidden");
     });
 
     $('li').live('mouseenter mouseleave', function(event) {
         if(event.type == 'mouseenter') {
             $(this).children('img').css('visibility', 'visible');
+            $(this).children('img').click(function() {
+                $.post('/delete', { filename: $(this).val() });
+            });
         } else {
             $(this).children('img').css('visibility', 'hidden');
-
         }
     });
 

@@ -150,24 +150,6 @@ def start_edit():
     except TemplateNotFound:
         abort(404)
 
-@editor.route('/edit/<path:path>', methods=['GET', 'POST']) # POST added because
-@login_required                            # of redirects from /save route POSTs
-def edit(path):
-    try:
-        path = secure_path(path)
-        f = open('/var/www/public/' + path, 'r')
-        target = path
-        if path.startswith('templates'):
-            target = path[10:] # strip out 'templates/' to make relative link match template routes
-            folder = 'templates'
-        elif path.startswith('static'):
-            folder = 'static'
-        else:
-            folder = ''
-        return render_template('editor.html', text_to_edit=f.read(), folder=folder, path=path, target=target, fileext=path.split('.').pop())
-    except TemplateNotFound:
-        abort(404)
-
 @editor.route('/file_delete', methods=['POST'])
 @login_required
 def file_delete():
@@ -200,6 +182,14 @@ def new_template():
     f.close()
     return redirect('/edit/templates/' + name, 302)
 
+
+@editor.route('/read', methods=['POST'])
+@login_required
+def read_contents():
+    path = secure_path(request.form['path'])
+    f = open('/var/www/public/' + path, 'r')
+    return f.read()
+
 @editor.route('/reload', methods=['POST'])
 @login_required
 def reload():
@@ -215,7 +205,7 @@ def save():
     f = open(root + path, 'w')
     f.write(request.form['text'])
     f.close()
-    return redirect('/edit/' + path, 302)
+    return '0';
 
 @editor.route("/login", methods=["GET", "POST"])
 def login():

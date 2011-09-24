@@ -4,15 +4,7 @@ public = Blueprint('public', __name__, static_folder='static', template_folder='
 
 @public.route('/<template_name>.html')
 def template(template_name):
-    return render_template(template_name + '.html', magic="Hey, presto!")
-
-@public.route('/arduino.html')
-def arduino():
-    return render_template('/arduino.html')
-
-@public.route('/lcd.html')
-def lcd():
-    return render_template('/lcd.html')
+    return render_template(template_name + '.html', magic="Hey presto!")
 
 @public.route('/')
 @public.route('/relay.html')
