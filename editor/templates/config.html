@@ -1,6 +1,6 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <title>Rascal demo</title>
+    <title>Config</title>
     <link rel="shortcut icon" href="/editor/static/favicon.ico">
 
     <link rel="stylesheet" type="text/css" href="/editor/static/style.css">
@@ -27,12 +27,14 @@
         </div>
     </div>
     <div class="rascalcontent">
-<div class=page>
-  {% for message in get_flashed_messages() %}
-    <div class=flash>{{ message }}</div>
-  {% endfor %}
-</div>
-    This is the config page.
+        <div class=page>
+          {% for message in get_flashed_messages() %}
+            <div class=flash>{{ message }}</div>
+          {% endfor %}
+        </div>
+        <pre>
+{{ processes }}
+        </pre>
     </div>
 </body>
 </html>

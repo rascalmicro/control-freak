@@ -32,7 +32,7 @@ BOILERPLATE = """
 <html>
 <head>
     <meta charset="utf-8">
-    <title>New page</title>
+    <title></title>
     <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Droid+Sans|Molengo">
     <link rel="stylesheet" type="text/css" href="/static/demo.css">
     <link rel="shortcut icon" href="/static/favicon.ico">
@@ -105,7 +105,7 @@ def tail(f, n, offset=None):
         avg_line_length *= 1.3
 
 @editor.route('/config')
-@fresh_login_required
+@login_required
 def config():
     try:
         import subprocess
@@ -180,7 +180,7 @@ def new_template():
     f = open('/var/www/public/templates/' + name, 'w')
     f.write(BOILERPLATE)
     f.close()
-    return redirect('/edit/templates/' + name, 302)
+    return redirect('/edit/', 302)
 
 
 @editor.route('/read', methods=['POST'])
