@@ -10,7 +10,7 @@
 </head>
 <body>
     <div id="topbar">
-        <div class="rascalcontent">
+        <div class="centered">
             <a href="/edit"><img id="rascallogo" src="/editor/static/rm-logo-words-only-light.png"></a>
             <div class=metanav>
             {% if current_user.is_authenticated() %}
@@ -21,11 +21,8 @@
             </div>
         </div>
     </div>
-    <div class="rascalcontent">
+    <div class="narrow-content">
         <div class="centered">
-            {% for message in get_flashed_messages() %}
-            <div class=flash>{{ message }}</div>
-            {% endfor %}
             <form action="" method=post>
                 <ul id="login-form">
                       <li>Username:</li>
@@ -33,7 +30,13 @@
                       <li>Remember password: <input type=checkbox name=remember value=yes></li>
                 </ul>
             </form>
+            {% for message in get_flashed_messages() %}
+            <div class=flash>{{ message }}</div>
+            {% endfor %}
         </div>
     </div>
+    <script>
+        $(".flash").delay(5).fadeOut('slow');
+    </script>
 </body>
 </html>
