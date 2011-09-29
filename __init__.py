@@ -1,5 +1,4 @@
 from flask import flash, Flask, redirect, render_template, request, url_for
-from www.public import public
 from www.editor import editor
 
 from flaskext.login import (LoginManager, current_user, login_required,
@@ -46,5 +45,4 @@ def load_user(id):
 
 login_manager.setup_app(app)
 
-app.register_blueprint(public)
 app.register_blueprint(editor)

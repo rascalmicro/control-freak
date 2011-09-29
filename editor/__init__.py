@@ -104,7 +104,7 @@ def tail(f, n, offset=None):
                    len(lines) > to_read or pos > 0
         avg_line_length *= 1.3
 
-@editor.route('/config')
+@editor.route('/editor/config')
 @login_required
 def config():
     try:
@@ -114,7 +114,7 @@ def config():
     except TemplateNotFound:
         abort(404)
 
-@editor.route('/log')
+@editor.route('/editor/log')
 @login_required
 def log():
     try:
@@ -131,7 +131,7 @@ def log():
     except TemplateNotFound:
         abort(404)
 
-@editor.route('/monitor')
+@editor.route('/editor/monitor')
 @login_required
 def monitor():
     try:
@@ -142,7 +142,7 @@ def monitor():
     except TemplateNotFound:
         abort(404)
 
-@editor.route('/edit/')
+@editor.route('/editor/edit/')
 @login_required
 def start_edit():
     try:
@@ -150,21 +150,21 @@ def start_edit():
     except TemplateNotFound:
         abort(404)
 
-@editor.route('/file_delete', methods=['POST'])
+@editor.route('/editor/file_delete', methods=['POST'])
 @login_required
 def file_delete():
     import subprocess
     # subprocess.Popen(['rm', request.form['filename']])
-    return redirect('/edit/', 302)
+    return redirect('/editor/edit/', 302)
 
-@editor.route('/file_rename', methods=['POST'])
+@editor.route('/editor/file_rename', methods=['POST'])
 @login_required
 def file_rename():
     import subprocess
     # subprocess.Popen(['mv', request.form['old_filename'], request.form['new_filename']])
-    return redirect('/edit/', 302)
+    return redirect('/editor/edit/', 302)
 
-@editor.route('/get_dirlist', methods=['POST'])
+@editor.route('/editor/get_dirlist', methods=['POST'])
 @login_required
 def get_dirlist():
     try:
@@ -173,17 +173,17 @@ def get_dirlist():
         print("Key error in attempt to list directory contents.")
     return str(dirlist(request.form['dir']))
 
-@editor.route('/new_template', methods=['POST'])
+@editor.route('/editor/new_template', methods=['POST'])
 @login_required
 def new_template():
     name = secure_path(request.form['template-name'])
     f = open('/var/www/public/templates/' + name, 'w')
     f.write(BOILERPLATE)
     f.close()
-    return redirect('/edit/', 302)
+    return redirect('/editor/edit/', 302)
 
 
-@editor.route('/read', methods=['POST'])
+@editor.route('/editor/read', methods=['POST'])
 @login_required
 def read_contents():
     path = secure_path(request.form['path'])
@@ -197,7 +197,7 @@ def reload():
     subprocess.Popen(['touch', '/etc/uwsgi.reload'])
     return render_template('editor.html')
 
-@editor.route('/save', methods=['POST'])
+@editor.route('/editor/save', methods=['POST'])
 @login_required
 def save():
     root = '/var/www/public/'
@@ -207,7 +207,7 @@ def save():
     f.close()
     return '0';
 
-@editor.route("/login", methods=["GET", "POST"])
+@editor.route("/editor/login", methods=["GET", "POST"])
 def login():
     if request.method == "POST" and "username" in request.form:
         username = request.form["username"]
@@ -223,7 +223,7 @@ def login():
     return render_template("login.html")
 
 
-@editor.route("/reauth", methods=["GET", "POST"])
+@editor.route("/editor/reauth", methods=["GET", "POST"])
 @login_required
 def reauth():
     if request.method == "POST":
@@ -233,7 +233,7 @@ def reauth():
     return render_template("reauth.html")
 
 
-@editor.route("/logout")
+@editor.route("/editor/logout")
 @login_required
 def logout():
     logout_user()

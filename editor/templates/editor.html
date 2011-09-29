@@ -22,11 +22,11 @@
 <body>
     <div id="topbar">
         <div class="rascalcontent">
-            <a href="/edit"><img id="rascallogo" src="/editor/static/rm-logo-words-only-light.png"></a>
+            <a href="/editor/edit"><img id="rascallogo" src="/editor/static/rm-logo-words-only-light.png"></a>
             <ul id="nav">
-                <li><a href="/log">log</a> | </li>
-                <li><a href="/config">config</a> | </li>
-                <li><a href="/monitor">monitor</a></li>
+                <li><a href="/editor/log">log</a> | </li>
+                <li><a href="/editor/config">config</a> | </li>
+                <li><a href="/editor/monitor">monitor</a></li>
             </ul>
             <div class=metanav>
             {% if current_user.is_authenticated() %}
@@ -98,7 +98,7 @@
     }
 
     function saveFile() {
-        $.post('/save', { path: $('#path').val(), text: editor.getValue() });
+        $.post('/editor/save', { path: $('#path').val(), text: editor.getValue() });
     }
 
     // Function for binding ctrl keystrokes from Ganeshji Marwaha:
@@ -114,8 +114,8 @@
     };
 
     $(document).ready( function() {
-        $('#filetree').fileTree({ root: '/var/www/public/', script: '/get_dirlist', multiFolder: false }, function(path) {
-            $.post('/read', "path=" + path.split('/var/www/public/').pop(), function(response) {
+        $('#filetree').fileTree({ root: '/var/www/public/', script: '/editor/get_dirlist', multiFolder: false }, function(path) {
+            $.post('/editor/read', "path=" + path.split('/var/www/public/').pop(), function(response) {
                 editor.setValue(response);
                 editor.setOption('mode', pickMode(path.split('.').pop()));
                 $('#location-bar').children('a').text(path.split('/var/www/public/').pop());
@@ -128,7 +128,7 @@
     });
 
     $('#reload').click( function() {
-        $.post('/reload', "text");
+        $.post('/editor/reload', "text");
     });
 
     $.ctrl('S', function() {
@@ -152,7 +152,7 @@
         if(event.type == 'mouseenter') {
             $(this).children('img').css('visibility', 'visible');
             $(this).children('img').click(function() {
-                $.post('/delete', { filename: $(this).val() });
+                $.post('/editor/delete', { filename: $(this).val() });
             });
         } else {
             $(this).children('img').css('visibility', 'hidden');

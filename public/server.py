@@ -1,6 +1,6 @@
-from flask import Blueprint, render_template, request
+from flask import Flask, render_template, request
 
-public = Blueprint('public', __name__, static_folder='static', template_folder='templates')
+public = Flask(__name__)
 
 @public.route('/<template_name>.html')
 def template(template_name):
@@ -51,3 +51,6 @@ def clear_lcd():
     import pytronics
     pytronics.send_serial(chr(0xFE) + chr(0x01), 9600)
     return render_template('/lcd.html')
+
+if __name__ == "__main__":
+    public.run(host='127.0.0.1:5000', debug=True)
