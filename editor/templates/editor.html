@@ -18,6 +18,7 @@
     <script src="/editor/static/codemirror2/mode/xml/xml.js"></script>
     <script src="/editor/static/jquery-1.5.js"></script>
     <script src="/editor/static/jquery.filetree.js"></script>
+    <script src="/editor/static/jquery.progressbar.js"></script>
 </head>
 <body>
     <div id="topbar">
@@ -30,7 +31,7 @@
             </ul>
             <div class=metanav>
             {% if current_user.is_authenticated() %}
-              Welcome, {{ current_user.name }} | <a href="/logout">log out</a>
+              Welcome, {{ current_user.name }} | <a href="/editor/logout">log out</a>
             {% else %}
               You are not logged in | <a href="/login">log in</a>
             {% endif %}
@@ -39,7 +40,7 @@
     </div>
     <div class="rascalcontent">
         <input id="reload" value="Reload pytronics" class="large red awesome" alt="Reload pytronics">
-        <textarea id="message-panel" class="cm-s-night">In theory, there will be console messages here.</textarea>
+        <span class="progressBar" id="pb1">100%</span>
         <div id="editor">
             <form method="POST" action="/save">
                 <div id="button-bar">
@@ -127,8 +128,10 @@
         });
     });
 
+
     $('#reload').click( function() {
         $.post('/editor/reload', "text");
+        $("#pb1").progressBar( { barImage: '/editor/static/images/progressbg_red.gif', boxImage: '/editor/static/images/progressbar.gif', steps: '500'} );
     });
 
     $.ctrl('S', function() {

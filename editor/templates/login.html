@@ -14,9 +14,9 @@
             <a href="/edit"><img id="rascallogo" src="/editor/static/rm-logo-words-only-light.png"></a>
             <div class=metanav>
             {% if current_user.is_authenticated() %}
-              Welcome, {{ current_user.name }} | <a href="/logout">log out</a>
+              Welcome, {{ current_user.name }} | <a href="/editor/logout">log out</a>
             {% else %}
-              You are not logged in | <a href="/login">log in</a>
+              You are not logged in | <a href="/editor/login">log in</a>
             {% endif %}
             </div>
         </div>
@@ -25,9 +25,8 @@
         <div class="centered">
             <form action="" method=post>
                 <ul id="login-form">
-                      <li>Username:</li>
-                      <li><input id="password-field" type=text name=username><input id="login" type="submit" value="Login" class="large red awesome" alt="Login"></li>
-                      <li>Remember password: <input type=checkbox name=remember value=yes></li>
+                      <li>Password:</li>
+                      <li><input id="password-field" type=text name=password><input id="login" type="submit" value="Login" class="large red awesome" alt="Login"></li>
                 </ul>
             </form>
             {% for message in get_flashed_messages() %}
@@ -36,7 +35,7 @@
         </div>
     </div>
     <script>
-        $(".flash").delay(5).fadeOut('slow');
+        $(".flash").delay(5000).fadeOut('slow');
     </script>
 </body>
 </html>

@@ -69,7 +69,7 @@ input {
     width: 642px;
 }
 
-#reload {
+#reload, #pb1 {
     float: right;
     clear: none;
     width: 160px;

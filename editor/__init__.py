@@ -142,7 +142,7 @@ def monitor():
     except TemplateNotFound:
         abort(404)
 
-@editor.route('/editor/edit/')
+@editor.route('/editor/')
 @login_required
 def start_edit():
     try:
@@ -155,14 +155,14 @@ def start_edit():
 def file_delete():
     import subprocess
     # subprocess.Popen(['rm', request.form['filename']])
-    return redirect('/editor/edit/', 302)
+    return redirect('/editor/', 302)
 
 @editor.route('/editor/file_rename', methods=['POST'])
 @login_required
 def file_rename():
     import subprocess
     # subprocess.Popen(['mv', request.form['old_filename'], request.form['new_filename']])
-    return redirect('/editor/edit/', 302)
+    return redirect('/editor/', 302)
 
 @editor.route('/editor/get_dirlist', methods=['POST'])
 @login_required
@@ -180,7 +180,7 @@ def new_template():
     f = open('/var/www/public/templates/' + name, 'w')
     f.write(BOILERPLATE)
     f.close()
-    return redirect('/editor/edit/', 302)
+    return redirect('/editor/', 302)
 
 
 @editor.route('/editor/read', methods=['POST'])
@@ -190,11 +190,11 @@ def read_contents():
     f = open('/var/www/public/' + path, 'r')
     return f.read()
 
-@editor.route('/reload', methods=['POST'])
+@editor.route('/editor/reload', methods=['POST'])
 @login_required
 def reload():
     import subprocess
-    subprocess.Popen(['touch', '/etc/uwsgi.reload'])
+    subprocess.Popen(['touch', '/etc/uwsgi/public.ini'])
     return render_template('editor.html')
 
 @editor.route('/editor/save', methods=['POST'])
@@ -205,21 +205,32 @@ def save():
     f = open(root + path, 'w')
     f.write(request.form['text'])
     f.close()
-    return '0';
+    return '0'
+
+def get_hash(username):
+    f = open('/etc/passwd', 'r')
+    accounts = f.readlines()
+    for account in accounts:
+        if account.startswith(username):
+            return account.split(':')[1]
+    import os
+    return os.urandom(13) # In the event that the account doesn't exist, return random noise to prevent login
 
 @editor.route("/editor/login", methods=["GET", "POST"])
 def login():
-    if request.method == "POST" and "username" in request.form:
-        username = request.form["username"]
-        if username in USER_NAMES:
-            remember = request.form.get("remember", "no") == "yes"
-            if login_user(USER_NAMES[username], remember=remember):
+    import crypt
+    if request.method == "POST" and "password" in request.form:
+        pw = request.form["password"]
+        hash = get_hash('root')
+        salt = hash[0:2]
+        if crypt.crypt(pw, salt) == hash:
+            if login_user(USER_NAMES['rascal']):
                 flash("Logged in!")
                 return redirect(request.args.get("next") or "/")
             else:
                 flash("Sorry, but you could not log in.")
         else:
-            flash(u"Invalid username.")
+            flash("Sorry, but you could not log in.")
     return render_template("login.html")
 
 
