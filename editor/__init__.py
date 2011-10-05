@@ -117,7 +117,6 @@ def config():
 @editor.route('/editor/log')
 @login_required
 def log():
-    print("rendering /editor/log")
     try:
         f = open('/var/log/uwsgi/public.log', 'r')
         app_log = '</td></tr>\n<tr><td>'.join(tail(f, 10)[0])
@@ -151,18 +150,12 @@ def start_edit():
     except TemplateNotFound:
         abort(404)
 
-@editor.route('/editor/file_delete', methods=['POST'])
+@editor.route('/editor/delete_template', methods=['POST'])
 @login_required
-def file_delete():
+def delete_template():
     import subprocess
-    # subprocess.Popen(['rm', request.form['filename']])
-    return redirect('/editor/', 302)
-
-@editor.route('/editor/file_rename', methods=['POST'])
-@login_required
-def file_rename():
-    import subprocess
-    # subprocess.Popen(['mv', request.form['old_filename'], request.form['new_filename']])
+    print "Deleting template: " + request.form['filename']
+    subprocess.Popen(['rm', '/var/www/public/templates/' + request.form['filename']])
     return redirect('/editor/', 302)
 
 @editor.route('/editor/get_dirlist', methods=['POST'])

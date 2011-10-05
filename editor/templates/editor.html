@@ -131,7 +131,6 @@
         });
     });
 
-
     $('#reload').click( function() {
         $.post('/editor/reload', "text");
         $('#reload-progress').css("background-position", "-120px");
@@ -159,7 +158,7 @@
         if(event.type == 'mouseenter') {
             $(this).children('img').css('visibility', 'visible');
             $(this).children('img').click(function() {
-                $.post('/editor/delete', { filename: $(this).val() });
+                $.post('/editor/delete_template', { filename: $(this).siblings('a').text() });
             });
         } else {
             $(this).children('img').css('visibility', 'hidden');
