@@ -18,12 +18,11 @@
     <script src="/editor/static/codemirror2/mode/xml/xml.js"></script>
     <script src="/editor/static/jquery-1.5.js"></script>
     <script src="/editor/static/jquery.filetree.js"></script>
-    <script src="/editor/static/jquery.progressbar.js"></script>
 </head>
 <body>
     <div id="topbar">
         <div class="rascalcontent">
-            <a href="/editor/edit"><img id="rascallogo" src="/editor/static/rm-logo-words-only-light.png"></a>
+            <a href="/editor/"><img id="rascallogo" src="/editor/static/rm-logo-words-only-light.png"></a>
             <ul id="nav">
                 <li><a href="/editor/log">log</a> | </li>
                 <li><a href="/editor/config">config</a> | </li>
@@ -39,14 +38,17 @@
         </div>
     </div>
     <div class="rascalcontent">
-        <input id="reload" value="Reload pytronics" class="large red awesome" alt="Reload pytronics">
-        <span class="progressBar" id="pb1">100%</span>
+        <div id="buttons">
+            <input id="reload" type="button" value="Reload pytronics" class="large red awesome" alt="Reload pytronics">
+            <input id="save" type="button" value="Save" class="large red awesome" alt="Save">
+        </div>
+        <div id="progress-bars">
+            <img id="save-progress" src="/editor/static/images/progressbar.gif"><p id="save-message">Saved file</p>
+            <img id="reload-progress" src="/editor/static/images/progressbar.gif">
+        </div>
         <div id="editor">
-            <form method="POST" action="/save">
-                <div id="button-bar">
-                    <input id="save" type="button" value="Save" class="large red awesome" alt="Save">
-                    <input id="path" type="hidden" name="path" value="{{ path }}">
-                </div>
+            <form>
+                <input id="path" type="hidden" name="path" value="{{ path }}">
                 <div id="location-bar">
                     &nbsp;<a></a>
                 </div>
@@ -65,7 +67,7 @@
             <div id="new-template-dialog">
                 Create a new template<br />
                 <div class="small">The name you type should end in .html</div>
-                <form method="POST" action="/new_template">
+                <form method="POST" action="/editor/new_template">
                     <fieldset>
                         <input type="text" name="template-name" id="template-name"/><br />
                         <input id="create-template" type="submit" value="Create" class="large red awesome" alt="Create">
@@ -100,6 +102,7 @@
 
     function saveFile() {
         $.post('/editor/save', { path: $('#path').val(), text: editor.getValue() });
+        $('#save-message').fadeIn().fadeOut();
     }
 
     // Function for binding ctrl keystrokes from Ganeshji Marwaha:
@@ -131,7 +134,8 @@
 
     $('#reload').click( function() {
         $.post('/editor/reload', "text");
-        $("#pb1").progressBar( { barImage: '/editor/static/images/progressbg_red.gif', boxImage: '/editor/static/images/progressbar.gif', steps: '500'} );
+        $('#reload-progress').css("background-position", "-120px");
+        $('#reload-progress').animate({ 'background-position': 0 }, 10000);
     });
 
     $.ctrl('S', function() {

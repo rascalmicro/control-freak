@@ -43,8 +43,29 @@ li {
     margin: 5px;
 }
 
-#button-bar {
-    height: 50px;
+#reload-progress {
+    float: right;
+    width: 120px;
+    background-image: url("/editor/static/images/progressbg_red.gif");
+    background-position: -120px;
+}
+
+#save-progress {
+    width: 120px;
+    background-image: url("/editor/static/images/progressbg_red.gif");
+    background-position: -120px;
+}
+
+#save-message {
+    display: inline;
+}
+
+#mark {
+    float: right;
+}
+
+.log-mark {
+    color: #95C3DB; /* light blue for log page */
 }
 
 input {
@@ -69,7 +90,7 @@ input {
     width: 642px;
 }
 
-#reload, #pb1 {
+#reload {
     float: right;
     clear: none;
     width: 160px;

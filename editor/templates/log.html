@@ -11,7 +11,7 @@
 <body>
     <div id="topbar">
         <div class="rascalcontent">
-            <a href="/edit"><img id="rascallogo" src="/editor/static/rm-logo-words-only-light.png"></a>
+            <a href="/editor/"><img id="rascallogo" src="/editor/static/rm-logo-words-only-light.png"></a>
             <ul id="nav">
                 <li><a href="/editor/log">log</a> | </li>
                 <li><a href="/editor/config">config</a> | </li>
@@ -27,6 +27,8 @@
         </div>
     </div>
     <div class="rascalcontent">
+        <input id="mark" type="button" value="Mark" class="large red awesome" alt="Mark">
+        <br />
         Webserver access log (serves static files)
         <div class="log-display">
             <table class="zebra">
@@ -46,11 +48,16 @@
             </table>
         </div>
     </div>
-     <script type="text/javascript">
- $(document).ready(function(){
-   $(".zebra tr").mouseover(function(){$(this).addClass("over");}).mouseout(function(){$(this).removeClass("over");});
-   $(".zebra tr:even").addClass("alt");
- });
+    <script type="text/javascript">
+    $(document).ready(function(){
+        $(".zebra tr").mouseover(function(){$(this).addClass("over");}).mouseout(function(){$(this).removeClass("over");});
+        $(".zebra tr:even").addClass("alt");
+    });
+
+    $('#mark').click( function() {
+        $.post('/editor/mark',{ fake: 'hat' });
+    });
+
      </script>
 </body>
 </html>

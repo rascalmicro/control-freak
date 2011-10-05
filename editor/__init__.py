@@ -117,8 +117,9 @@ def config():
 @editor.route('/editor/log')
 @login_required
 def log():
+    print("rendering /editor/log")
     try:
-        f = open('/var/log/uwsgi.log', 'r')
+        f = open('/var/log/uwsgi/public.log', 'r')
         app_log = '</td></tr>\n<tr><td>'.join(tail(f, 10)[0])
         f.close()
         f = open('/var/log/nginx/access', 'r')
@@ -172,6 +173,18 @@ def get_dirlist():
     except KeyError:
         print("Key error in attempt to list directory contents.")
     return str(dirlist(request.form['dir']))
+
+@editor.route('/editor/mark', methods=['POST'])
+@login_required
+def mark():
+    fake = request.form['fake']
+    import time
+    logfiles = ['/var/log/nginx/access', '/var/log/nginx/error', '/var/log/uwsgi/public.log']
+    for file in logfiles:
+        f = open(file, 'a')
+        f.write('<div class="log-mark">## MARK ## Rascal time: ' + time.strftime('%X %x %Z') + '</div>\n')
+        f.close()
+    return redirect('/editor/log', 302)
 
 @editor.route('/editor/new_template', methods=['POST'])
 @login_required
