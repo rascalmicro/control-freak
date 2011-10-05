@@ -12,13 +12,6 @@
     <div id="topbar">
         <div class="centered">
             <a href="/edit"><img id="rascallogo" src="/editor/static/rm-logo-words-only-light.png"></a>
-            <div class=metanav>
-            {% if current_user.is_authenticated() %}
-              Welcome, {{ current_user.name }} | <a href="/editor/logout">log out</a>
-            {% else %}
-              You are not logged in | <a href="/editor/login">log in</a>
-            {% endif %}
-            </div>
         </div>
     </div>
     <div class="narrow-content">
