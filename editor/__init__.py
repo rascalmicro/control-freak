@@ -229,8 +229,8 @@ def get_hash(username):
     import os
     return os.urandom(13) # In the event that the account doesn't exist, return random noise to prevent login
 
-@editor.route("/editor/login", methods=["GET", "POST"])
-def login():
+@editor.route("/editor/auth", methods=["GET", "POST"])
+def auth():
     import crypt
     if request.method == "POST" and "password" in request.form:
         pw = request.form["password"]
@@ -244,7 +244,7 @@ def login():
                 flash("Sorry, but you could not log in.")
         else:
             flash("Sorry, but you could not log in.")
-    return render_template("login.html")
+    return render_template("auth.html")
 
 
 @editor.route("/editor/reauth", methods=["GET", "POST"])

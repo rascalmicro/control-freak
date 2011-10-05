@@ -35,9 +35,9 @@ app.config.from_object(__name__)
 login_manager = LoginManager()
 
 login_manager.anonymous_user = Anonymous
-login_manager.login_view = "login"
+login_manager.login_view = "/editor/auth"
 login_manager.login_message = u"Please log in to access this page."
-login_manager.refresh_view = "reauth"
+login_manager.refresh_view = "/editor/reauth"
 
 @login_manager.user_loader
 def load_user(id):

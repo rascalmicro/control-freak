@@ -19,9 +19,9 @@
             </ul>
             <div class=metanav>
             {% if current_user.is_authenticated() %}
-              Welcome, {{ current_user.name }} | <a href="/logout">log out</a>
+              Welcome, {{ current_user.name }} | <a href="/editor/logout">log out</a>
             {% else %}
-              You are not logged in | <a href="/login">log in</a>
+              You are not logged in | <a href="/editor/login">log in</a>
             {% endif %}
             </div>
         </div>
