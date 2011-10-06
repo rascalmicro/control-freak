@@ -48,16 +48,20 @@ li {
     width: 120px;
     background-image: url("/editor/static/images/progressbg_red.gif");
     background-position: -120px;
+    margin-top: 5px;
+    margin-bottom: 5px;
 }
 
 #save-progress {
     width: 120px;
     background-image: url("/editor/static/images/progressbg_red.gif");
     background-position: -120px;
+    margin-top: 5px;
+    margin-bottom: 5px;
 }
 
 #save-message {
-    display: inline;
+    display: none;
 }
 
 #mark {
