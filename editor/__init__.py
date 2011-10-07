@@ -1,9 +1,12 @@
-from flask import abort, Blueprint, flash, redirect, render_template, request
+from flask import abort, Blueprint, flash, Flask, redirect, render_template, request, url_for
 from flaskext.login import (LoginManager, current_user, login_required,
                             login_user, logout_user, UserMixin, AnonymousUser,
                             confirm_login, fresh_login_required)
 from jinja2 import TemplateNotFound
 from werkzeug import secure_filename
+
+editor = Flask(__name__)
+# editor = Blueprint('editor', __name__, static_url_path='/editor/', static_folder='static', template_folder='templates')
 
 class User(UserMixin):
     def __init__(self, name, id, active=True):
@@ -25,7 +28,25 @@ USERS = {
 
 USER_NAMES = dict((u.name, u) for u in USERS.itervalues())
 
-editor = Blueprint('editor', __name__, static_url_path='/editor/', static_folder='static', template_folder='templates')
+SECRET_KEY = "rascal"
+DEBUG = True
+
+editor.config.from_object(__name__)
+
+login_manager = LoginManager()
+
+login_manager.anonymous_user = Anonymous
+login_manager.login_view = "/editor/auth"
+login_manager.login_message = u"Please log in to access this page."
+login_manager.refresh_view = "/editor/reauth"
+
+@login_manager.user_loader
+def load_user(id):
+    return USERS.get(int(id))
+
+login_manager.setup_app(editor)
+
+# app.register_blueprint(editor)
 
 BOILERPLATE = """
 <!DOCTYPE html>
@@ -256,4 +277,7 @@ def logout():
     logout_user()
     flash("Logged out.")
     return redirect("/")
+
+if __name__ == "__main__":
+    editor.run(host='127.0.0.1:5001', debug=True)
 
