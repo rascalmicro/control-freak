@@ -20,11 +20,11 @@
                 <ul id="login-form">
                       <li>Password:</li>
                       <li><input id="password-field" type=text name=password><input id="login" type="submit" value="Login" class="large red awesome" alt="Login"></li>
+                      {% for message in get_flashed_messages() %}
+                      <li><div class=flash>{{ message }}</div></li>
+                      {% endfor %}
                 </ul>
             </form>
-            {% for message in get_flashed_messages() %}
-            <div class=flash>{{ message }}</div>
-            {% endfor %}
         </div>
     </div>
     <script>

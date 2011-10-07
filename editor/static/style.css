@@ -177,11 +177,13 @@ input {
 
 #login-form {
     margin-top: 300px;
+    padding: 0px; /* to reset -webkit-padding-start */
 }
 
 #password-field {
     width: 300px;
     font-size: 2em;
+    margin-right: 10px;
 }
 
 #location-bar {
