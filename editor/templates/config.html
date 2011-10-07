@@ -32,6 +32,14 @@
         <pre>
 {{ processes }}
         </pre>
+        <form>
+            <input id="reset" type="button" value="Reset web interface" class="large red awesome" alt="Reset web interface">
+        </form>
     </div>
+    <script type="text/javascript">
+    $("#reset").click( function() {
+        $.post("/editor/reset", "text");
+    });
+    </script>
 </body>
 </html>

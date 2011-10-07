@@ -224,6 +224,14 @@ def reload():
     subprocess.Popen(['touch', '/etc/uwsgi/public.ini'])
     return render_template('editor.html')
 
+@editor.route('/editor/reset', methods=['POST'])
+@login_required
+def reset():
+    import subprocess
+    subprocess.Popen(['cd', '/var/www'])
+    subprocess.Popen(['git', ['checkout', '.']])
+    return render_template('config.html')
+
 @editor.route('/editor/save', methods=['POST'])
 @login_required
 def save():

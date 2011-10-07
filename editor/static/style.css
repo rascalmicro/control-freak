@@ -97,6 +97,10 @@ input {
     width: 642px;
 }
 
+#reset {
+    width: 220px;
+}
+
 #reload {
     float: right;
     clear: none;
