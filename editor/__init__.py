@@ -125,6 +125,14 @@ def tail(f, n, offset=None):
                    len(lines) > to_read or pos > 0
         avg_line_length *= 1.3
 
+# The redirect for static files below is only needed when using Flask's
+# built-in server for debugging. Normally, Nginx serves all of the
+# static files, bypassing uWSGI entirely.
+
+@editor.route('/editor/static/<path:path>')
+def redirect_to_static(path):
+    return redirect('/static/' + path, 302)
+
 @editor.route('/editor/config')
 @login_required
 def config():
