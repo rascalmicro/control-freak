@@ -228,8 +228,8 @@ def reload():
 @login_required
 def reset():
     import subprocess
-    subprocess.Popen(['cd', '/var/www'])
-    subprocess.Popen(['git', ['checkout', '.']])
+    subprocess.Popen(['git checkout .'], cwd='/var/www', shell=True)
+    subprocess.Popen(['git clean -dxf'], cwd='/var/www', shell=True)
     return render_template('config.html')
 
 @editor.route('/editor/save', methods=['POST'])

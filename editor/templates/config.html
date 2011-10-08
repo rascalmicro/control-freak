@@ -29,12 +29,17 @@
             <div class=flash>{{ message }}</div>
           {% endfor %}
         </div>
+        <p>Some useful configuration info:</p>
         <pre>
 {{ processes }}
         </pre>
+        <hr />
+        <p>A weapon of mass destruction:</p>
         <form>
-            <input id="reset" type="button" value="Reset web interface" class="large red awesome" alt="Reset web interface">
+            <input id="reset" type="button" value="Destroy all my work" class="large red awesome" alt="Destroy all my work">
         </form>
+        <p>If you click the "Destroy all my work" button, all the changes you've made to your Rascal's web interface will be deleted.</p>
+        <p>(What this really does is to return the Git repository in /var/www to its last committed state.)</p>
     </div>
     <script type="text/javascript">
     $("#reset").click( function() {
