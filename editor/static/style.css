@@ -40,7 +40,9 @@ li {
     clear: none;
     float: left;
     border: none;
-    margin: 5px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    margin-left: -3px;
 }
 
 #reload-progress {
@@ -49,7 +51,6 @@ li {
     background-image: url("/editor/static/images/progressbg_red.gif");
     background-position: -120px;
     margin-top: 5px;
-    margin-bottom: 5px;
 }
 
 #save-progress {
@@ -57,11 +58,12 @@ li {
     background-image: url("/editor/static/images/progressbg_red.gif");
     background-position: -120px;
     margin-top: 5px;
-    margin-bottom: 5px;
+    display: inline;
 }
 
 #save-message {
-    display: none;
+    visibility: hidden;
+    display: inline;
 }
 
 #mark {
@@ -73,7 +75,8 @@ li {
 }
 
 input {
-    margin: 5px;
+    margin-top: 5px;
+    margin-bottom: 5px;
     width: 120px;
 }
 

@@ -39,7 +39,8 @@
             <input id="save" type="button" value="Save" class="large red awesome" alt="Save">
         </div>
         <div id="progress-bars">
-            <img id="save-progress" src="/editor/static/images/progressbar.gif"><div id="save-message">Saved file</div>
+            <img id="save-progress" src="/editor/static/images/progressbar.gif">
+            <div id="save-message">Saved file</div>
             <img id="reload-progress" src="/editor/static/images/progressbar.gif">
         </div>
         <div id="editor">
@@ -100,7 +101,7 @@
         $.post('/editor/save', { path: $('#path').val(), text: editor.getValue() });
         $('#save-progress').css("background-position", "-120px");
         $('#save-progress').animate({ 'background-position': 0 }, 1000);
-        $('#save-message').fadeIn(500).fadeOut(2000);
+        $('#save-message').css('visibility','visible').hide().fadeTo(500, 1).fadeTo(2000, 0);
     }
 
     // Function for binding ctrl keystrokes from Ganeshji Marwaha:
