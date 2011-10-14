@@ -159,6 +159,8 @@
             $(this).children('img').css('visibility', 'visible');
             $(this).children('img').click(function() {
                 $.post('/editor/delete_template', { filename: $(this).siblings('a').text() });
+                $(this).parent().hide("slow");
+                editor.setValue("File deleted.");
             });
         } else {
             $(this).children('img').css('visibility', 'hidden');
