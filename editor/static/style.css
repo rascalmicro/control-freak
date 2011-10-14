@@ -108,13 +108,11 @@ input {
 }
 
 .jqueryfiletree a {
-    background: #0A001F !important;
     color: #E7E8E9 !important;
     font-family: "Molengo","URW Gothic L",sans-serif;
     font-size: 1em;
 }
-
-.jqueryfiletree a:hover {
+.jqueryfiletree .directory a:hover {
     background: #414243 !important;
 }
 
