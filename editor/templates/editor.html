@@ -100,8 +100,9 @@
     function saveFile() {
         $.post('/editor/save', { path: $('#path').val(), text: editor.getValue() });
         $('#save-progress').css("background-position", "-120px");
-        $('#save-progress').animate({ 'background-position': 0 }, 1000);
-        $('#save-message').css('visibility','visible').hide().fadeTo(500, 1).fadeTo(2000, 0);
+        $('#save-progress').animate({ 'background-position': 0 }, 1000, function() {
+            $('#save-message').css('visibility','visible').hide().fadeTo(500, 1).fadeTo(2000, 0);
+        });
     }
 
     // Function for binding ctrl keystrokes from Ganeshji Marwaha:
