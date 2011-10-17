@@ -7,7 +7,7 @@
     <link rel="stylesheet" type="text/css" href="/editor/static/codemirror2/lib/codemirror.css">
     <link rel="stylesheet" type="text/css" href="/editor/static/codemirror2/theme/default.css">
     <link rel="stylesheet" type="text/css" href="/editor/static/codemirror2/theme/night.css">
-    <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Droid+Sans|Molengo'">
+    <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Droid+Sans|Molengo">
     <link rel="stylesheet" type="text/css" href="/editor/static/jquery.filetree.css">
 
     <script src="/editor/static/codemirror2/lib/codemirror.js"></script>
@@ -76,7 +76,7 @@
         </div>
     </div>
     <script type="text/javascript">
-    var editor = CodeMirror.fromTextArea(document.getElementById('code'), {
+    var editor = CodeMirror.fromTextArea(document.getElementById("code"), {
         mode: "text", // text mode doesn't exist explicitly, but setting it provokes plain text by default
         tabMode: "shift",
         indentUnit: "4",
@@ -99,10 +99,10 @@
     }
 
     function saveFile() {
-        $.post('/editor/save', { path: $('#path').val(), text: editor.getValue() });
-        $('#save-progress').css("background-position", "-120px");
-        $('#save-progress').animate({ 'background-position': 0 }, 1000, function() {
-            $('#save-message').css('visibility','visible').hide().fadeTo(500, 1).fadeTo(2000, 0);
+        $.post("/editor/save", { path: $("#path").val(), text: editor.getValue() });
+        $("#save-progress").css("background-position", "-120px");
+        $("#save-progress").animate({ "background-position": 0 }, 1000, function() {
+            $("#save-message").css("visibility","visible").hide().fadeTo(500, 1).fadeTo(2000, 0);
         });
     }
 
@@ -119,26 +119,26 @@
     };
 
     $(document).ready( function() {
-        $('#filetree').fileTree({ root: '/var/www/public/', script: '/editor/get_dirlist', multiFolder: false }, function(path) {
-            $.post('/editor/read', "path=" + path.split('/var/www/public/').pop(), function(response) {
+        $("#filetree").fileTree({ root: "/var/www/public/", script: "/editor/get_dirlist", multiFolder: false }, function(path) {
+            $.post("/editor/read", "path=" + path.split("/var/www/public/").pop(), function(response) {
                 editor.setValue(response);
-                editor.setOption('mode', pickMode(path.split('.').pop()));
-                $('#location-bar').children('a').text(path.split('/var/www/public/').pop());
-                if (path.split('/var/www/public/')[1].match(/templates/)) { // hack to fix template links. could be improved.
-                    $('#location-bar').children('a').attr('href', path.split('/var/www/public/templates').pop());
+                editor.setOption("mode", pickMode(path.split(".").pop()));
+                $("#location-bar").children("a").text(path.split("/var/www/public/").pop());
+                if (path.split("/var/www/public/")[1].match(/templates/)) { // hack to fix template links. could be improved.
+                    $("#location-bar").children("a").attr("href", path.split("/var/www/public/templates").pop());
                 }
-                $('#path').val(path.split('/var/www/public/').pop());
+                $("#path").val(path.split("/var/www/public/").pop());
             });
         });
     });
 
-    $('#reload').click( function() {
-        $.post('/editor/reload', "text");
-        $('#reload-progress').css("background-position", "-120px");
-        $('#reload-progress').animate({ 'background-position': 0 }, 10000);
+    $("#reload").click( function() {
+        $.post("/editor/reload", "text");
+        $("#reload-progress").css("background-position", "-120px");
+        $("#reload-progress").animate({ "background-position": 0 }, 10000);
     });
 
-    $.ctrl('S', function() {
+    $.ctrl("S", function() {
         saveFile();
     });
 
@@ -155,18 +155,18 @@
         $( "#overlay" ).css("visibility", "hidden");
     });
 
-    $('li.file').live('mouseenter mouseleave', function(event) {
-        if(event.type == 'mouseenter') {
+    $("li.file").live("mouseenter mouseleave", function(event) {
+        if(event.type == "mouseenter") {
             $(this).children("a").css("background", "#414243");
-            $(this).children('img').css('visibility', 'visible');
-            $(this).children('img').click(function() {
-                $.post('/editor/delete_template', { filename: $(this).siblings('a').text() });
+            $(this).children("img").css("visibility", "visible");
+            $(this).children("img").click(function() {
+                $.post("/editor/delete_template", { filename: $(this).siblings("a").text() });
                 $(this).parent().hide("slow");
                 editor.setValue("File deleted.");
             });
         } else {
             $(this).children("a").css("background", "#0A001F");
-            $(this).children('img').css('visibility', 'hidden');
+            $(this).children("img").css("visibility", "hidden");
         }
     });
 

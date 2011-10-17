@@ -4,7 +4,7 @@
     <link rel="shortcut icon" href="/editor/static/favicon.ico">
 
     <link rel="stylesheet" type="text/css" href="/editor/static/style.css">
-    <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Droid+Sans|Molengo'">
+    <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Droid+Sans|Molengo">
 
     <script src="http://code.jquery.com/jquery-1.5.js"></script>
 </head>
@@ -51,8 +51,8 @@
         $(".zebra tr:even").addClass("alt");
     });
 
-    $('#mark').click( function() {
-        $.post('/editor/mark',{ fake: 'hat' });
+    $("#mark").click( function() {
+        $.post("/editor/mark",{ fake: "hat" });
     });
 
      </script>
