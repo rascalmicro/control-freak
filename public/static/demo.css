@@ -135,6 +135,10 @@ tr.over td {
     color: #00ff00;
 }
 
+.jqplot-axis {
+    color: #fff;
+}
+
 /* Zurb awesome buttons */
 .awesome, .awesome:visited {
     display: inline-block;
