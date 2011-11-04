@@ -52,5 +52,13 @@ def clear_lcd():
     pytronics.send_serial(chr(0xFE) + chr(0x01), 9600)
     return render_template('/lcd.html')
 
+@public.route('/set-color', methods=['POST'])
+def set_color():
+    import subprocess
+    color = request.form['color']
+    cmd = 'blinkm set-rgb -d 9 -r ' + str(int(color[0:2], 16)) + ' -g ' + str(int(color[2:4], 16)) + ' -b ' + str(int(color[4:6], 16))
+    subprocess.Popen([cmd], shell=True)
+    return ('color sent to Blinkm')
+        
 if __name__ == "__main__":
     public.run(host='127.0.0.1:5000', debug=True)
