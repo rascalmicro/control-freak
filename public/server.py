@@ -40,13 +40,13 @@ def analog():
     }
     return json.dumps(data)
 
-@public.route('/lcd.html', methods=['POST'])
-def write_serial():
+@public.route('/send-to-lcd', methods=['POST'])
+def send_to_lcd():
     import pytronics
     pytronics.send_serial(request.form['serial_text'], 9600)
     return render_template('/lcd.html')
 
-@public.route('/clear', methods=['POST'])
+@public.route('/clear-lcd', methods=['POST'])
 def clear_lcd():
     import pytronics
     pytronics.send_serial(chr(0xFE) + chr(0x01), 9600)
@@ -59,6 +59,28 @@ def set_color():
     cmd = 'blinkm set-rgb -d 9 -r ' + str(int(color[0:2], 16)) + ' -g ' + str(int(color[2:4], 16)) + ' -b ' + str(int(color[4:6], 16))
     subprocess.Popen([cmd], shell=True)
     return ('color sent to Blinkm')
-        
+
+@public.route('/sms', methods=['POST'])
+def parse_sms():
+    import subprocess, webcolors
+    message = request.form['Body']
+    print message
+    color = webcolors.name_to_rgb(message)
+    cmd = 'blinkm set-rgb -d 9 -r ' + str(color[0]) + ' -g ' + str(color[1]) + ' -b ' + str(color[2])
+    subprocess.Popen([cmd], shell=True)
+    return ('color sent to Blinkm')
+
+@public.route('/sprinkler', methods=['POST'])
+def sprinkler():
+    import pytronics
+    message = request.form['Body']
+    print message
+    #command = request.form['command']
+    #if(command == "ON"):
+    #    pytronics.set_pin_high(2)
+    #else:
+    #    pytronics.set_pin_low(2)
+    return ('Sprinkler toggled')
+
 if __name__ == "__main__":
     public.run(host='127.0.0.1:5000', debug=True)
