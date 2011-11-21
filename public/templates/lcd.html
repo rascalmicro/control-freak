@@ -11,13 +11,13 @@
     <div class="rascalcontent">
         <h1><a href="/lcd.html">LCD demo</a></h1>
         <p>Enter some text to send to the LCD display</p><br />
-        <textarea rows="2" cols="16" id="serial_text" name="serial_text" type="textarea" style="border:10px;border-color:#E7E8E9;border-style:solid;margin-top:10px;margin-bottom:10px;font-family:'VT323', 'Courier', sans-serif;font-size:100px;background-color:#111111;color:#A4211A"></textarea><br />
-        <input id="send-to-lcd" type="button" value="Send to LCD" class="large blue awesome" alt="Send to LCD" style="margin-left:590px">
-        <input id="clear-lcd" type="button" value="Clear LCD" class="large red awesome" alt="ON">
+        <textarea rows="2" cols="16" id="serial-text"></textarea><br />
+        <input id="send-to-lcd" type="button" value="Send to LCD" class="large blue awesome" alt="Send to LCD">
+        <input id="clear-lcd" type="button" value="Clear LCD" class="large red awesome" alt="Clear LCD">
     </div>
     <script language="javascript" type="text/javascript">
     $("#send-to-lcd").click( function() {
-        $.post("/send-to-lcd", { serial_text: $("#serial_text").val() });
+        $.post("/send-to-lcd", { serial_text: $("#serial-text").val() });
     });
     $("#clear-lcd").click( function() {
         $.post("/clear-lcd");

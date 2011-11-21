@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Analog graph demo</title>
+    <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Droid+Sans|Molengo">
+    <link rel="stylesheet" type="text/css" href="/static/demo.css">
+    <link rel="shortcut icon" href="/static/favicon.ico">
+    <script src="/static/jquery-1.5.js"></script>
+    <!--[if IE]><script language="javascript" type="text/javascript" src="/excanvas.js"></script><![endif]-->
+    <script language="javascript" type="text/javascript" src="/static/jquery.jqplot.js"></script>
+    <link rel="stylesheet" type="text/css" href="/static/jquery.jqplot.css" />
+</head>
+<body>
+    <div class="rascalcontent">
+        <h1>Analog graph demo</h1>
+        <div id="chart1" style="height:400px;width:900px;"></div>
+    </div>
+    <script language="javascript" type="text/javascript">
+
+    chartOptions = {
+        legend: {
+            show: true,
+            location: "nw" },
+        title: "Channel 0",
+        series: [
+            {label: "Channel 0", lineWidth:3, showMarker:false}
+        ],
+        axes: {
+            xaxis: {
+                label: "Time [seconds ago]",
+                min: 0,
+                max: 120,
+                pad: 0 },
+            yaxis: {
+                label: "Sensor voltage [V]",
+                min: 0,
+                max: 2.5 },
+        },
+        seriesColors: [ "#cd2820" ]
+    };
+
+    a0 = new Array();
+
+    setInterval(function() {
+        $.post("analog",  { adref: 2.5 }, function(response) {
+            data = $.parseJSON(response);
+            if(a0.length > chartOptions.axes.xaxis.max) {
+                a0.pop();
+            }
+            a0.unshift(data.A0);
+            $.jqplot("chart1", [a0], chartOptions).replot();
+        });
+    }, 200);
+    </script>
+</body>
+</html>

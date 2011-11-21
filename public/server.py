@@ -31,12 +31,13 @@ def toggle():
 def analog():
     from pytronics import read_analog
     import json, time
+    try:
+        ad_ref = float(request.form['adref'])
+    except KeyError:
+        ad_ref = 3.3
     data = {
         "time" : float(time.time()),
-        "A0" : float(read_analog('A0')) * 3.3 / 1024.0,
-        "A1" : float(read_analog('A1')) * 3.3 / 1024.0,
-        "A2" : float(read_analog('A2')) * 3.3 / 1024.0,
-        "A3" : float(read_analog('A3')) * 3.3 / 1024.0
+        "A0" : float(read_analog('A0')) * ad_ref / 1024.0
     }
     return json.dumps(data)
 
