@@ -1,6 +1,20 @@
 from flask import Flask, render_template, request
+#from uwsgidecorators import *
+import time
 
 public = Flask(__name__)
+
+def toggle_pin(pin):
+    from pytronics import read_pin, set_pin_high, set_pin_low
+    if read_pin(pin) == '1':
+        set_pin_low(pin)
+    else:
+        set_pin_high(pin)
+
+#@rbtimer(1)
+#def five_seconds(num):
+#    print("The time is now " + str(time.time()))
+#    toggle_pin(2)
 
 @public.route('/<template_name>.html')
 def template(template_name):
@@ -26,6 +40,16 @@ def toggle():
     else:
         result = 'Target_state is screwed up'
     return result
+
+@public.route('/temperature', methods=['POST'])
+def temperature():
+    import json, thermostat
+    data = {
+        "time" : float(time.time()),
+        "actual" : float(thermostat.read_sensor(0x48)),
+        "target" : thermostat.get_target_temp('/var/www/public/static/basic.ics')
+    }
+    return json.dumps(data)
 
 @public.route('/analog', methods=['POST'])
 def analog():

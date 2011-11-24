@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>TMP102 demo</title>
+    <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Droid+Sans|Molengo">
+    <link rel="stylesheet" type="text/css" href="/static/demo.css">
+    <link rel="shortcut icon" href="/static/favicon.ico">
+    <script src="/static/jquery-1.5.js"></script>
+    <!--[if IE]><script language="javascript" type="text/javascript" src="/excanvas.js"></script><![endif]-->
+    <script language="javascript" type="text/javascript" src="/static/jquery.jqplot.js"></script>
+    <link rel="stylesheet" type="text/css" href="/static/jquery.jqplot.css" />
+</head>
+<body>
+    <div class="rascalcontent">
+        <h1>TMP102 demo</h1>
+        <div id="chart1" style="height:500px;width:900px;"></div>
+    </div>
+    <script language="javascript" type="text/javascript">
+
+    chartOptions = {
+        legend: {
+            show: true,
+            location: "nw" },
+        title: "Channel 0",
+        series: [
+            {label: "Channel 0", lineWidth:3, showMarker:false},
+            {label: "Target", lineWidth:1, showMarker:false},
+            {label: "Channel 2", lineWidth:3, showMarker:false, fill: "true", fillAlpha: 0.5}
+        ],
+        axes: {
+            xaxis: {
+                label: "Time [seconds ago]",
+                min: 0,
+                max: 120,
+                pad: 0 },
+            yaxis: {
+                label: "Temperature [F]",
+                min: 50.0,
+                max: 90.0 },
+        },
+        seriesColors: [ "#CD2820", "#414243", "#CD2820" ]
+    };
+
+    a0 = new Array();
+    a1 = new Array();
+    a2 = new Array();
+
+    setInterval(function() {
+        $.post("/temperature", function(response) {
+            data = $.parseJSON(response);
+            if(a0.length > chartOptions.axes.xaxis.max) {
+                a0.pop();
+                a1.pop();
+                a2.pop();
+            }
+            actual = data.actual * 1.8 + 32.0
+            threshold = data.target
+            a0.unshift(actual);
+            a1.unshift(threshold);
+            if (actual < threshold) {
+                a2.unshift(actual);
+            } else {
+                a2.unshift(0.0);
+            }
+            $.jqplot("chart1", [a0, a1, a2], chartOptions).replot();
+        });
+    }, 1000);
+    </script>
+</body>
+</html>
+
