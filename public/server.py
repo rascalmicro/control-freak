@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request
-#from uwsgidecorators import *
+from uwsgidecorators import *
 import time
 
 public = Flask(__name__)
@@ -11,10 +11,24 @@ def toggle_pin(pin):
     else:
         set_pin_high(pin)
 
-#@rbtimer(1)
-#def five_seconds(num):
-#    print("The time is now " + str(time.time()))
-#    toggle_pin(2)
+@rbtimer(60)
+def fetch_calendar(num):
+    import thermostat
+    thermostat.update_calendar_file()
+    print('Calendar reload attempt')
+
+@rbtimer(3)
+def update_relay(num):
+    import pytronics, thermostat
+    actual = float(thermostat.read_sensor(0x48)) * 1.8 + 32.0
+    print("Measured temperature: %f degrees" % actual)
+    target = thermostat.get_target_temp('/var/www/public/static/basic.ics')
+    if actual < target:
+        pytronics.set_pin_high(2)
+        print("Heat on")
+    else:
+        pytronics.set_pin_low(2)
+        print("Heat off")
 
 @public.route('/<template_name>.html')
 def template(template_name):
@@ -87,13 +101,13 @@ def set_color():
 
 @public.route('/sms', methods=['POST'])
 def parse_sms():
-    import subprocess, webcolors
+    import subprocess
     message = request.form['Body']
-    print message
-    color = webcolors.name_to_rgb(message)
-    cmd = 'blinkm set-rgb -d 9 -r ' + str(color[0]) + ' -g ' + str(color[1]) + ' -b ' + str(color[2])
-    subprocess.Popen([cmd], shell=True)
-    return ('color sent to Blinkm')
+    print "Received text message: " + str(message)
+    f = open('/var/www/public/thermostat-target.txt', 'w')
+    f.write(str(message))
+    f.close()
+    return ('Message processed')
 
 @public.route('/sprinkler', methods=['POST'])
 def sprinkler():

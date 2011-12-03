@@ -1,3 +1,4 @@
+TARGET_PATH = '/var/www/public/thermostat-target.txt'
 DEFAULT_TEMPERATURE = 56.0
 LOCAL_CALENDAR = '/var/www/public/static/basic.ics'
 CALENDAR_URL = 'https://www.google.com/calendar/ical/0c3lie03m3ajg6j6numm2gf1l4%40group.calendar.google.com/public/basic.ics'
@@ -14,6 +15,11 @@ def get_event_list(calendar_path):
 
 def get_target_temp(calendar_path):
     import datetime
+
+    f = open(TARGET_PATH, 'r')
+    override = f.read()
+    if (override[0:2] != 'ab'):
+        return str(override)
 
     days = list(['MO', 'TU', 'WE', 'TH', 'FR', 'SA', 'SU'])
 
