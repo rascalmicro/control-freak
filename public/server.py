@@ -11,18 +11,27 @@ def toggle_pin(pin):
     else:
         set_pin_high(pin)
 
-@rbtimer(60)
+@public.route('/set-speed', methods=['POST'])
+def set_speed():
+    import subprocess
+    speed = request.form['speed']
+    cmd = 'i2cset -y 0 0x29 ' + str(speed)
+    print cmd
+    subprocess.Popen([cmd], shell=True)
+    return ('speed set')
+
+# @rbtimer(60)
 def fetch_calendar(num):
     import thermostat
     thermostat.update_calendar_file()
     print('Calendar reload attempt')
 
-@rbtimer(3)
+# @rbtimer(3)
 def update_relay(num):
     import pytronics, thermostat
     actual = float(thermostat.read_sensor(0x48)) * 1.8 + 32.0
-    print("Measured temperature: %f degrees" % actual)
-    target = thermostat.get_target_temp('/var/www/public/static/basic.ics')
+    target = float(thermostat.get_target_temp('/var/www/public/static/basic.ics'))
+    print("Measured temperature: %f degrees. Target is %f degrees." % (actual, target))
     if actual < target:
         pytronics.set_pin_high(2)
         print("Heat on")
