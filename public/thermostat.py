@@ -3,7 +3,18 @@ DEFAULT_TEMPERATURE = 56.0
 LOCAL_CALENDAR = '/var/www/public/static/basic.ics'
 CALENDAR_URL = 'https://www.google.com/calendar/ical/0c3lie03m3ajg6j6numm2gf1l4%40group.calendar.google.com/public/basic.ics'
 
-# @rbtimer(300) # 300 seconds is every 5 minutes
+import datetime
+
+class EST(datetime.tzinfo):
+    def utcoffset(self,dt):
+        return datetime.timedelta(hours=-5)
+    def tzname(self,dt):
+        return "EST"
+    def dst(self,dt):
+        return datetime.timedelta(0)
+
+timezone = EST()
+
 def update_calendar_file():
     import urllib
     urllib.urlretrieve(CALENDAR_URL, LOCAL_CALENDAR)
@@ -14,7 +25,6 @@ def get_event_list(calendar_path):
     return cal.walk('VEVENT')
 
 def get_target_temp(calendar_path):
-    import datetime
 
     f = open(TARGET_PATH, 'r')
     override = f.read()
@@ -23,12 +33,13 @@ def get_target_temp(calendar_path):
 
     days = list(['MO', 'TU', 'WE', 'TH', 'FR', 'SA', 'SU'])
 
-    now = datetime.datetime.now()
+    now = datetime.datetime.now(timezone)
     today = days[now.weekday()]
     events = get_event_list(calendar_path)
     for event in events:
         if event_is_today(event, today) and event_is_now(event, now):
             return float(event.decoded('summary'))
+    print "Temperature not found in calendar. Using default."
     return DEFAULT_TEMPERATURE
 
 def event_is_today(event, today):

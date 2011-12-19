@@ -20,13 +20,13 @@ def set_speed():
     subprocess.Popen([cmd], shell=True)
     return ('speed set')
 
-# @rbtimer(60)
+@rbtimer(60)
 def fetch_calendar(num):
     import thermostat
     thermostat.update_calendar_file()
     print('Calendar reload attempt')
 
-# @rbtimer(3)
+@rbtimer(3)
 def update_relay(num):
     import pytronics, thermostat
     actual = float(thermostat.read_sensor(0x48)) * 1.8 + 32.0
