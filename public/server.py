@@ -30,7 +30,7 @@ def fetch_calendar(num):
 def update_relay(num):
     import pytronics, thermostat
     actual = float(thermostat.read_sensor(0x48)) * 1.8 + 32.0
-    target = float(thermostat.get_target_temp('/var/www/public/static/basic.ics'))
+    target = float(thermostat.get_target_temp('/var/www/public/static/basic.ics', 'America/New_York'))
     print("Measured temperature: %f degrees. Target is %f degrees." % (actual, target))
     if actual < target:
         pytronics.set_pin_high(2)
@@ -70,7 +70,7 @@ def temperature():
     data = {
         "time" : float(time.time()),
         "actual" : float(thermostat.read_sensor(0x48)),
-        "target" : thermostat.get_target_temp('/var/www/public/static/basic.ics')
+        "target" : thermostat.get_target_temp('/var/www/public/static/basic.ics', 'America/New_York')
     }
     return json.dumps(data)
 
