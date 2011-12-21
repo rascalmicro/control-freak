@@ -78,10 +78,11 @@
     <script type="text/javascript">
     var editor = CodeMirror.fromTextArea(document.getElementById("code"), {
         mode: "text", // text mode doesn't exist explicitly, but setting it provokes plain text by default
-        tabMode: "shift",
-        indentUnit: "4",
+        tabSize: 4,
+        indentUnit: 4,
         enterMode: "keep",
         electricChars: false,
+        lineWrapping: true,
         theme: "night"
     });
 
