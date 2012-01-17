@@ -1,8 +1,10 @@
 from flask import Flask, render_template, request
-from uwsgidecorators import *
+#from uwsgidecorators import *
 import time
 
 public = Flask(__name__)
+LOCAL_CALENDAR = '/var/www/public/static/basic.ics'
+CALENDAR_URL = 'https://www.google.com/calendar/ical/0c3lie03m3ajg6j6numm2gf1l4%40group.calendar.google.com/public/basic.ics'
 
 def toggle_pin(pin):
     from pytronics import read_pin, set_pin_high, set_pin_low
@@ -20,13 +22,13 @@ def set_speed():
     subprocess.Popen([cmd], shell=True)
     return ('speed set')
 
-@rbtimer(60)
+#@rbtimer(300)
 def fetch_calendar(num):
-    import thermostat
-    thermostat.update_calendar_file()
+    import thermostat, urllib
+    urllib.urlretrieve(CALENDAR_URL, LOCAL_CALENDAR)
     print('Calendar reload attempt')
 
-@rbtimer(3)
+#@rbtimer(3)
 def update_relay(num):
     import pytronics, thermostat
     actual = float(thermostat.read_sensor(0x48)) * 1.8 + 32.0
@@ -103,10 +105,18 @@ def clear_lcd():
 @public.route('/set-color', methods=['POST'])
 def set_color():
     import subprocess
+    import colorsys, kinet
     color = request.form['color']
-    cmd = 'blinkm set-rgb -d 9 -r ' + str(int(color[0:2], 16)) + ' -g ' + str(int(color[2:4], 16)) + ' -b ' + str(int(color[4:6], 16))
-    subprocess.Popen([cmd], shell=True)
-    return ('color sent to Blinkm')
+    print "RGB = " + str(color)
+    #cmd = 'blinkm set-rgb -d 9 -r ' + str(int(color[0:2], 16)) + ' -g ' + str(int(color[2:4], 16)) + ' -b ' + str(int(color[4:6], 16))
+    #subprocess.Popen([cmd], shell=True)
+    pds = kinet.PowerSupply("192.168.10.57")
+    pds.append(kinet.FixtureRGB(0))
+    hsv = (colorsys.rgb_to_hsv(int(color[0:2], 16)/255.0, int(color[2:4], 16)/255.0, int(color[4:6], 16)/255.0))
+    print "HSV = " + str(hsv)
+    pds[0].hsv = hsv
+    pds.go()
+    return ('color sent to Blinkm and CK box')
 
 @public.route('/sms', methods=['POST'])
 def parse_sms():
