@@ -17,7 +17,7 @@ def get_target_temp(calendar_path, timezone_name):
 
     now = datetime.datetime.now(pytz.timezone(timezone_name))
     today = days[now.weekday()]
-    events = icalendar.Calendar.from_string(open(calendar_path,'rb').read().walk('VEVENT')
+    events = icalendar.Calendar.from_string(open(calendar_path,'rb').read()).walk('VEVENT')
     for event in events:
         if event_is_today(event, today) and event_is_now(event, now):
             return float(event.decoded('summary'))
