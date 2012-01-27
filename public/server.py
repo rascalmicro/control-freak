@@ -3,6 +3,8 @@ from flask import Flask, render_template, request
 import time
 
 public = Flask(__name__)
+public.config['PROPAGATE_EXCEPTIONS'] = True
+
 LOCAL_CALENDAR = '/var/www/public/static/basic.ics'
 CALENDAR_URL = 'https://www.google.com/calendar/ical/0c3lie03m3ajg6j6numm2gf1l4%40group.calendar.google.com/public/basic.ics'
 
