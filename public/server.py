@@ -24,6 +24,17 @@ def set_speed():
     subprocess.Popen([cmd], shell=True)
     return ('speed set')
 
+@public.route('/pin/<pin>/<state>')
+def update_pin(pin, state):
+    from pytronics import set_pin_high, set_pin_low
+    if state.lower() == 'on':
+        set_pin_high(pin)
+        return 'Set pin %s high' % pin
+    elif state.lower() == 'off':
+        set_pin_low(pin)
+        return 'Set pin %s low' % pin
+    return "Something's wrong with your syntax. You should send something like: /pin/2/on"
+
 #@rbtimer(300)
 def fetch_calendar(num):
     import thermostat, urllib
