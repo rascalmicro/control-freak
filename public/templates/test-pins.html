@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Test pins</title>
+    <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Droid+Sans|Molengo">
+    <link rel="stylesheet" type="text/css" href="/static/demo.css">
+    <link rel="shortcut icon" href="/static/favicon.ico">
+    <script src="http://code.jquery.com/jquery-1.7.2rc1.js"></script>
+</head>
+<body>
+    <div class="rascalcontent">
+        <h1>Test some pins.</h1>
+        <ul>
+            <li>LED: <input id="LED" type="button" value="ON" class="large red awesome" alt="ON">
+                <input id="LED" type="button" value="OFF" class="large red awesome" alt="OFF"></li>
+
+            <li>PIN 0: <input id="0" type="button" value="ON" class="large red awesome" alt="ON">
+                <input id="0" type="button" value="OFF" class="large red awesome" alt="OFF"></li>
+
+            <li>PIN 1: <input id="1" type="button" value="ON" class="large red awesome" alt="ON">
+                <input id="1" type="button" value="OFF" class="large red awesome" alt="OFF"></li>
+
+            <li>PIN 2: <input id="2" type="button" value="ON" class="large red awesome" alt="ON">
+                <input id="2" type="button" value="OFF" class="large red awesome" alt="OFF"></li>
+
+            <li>PIN 3: <input id="3" type="button" value="ON" class="large red awesome" alt="ON">
+                <input id="3" type="button" value="OFF" class="large red awesome" alt="OFF"></li>
+
+            <li>PIN 4: <input id="4" type="button" value="ON" class="large red awesome" alt="ON">
+                <input id="4" type="button" value="OFF" class="large red awesome" alt="OFF"></li>
+
+            <li>PIN 5: <input id="5" type="button" value="ON" class="large red awesome" alt="ON">
+                <input id="5" type="button" value="OFF" class="large red awesome" alt="OFF"></li>
+
+            <li>PIN 6: <input id="6" type="button" value="ON" class="large red awesome" alt="ON">
+                <input id="6" type="button" value="OFF" class="large red awesome" alt="OFF"></li>
+
+            <li>PIN 7: <input id="7" type="button" value="ON" class="large red awesome" alt="ON">
+                <input id="7" type="button" value="OFF" class="large red awesome" alt="OFF"></li>
+
+            <li>PIN 8: <input id="8" type="button" value="ON" class="large red awesome" alt="ON">
+                <input id="8" type="button" value="OFF" class="large red awesome" alt="OFF"></li>
+
+            <li>PIN 9: <input id="9" type="button" value="ON" class="large red awesome" alt="ON">
+                <input id="9" type="button" value="OFF" class="large red awesome" alt="OFF"></li>
+
+            <li>PIN 10: <input id="10" type="button" value="ON" class="large red awesome" alt="ON">
+                <input id="10" type="button" value="OFF" class="large red awesome" alt="OFF"></li>
+
+            <li>PIN 11: <input id="11" type="button" value="ON" class="large red awesome" alt="ON">
+                <input id="11" type="button" value="OFF" class="large red awesome" alt="OFF"></li>
+
+            <li>PIN 12: <input id="12" type="button" value="ON" class="large red awesome" alt="ON">
+                <input id="12" type="button" value="OFF" class="large red awesome" alt="OFF"></li>
+
+            <li>PIN 13: <input id="13" type="button" value="ON" class="large red awesome" alt="ON">
+                <input id="13" type="button" value="OFF" class="large red awesome" alt="OFF"></li>
+        </ul>
+    </div>
+    <script language="javascript" type="text/javascript">
+    $(":button").click( function() {
+        $.get("/pin/" + $(this).attr("id") + "/" + $(this).attr("value")); // creates URL like /pin/2/ON
+    });
+    </script>
+</body>
+</html>
