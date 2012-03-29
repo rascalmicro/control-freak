@@ -1,12 +1,14 @@
-UL.jqueryFileTree {
-	font-family: Verdana, sans-serif;
-	padding: 10px;
+/* Rascal Styles */
+
+/* No padding-right to stop selection r margin creeping in */
+/* padding-top and padding-bottom reduced */
+ul.jqueryFileTree {
+	/* padding: 10px; */
+	padding: 5px 0px 5px 10px;
 	margin: 0px;
-    background: #E7E8E9;
-    width: 300px;
 }
 
-UL.jqueryFileTree LI {
+ul.jqueryFileTree > li {
 	list-style: none;
 	padding: 0px;
 	padding-left: 20px;
@@ -14,16 +16,48 @@ UL.jqueryFileTree LI {
 	white-space: nowrap;
 }
 
-UL.jqueryFileTree A {
-	color: #333;
-	text-decoration: none;
-	display: block;
-	padding: 0px 2px;
+ul.jqueryFileTree > li.directory > a:hover {
+    background-color: #414243;
 }
 
-UL.jqueryFileTree A:hover {
-	background: #BDF;
+/* No padding-right to stop selection r margin creeping in */
+ul.jqueryFileTree a {
+    color: #E7E8E9;
+    font-family: "Molengo","URW Gothic L",sans-serif;
+    font-size: 1em;
+	text-decoration: none;
+	display: block;
+	/* padding: 0px 2px; */
+	padding: 0px 0px 0px 2px;
 }
+
+ul.jqueryFileTree a.selected {
+    background-color: #414243;
+}
+
+ul.jqueryFileTree a.dragover {
+    background-color: #414243;
+}
+
+/* Visibility hidden causes issues after scrolling with Webkit and Chrome */
+ul.jqueryFileTree img {
+    /* visibility: hidden; */
+    float: right;
+    margin-right: 3px;
+    margin-top: 4px;
+    width: 14px;
+    opacity: 0.0;
+}
+
+ul.jqueryFileTree img.selected {
+    /* visibility: visible; */
+    opacity: 0.6;
+}
+
+ul.jqueryFileTree img.selected:hover {
+    opacity: 1.0;
+}
+
 
 /* Core Styles */
 .jqueryFileTree LI.directory { background: url(file-icons/directory.png) left top no-repeat; }

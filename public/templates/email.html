@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<!-- 3 Mar 2011 dsmall Updated (JSLint CSSLint) -->
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Send an email</title>
+    <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Droid+Sans|Molengo">
+    <link rel="stylesheet" type="text/css" href="/static/demo.css">
+    <link rel="stylesheet" type="text/css" href="/static/email.css">
+    <link rel="shortcut icon" href="/static/favicon.ico">
+    <script src="/static/jquery-1.5.js"></script>
+    <!--[if IE]><script language="javascript" type="text/javascript" src="/excanvas.js"></script><![endif]-->
+<!-- 
+    <script language="javascript" type="text/javascript" src="/static/jquery.jqplot.js"></script>
+    <link rel="stylesheet" type="text/css" href="/static/jquery.jqplot.css" />
+ -->
+</head>
+<body>
+    <div class="rascalcontent">
+        <h1>Send an Email</h1>
+        <p>Enter the sender and recipient email addresses, the subject and a message in the box:</p>
+        <div style="margin: 0; line-height: 0.8em">
+            Sender:<br />
+            <input type="text" class="email-input" id="sender" value="{{ sender }}"/><br />
+            Recipients:<br />
+            <input type="text" class="email-input" id="recipients" /><br />
+            Subject:<br />
+            <input type="text" class="email-input" id="subject" /><br />
+        </div>
+        <textarea rows="6" cols="40" class="email-body" id="email-body"></textarea><br />
+        
+        <input id="send-email" type="button" value="Send Email" class="large red awesome" />
+        <input id="clear-form" type="button" value="Clear Form" class="large blue awesome" />
+        <div id="result"></div>
+    </div>
+    
+    <script language="javascript" type="text/javascript">
+        var $;
+        
+        $("#send-email").click(function () {
+            "use strict";
+            $('#result').empty();
+            $.post("/send-email",
+                    { sender: $("#sender").val(), recipients: $("#recipients").val(),
+                    subject: $("#subject").val(), body: $("#email-body").val() },
+                function (response) {
+                    var result = $.parseJSON(response);
+                    $('#result').text(result.message);
+                    if (result.status === 0) {
+                        $("#result").css("color", "")
+                            .css("visibility", "visible")
+                            .hide()
+                            .fadeTo(500, 1)
+                            .fadeTo(2000, 0);
+                    } else {
+                        $("#result").css("color", "red")
+                            .css("visibility", "visible")
+                            .hide()
+                            .fadeTo(500, 1);
+                    }
+                });
+        });
+        $("#clear-form").click(function () {
+            "use strict";
+            $('#sender').val('');
+            $('#recipients').val('');
+            $('#subject').val('');
+            $('#email-body').val('');
+            $('#result').text('');
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,138 @@
+/* This file is specific to the editor page */
+
+/* buttons and progress-bars */
+#progress-bars {
+    line-height: 1.4em;
+}
+
+#save-progress {
+    width: 120px;
+    background-image: url("/editor/static/images/progressbg_red.gif");
+    background-position: -120px;
+    margin-top: 5px;
+    display: inline;
+}
+
+#save-message {
+    visibility: hidden;
+    display: inline;
+}
+
+#save-message.warning {
+    color: red;
+}
+
+#reload {
+    float: right;
+    clear: none;
+    width: 160px;
+}
+
+#reload-progress {
+    float: right;
+    width: 120px;
+    background-image: url("/editor/static/images/progressbg_red.gif");
+    background-position: -120px;
+    margin-top: 5px;
+}
+
+/* sidebar */
+#side-bar {
+    float: left;
+}
+
+/* This puts filetree border in ft-background, saving 1px all round */
+#ft-background {
+    border: 2px solid #414243;
+    width: 352px;
+}
+
+/* padding-right to limit width of selection highlight */
+#filetree {
+    padding: 0 10px 0 0;
+    border: 1px solid #414243;
+    /* height: 585px; */
+    height: 460px;
+    overflow: auto;
+}
+
+#filetree.dragover {
+    border: 1px solid #8284B6;
+    box-shadow: 0 0 12px #6666DD;
+}
+
+a[draggable=true] {
+    -moz-user-select:none;
+    -khtml-user-drag: element;
+    cursor: move;
+}
+
+#new-file-folder-bar {
+    margin-top: 3px;
+    padding: 5px;
+    border: 3px solid #414243;
+    height: 32px;
+}
+
+#preferences {
+    float: right;
+}
+
+/* editor */
+#location-bar {
+    margin-left: 363px;
+    margin-right: 3px;
+    padding: 3px;
+    border: 3px solid #414243;
+}
+
+#location-bar a {
+    color: #EF4A42;
+}
+
+#textfield {
+    position: relative;
+    margin-left: 360px;
+    padding: 3px;
+}
+
+.frame {
+    position: absolute;
+    visibility: hidden;
+    top:  3px;
+    left: 3px;
+    background-color: #818283;
+    border: 3px solid #414243;
+    -moz-box-shadow: 0 0 22px #111;
+    -webkit-box-shadow: 0 0 22px #111;
+    box-shadow: 0 0 22px #111;
+    z-index: 1000;
+}
+
+/* overlays */
+.overlay {
+    visibility: hidden;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width:100%;
+    height:100%;
+    text-align:center;
+    z-index: 1000;
+}
+
+.dialog {
+    width:300px;
+    margin: 300px auto 0;
+    background-color: #414243;
+    border: 3px solid #616263;
+    padding:15px;
+}
+
+input[type="checkbox"] {
+    width: 16px;
+}
+
+#template-name {
+    width: 250px;
+}

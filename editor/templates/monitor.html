@@ -1,17 +1,18 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <title>Monitor</title>
+    <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Droid+Sans|Molengo">
     <link rel="shortcut icon" href="/editor/static/favicon.ico">
 
-    <link rel="stylesheet" type="text/css" href="/editor/static/style.css">
-    <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Droid+Sans|Molengo">
+    <link rel="stylesheet" type="text/css" href="/editor/static/editor-all.css">
+    <link rel="stylesheet" type="text/css" href="/editor/static/editor-other.css">
 
     <script src="http://code.jquery.com/jquery-1.5.js"></script>
 </head>
 <body>
     <div id="topbar">
         <div class="rascalcontent">
-            <a href="/editor/"><img id="rascallogo" src="/editor/static/rm-logo-words-only-light.png"></a>
+            <a href="/editor/"><img id="rascallogo" src="/editor/static/images/rm-logo-words-only-light.png"></a>
             <ul id="nav">
                 <li><a href="/editor/">editor</a> | </li>
                 <li><a href="/editor/log">log</a> | </li>
@@ -30,11 +31,20 @@
             </table>
         </div>
     </div>
-     <script type="text/javascript">
- $(document).ready(function(){
-   $(".zebra tr").mouseover(function(){$(this).addClass("over");}).mouseout(function(){$(this).removeClass("over");});
-   $(".zebra tr:even").addClass("alt");
- });
+    
+    <script src="/editor/static/editor-resize.js"></script>
+    <script src="/editor/static/editor-other.js"></script>
+    <script type="text/javascript">
+         $(document).ready(function(){
+            adjustGeometry();
+           $(".zebra tr").mouseover(function(){$(this).addClass("over");}).mouseout(function(){$(this).removeClass("over");});
+           $(".zebra tr:even").addClass("alt");
+            $(window).resize(function () {
+                resizeDelay(function () {
+                    adjustGeometry();
+                }, 500);
+            });
+         });
      </script>
 </body>
 </html>

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<!-- 27 Feb 2011 dsmall rascal-1.02.js -->
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>File Upload - Choose File</title>
+    <link rel="stylesheet" type="text/css" href="/static/demo.css">
+    <link rel="stylesheet" type="text/css" href="/static/rascal-demo.css">
+    <link rel="shortcut icon" href="/static/favicon.ico">
+    <script src="/static/jquery-1.5.js"></script>
+    <script src="/static/rascal-1.02.js"></script>
+    <style>
+        /* Hide real file input button behind fake button */
+        #fileinput {
+            position: relative;
+        }
+        #fakefile {
+            z-index: 2;
+        }
+        #file {
+            position: absolute;
+            visibility: hidden;
+            top: 0px;
+            left: 0px;
+            z-index: 1;
+        }
+        .infobox {
+            border: 2px dashed #999;
+            -moz-border-radius: 5px;
+            -webkit-border-radius: 5px;
+            border-radius: 5px;
+            width: 400px;
+            padding: 5px 10px 20px;
+        }
+    </style>    
+</head>
+<body>
+    <div class="rascalcontent">
+        <h1>Upload using Choose File</h1>
+        <p>Choose and upload image files</p>
+        
+        <span id="fileinput">
+            <input id="fakefile" type="button" value="Choose File" class="large red awesome" />
+            <input id="file" type="file" name="file" accept="image/*" multiple />
+        </span>
+        <p id="progress" /> 
+        <div id="status"></div>
+        
+        <h3>Files in the uploads directory:</h3>
+        <div id="filelist" class="infobox"></div>
+        <input id="clear" type="button" value="Clear Files" class="medium blue awesome" />
+    </div>
+    
+    <script src="/static/rascal-demo.js"></script>
+    
+    <script type="text/javascript">
+                
+        // We are using a fake file button to get a better appearance
+        // Pass fakefile click to real file button underneath
+        $('#fakefile').click( function() {
+            $('#file').click();
+        });
+
+        // Called when the "Clear Files" button is clicked
+        $('#clear').click( function() {
+            rascal.directory.clearDirectory(rascal.directory.listDirectory);
+        });
+        
+        // Initialise Rascal library after everything is loaded
+        $(document).ready(function() {
+
+            // Initialise rascal.dnd 
+            rascal.dnd.container = 'file';
+            rascal.dnd.root = 'static/uploads/'
+            rascal.dnd.filesDropped = uploadItems;
+            
+            // Listen to choose file
+            $('#file').change(rascal.dnd.handleDrop);
+
+           // Initialise rascal.directory
+            rascal.directory.directory = 'static/uploads/';
+            rascal.directory.listID = 'filelist';
+
+            // Load file names from the uploads folder
+            rascal.directory.listDirectory();
+        });
+    </script>
+</body>
+</html>

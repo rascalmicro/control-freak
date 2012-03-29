@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Browser Test</title>
+    <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Droid+Sans|Molengo">
+    <link rel="stylesheet" type="text/css" href="/static/demo.css">
+    <link rel="shortcut icon" href="/static/favicon.ico">
+    <script src="/static/jquery-1.5.js"></script>
+    <script src="/static/modernizr-2.5.3.js"></script>
+    <style>
+        body {
+            margin: 0.5em;
+        }
+        .rascalcontent {
+            width: 640px;
+        }
+    </style>
+</head>
+<body>
+    <div class="rascalcontent">
+        <h1>Browser Test</h1>
+        <p>Features supported in this browser are indicated by "true" in the Status column.
+        Features required for drag and drop in the editor and for the Upload and Album demos
+        are indicated by "true" in the Required column:</p>
+        <div id='what'></div>
+    </div>
+    <script type="text/javascript">
+        var s;
+        
+        function testfeature(name, result, required) {
+            var status = (result != undefined);
+            s += '<tr><td>' + name + '</td><td>' + status + '</td><td>' + required + '</td></tr>';
+        }
+        
+        function test() {
+            var xhr = new XMLHttpRequest();
+            s = '<table border="1" cellspacing="0" cellpadding="5">';
+            s += '<tr><td>Feature</td><td>Status</td><td>Required</td></tr>';
+            testfeature('Drag and Drop', Modernizr.draganddrop, true);
+            testfeature('FileList', window.FileList, true);
+            testfeature('File', window.File, true);
+            testfeature('XMLHttpRequest.upload', xhr.upload, true);
+            testfeature('FileReader', window.FileReader, false);
+            testfeature('Blob', window.Blob, false);
+            s += '</table>';
+            document.getElementById('what').innerHTML = s;
+        }
+
+        $(document).ready(function() {
+            test();
+        });
+    </script>
+</body>
+</html>

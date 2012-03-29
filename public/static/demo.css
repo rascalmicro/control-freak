@@ -194,24 +194,38 @@ tr.over td {
 /* end Zurb awesome buttons */
 
 @font-face {
+  font-family: 'URW Gothic L';
+  font-style: normal;
+  font-weight: normal;
+  src: url('fonts/urw-gothic-l-book.ttf');
+}
+
+@font-face {
   font-family: 'DroidSans';
   font-style: normal;
   font-weight: normal;
-  src: url('DroidSans.ttf');
+  src: url('fonts/DroidSans.ttf');
+}
+
+@font-face {
+  font-family: 'DroidSans-Bold';
+  font-style: normal;
+  font-weight: normal;
+  src: url('fonts/DroidSans-Bold.ttf');
 }
 
 @font-face {
   font-family: 'Molengo';
   font-style: normal;
   font-weight: normal;
-  src: url('Molengo-Regular.ttf');
+  src: url('fonts/Molengo-Regular.ttf');
 }
 
 @font-face {
   font-family: 'VT323';
   font-style: normal;
   font-weight: normal;
-  src: url('VT323.ttf');
+  src: url('fonts/VT323.ttf');
 }
 
 #serial-text {

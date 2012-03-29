@@ -1,0 +1,164 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Editor</title>
+    <link rel="shortcut icon" href="/editor/static/favicon.ico">
+    <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Droid+Sans|Molengo">
+
+    <link rel="stylesheet" type="text/css" href="/editor/static/codemirror2/lib/codemirror.css">
+    <link rel="stylesheet" type="text/css" href="/editor/static/codemirror2/theme/night.css">
+    <link rel="stylesheet" type="text/css" href="/editor/static/editor-all.css">
+    <link rel="stylesheet" type="text/css" href="/editor/static/editor.css">
+    <link rel="stylesheet" type="text/css" href="/editor/static/jquery.filetree.css">
+
+    <script src="/editor/static/codemirror2/lib/codemirror.js"></script>
+    <script src="/editor/static/codemirror2/mode/css/css.js"></script>
+    <script src="/editor/static/codemirror2/mode/javascript/javascript.js"></script>
+    <script src="/editor/static/codemirror2/mode/xml/xml.js"></script>
+    <script src="/editor/static/codemirror2/mode/htmlmixed/htmlmixed.js"></script>
+    <script src="/editor/static/codemirror2/mode/python/python.js"></script>
+    
+    <script src="/editor/static/jquery-1.5.js"></script>
+    <script src="/editor/static/jquery.filetree.js"></script>
+    <script src="/editor/static/rascal-1.02.js"></script>
+    <style>
+        .CodeMirror-scroll {
+            /* height: 600px; */
+            height: 475px;
+            border: 3px solid #414243;
+        }
+    </style>
+</head>
+<body>
+    <div id="topbar">
+        <div class="rascalcontent">
+            <a href="/editor/"><img id="rascallogo" src="/editor/static/images/rm-logo-words-only-light.png"></a>
+            <ul id="nav">
+                <li><a href="/editor/">editor</a> | </li>
+                <li><a href="/editor/log">log</a> | </li>
+                <li><a href="/editor/config">config</a> | </li>
+                <li><a href="/editor/monitor">monitor</a></li>
+            </ul>
+            <div class=metanav>
+                <a href="/editor/logout">log out</a>
+            </div>
+        </div>
+    </div>
+    <div class="rascalcontent">
+        <div id="buttons">
+            <input id="reload" type="button" value="Reload pytronics" class="large red awesome" alt="Reload pytronics">
+            <input id="save" type="button" value="Save" class="large red awesome" alt="Save">
+        </div>
+        <div id="progress-bars">
+            <img id="save-progress" src="/editor/static/images/progressbar.gif">
+            <div id="save-message">Saved file</div>
+            <img id="reload-progress" src="/editor/static/images/progressbar.gif">
+        </div>
+        <div id="side-bar">
+            <div id="ft-background" class="night">
+                <div id="filetree"></div>
+            </div>
+            <div id="new-file-folder-bar" class="night">
+                <img id="new-template" src="/editor/static/images/oxygen-new-file-32x32.png" />
+                <img id="new-folder" src="/editor/static/images/oxygen-new-folder-32x32.png" />
+                <img id="preferences" src="/editor/static/images/oxygen-actions-32x32.png" />
+            </div>
+        </div>
+        <div id="editor">
+            <form>
+                <input id="path" type="hidden" name="path" value="{{ path }}">
+                <div id="location-bar" class="night">&nbsp;</div>
+                <div id="textfield">
+                    <textarea id="code" cols="100" rows="120" name="text">{{text_to_edit}}</textarea>
+                    <div id="frame-p" class="frame"></div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="overlay-t" class="overlay">OVERLAY TEMPLATE
+        <div id="new-template-dialog" class="dialog">
+            Create a new template<br />
+            <div class="small">The name you type should end in .html</div>
+            <fieldset>
+                <input id="template-name" type="text" name="template-name" /><br />
+                <input id="create-template" type="button" value="Create" class="large red awesome" alt="Create" />
+                <input id="cancel-template" type="button" value="Cancel" class="large red awesome" alt="Cancel" />
+            </fieldset>
+        </div>
+    </div>
+    <div id="overlay-f" class="overlay">OVERLAY FOLDER
+        <div id="new-folder-dialog" class="dialog">
+            Create a new folder in "static"<br />
+            <div id="folder-message" class="small">You will be able to drag it to another folder</div>
+            <fieldset>
+                <input id="folder-name" type="text" name="folder-name" /><br />
+                <input id="create-folder" type="button" value="Create" class="large red awesome" alt="Create" />
+                <input id="cancel-folder" type="button" value="Cancel" class="large red awesome" alt="Cancel" />
+            </fieldset>
+        </div>
+    </div>
+    <div id="overlay-p" class="overlay">OVERLAY PREFERENCES
+        <div id="prefs-dialog" class="dialog">
+            CodeMirror Preferences<br />
+            <div id="folder-message" class="small">&nbsp;</div>
+            <fieldset class="medium" style="text-align: left;">
+                <input id="warn-save" type="checkbox" name="warn-delete" />Warn if changes not saved<br />
+                <input id="warn-delete" type="checkbox" name="warn-delete" />Warn before deleting<br />
+                <input id="lineWrapping" type="checkbox" name="lineWrapping" />Wrap lines<br />
+                <input id="lineNumbers" type="checkbox" name="lineNumbers" />Show line numbers<br />
+            </fieldset>
+            <input id="cancel-prefs" type="button" value="OK" class="large red awesome" alt="Cancel" />
+        </div>
+    </div>
+
+
+    <script src="/editor/static/editor-resize.js"></script>
+    <script src="/editor/static/editor-cm.js"></script>
+    <script src="/editor/static/editor.js"></script>
+    <script type="text/javascript">
+            
+        var delay = (function () {
+            var timer = 0;
+            return function(callback, ms) {
+                clearTimeout (timer);
+                timer = setTimeout(callback, ms);
+            };
+        })();
+        
+        function adjustGeometry () {
+            var w, h, dw, dh;
+            if (ADJUSTSIZE) {
+                w = $(window).width();
+                h = $(window).height();
+                saveMsg(w + ' x ' + h);
+                console.log('size ' + w + ' x ' + h);
+                dw = (w > (1260 + XW)) ? w - (1260 + XW) : 0;
+                dh = (h > (637 + XH)) ? h - (637 + XH) : 0;
+                console.log('resize ' + dw + ' x ' + dh);
+                $('.rascalcontent').width(1260 + dw);
+                $('#filetree').height(460 + dh);
+                $('.CodeMirror-scroll').height(475 + dh);
+                if (rascal.picture.showing) {
+                    $('#frame-p')
+                        .height($('.CodeMirror-scroll').height())
+                        .width($('.CodeMirror-scroll').width());
+                    rascal.picture.resize();
+                }
+            }
+        }
+        
+        $(document).ready(function () {
+            initEditor();
+            initPreferences();
+            adjustGeometry();
+            initRascalDnd ();
+            displayTree('/var/www/public/templates/');
+            $(window).resize(function () {
+                delay(function () {
+                    adjustGeometry();
+                }, 500);
+            });
+        });
+    </script>
+</body>
+</html>

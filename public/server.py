@@ -1,12 +1,14 @@
 from flask import Flask, render_template, request
-#from uwsgidecorators import *
+# from uwsgidecorators import *
 import time
 
 public = Flask(__name__)
 public.config['PROPAGATE_EXCEPTIONS'] = True
 
-LOCAL_CALENDAR = '/var/www/public/static/basic.ics'
-CALENDAR_URL = 'https://www.google.com/calendar/ical/0c3lie03m3ajg6j6numm2gf1l4%40group.calendar.google.com/public/basic.ics'
+# config for upload
+ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
+ALLOWED_DIRECTORIES = set(['static/uploads/', 'static/pictures/'])
+# public.config['MAX_CONTENT_LENGTH'] = 4 * 1024 * 1024
 
 def toggle_pin(pin):
     from pytronics import read_pin, set_pin_high, set_pin_low
@@ -14,6 +16,17 @@ def toggle_pin(pin):
         set_pin_low(pin)
     else:
         set_pin_high(pin)
+
+@public.route('/pin/<pin>/<state>')
+def update_pin(pin, state):
+    from pytronics import set_pin_high, set_pin_low
+    if state.lower() == 'on':
+        set_pin_high(pin)
+        return 'Set pin %s high' % pin
+    elif state.lower() == 'off':                       
+        set_pin_low(pin)
+        return 'Set pin %s low' % pin
+    return "Something's wrong with your syntax. You should send something like: /pin/2/on"
 
 @public.route('/set-speed', methods=['POST'])
 def set_speed():
@@ -24,21 +37,10 @@ def set_speed():
     subprocess.Popen([cmd], shell=True)
     return ('speed set')
 
-@public.route('/pin/<pin>/<state>')
-def update_pin(pin, state):
-    from pytronics import set_pin_high, set_pin_low
-    if state.lower() == 'on':
-        set_pin_high(pin)
-        return 'Set pin %s high' % pin
-    elif state.lower() == 'off':
-        set_pin_low(pin)
-        return 'Set pin %s low' % pin
-    return "Something's wrong with your syntax. You should send something like: /pin/2/on"
-
-#@rbtimer(300)
+#@rbtimer(60)
 def fetch_calendar(num):
-    import thermostat, urllib
-    urllib.urlretrieve(CALENDAR_URL, LOCAL_CALENDAR)
+    import thermostat
+    thermostat.update_calendar_file()
     print('Calendar reload attempt')
 
 #@rbtimer(3)
@@ -58,7 +60,6 @@ def update_relay(num):
 def template(template_name):
     return render_template(template_name + '.html', magic="Hey presto!")
 
-@public.route('/')
 @public.route('/relay.html')
 def index():
     import pytronics
@@ -91,15 +92,23 @@ def temperature():
 
 @public.route('/analog', methods=['POST'])
 def analog():
-    from pytronics import read_analog
+    # from pytronics import read_analog
+    import pytronics, ds_temp
     import json, time
     try:
         ad_ref = float(request.form['adref'])
     except KeyError:
         ad_ref = 3.3
+    if pytronics.read_pin('LED') == '1':
+        strLED = "LED is on"
+    else:
+        strLED = "LED is off"
     data = {
         "time" : float(time.time()),
-        "A0" : float(read_analog('A0')) * ad_ref / 1024.0
+        "A0" : float(pytronics.read_analog('A0')) * ad_ref / 1024.0,
+        "date" : time.strftime("%d %b %Y %H:%M:%S %Z", time.localtime()),
+        "led" : strLED,
+        "temp" : format(float(ds_temp.read_sensor(0x48)), '.1f') + unichr(176) + 'C'
     }
     return json.dumps(data)
 
@@ -117,8 +126,7 @@ def clear_lcd():
 
 @public.route('/set-color', methods=['POST'])
 def set_color():
-    import subprocess
-    import colorsys, kinet
+    import colorsys, kinet, subprocess
     color = request.form['color']
     print "RGB = " + str(color)
     #cmd = 'blinkm set-rgb -d 9 -r ' + str(int(color[0:2], 16)) + ' -g ' + str(int(color[2:4], 16)) + ' -b ' + str(int(color[4:6], 16))
@@ -152,6 +160,125 @@ def sprinkler():
     #else:
     #    pytronics.set_pin_low(2)
     return ('Sprinkler toggled')
+
+
+ # @rbtimer(5)
+def toggle_led(num):
+    import pytronics
+    if pytronics.read_pin('LED') == '1':
+        pytronics.set_pin_low('LED')
+    else:
+        pytronics.set_pin_high('LED')
+
+        
+# @cron(0, -1, -1, -1, -1)
+# @cron(0, 0, -1, -1, -1)
+# @cron(0, 6, -1, -1, -1)
+# @cron(0, 12, -1, -1, -1)
+# @cron(0, 18, -1, -1, -1)
+def ntp_daemon(num):
+    import subprocess
+    cmd = 'ntpdate uk.pool.ntp.org'
+    subp = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE)
+    try:
+        data = subp.communicate()[0].strip()
+        print '## NTPD ## ' + data
+    except:
+        print '## NTPD ## Failed.'
+
+@public.route('/email.html')
+def email_form():
+    return render_template('email.html', sender='rascal24 <davids@hlh.co.uk>')
+
+@public.route('/send-email', methods=['POST'])
+def send_email():
+    import ds_mail, json
+    sender = request.form['sender'].strip()
+    recipients = request.form['recipients'].strip()
+    subject = request.form['subject'].strip()
+    body = request.form['body'].strip()
+    if sender == '':
+        result = (1, 'Please enter the sender')
+    elif recipients == '':
+        result = (1, 'Please enter at least one recipient')
+    else:
+        result = ds_mail.sendmail(sender, recipients, subject, body)
+    data = {
+        "status" : int(result[0]),
+        "message" : result[1]
+    }
+    return json.dumps(data)
+
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+    
+@public.route('/xupload', methods=['POST'])
+def xupload_file():
+    import os
+    from werkzeug import secure_filename
+    from werkzeug.exceptions import RequestEntityTooLarge
+    if request.method == 'POST':
+        try:
+            root = '/var/www/public/'
+            # Check file type and folder
+            filename = secure_filename(request.headers['X-File-Name'])
+            if not allowed_file(filename):
+                print '## xupload ## bad file type ' + filename
+                return 'Forbidden', 403
+            folder = request.headers['X-Folder']
+            fpath = os.path.join(root, os.path.join(folder, filename))
+            # Write out the stream
+            f = file(fpath, 'wb')
+            f.write(request.stream.read())
+            f.close()
+            print '## xupload ## ' + fpath
+        except RequestEntityTooLarge:
+            return 'File too large', 413
+        except:
+            return 'Bad request', 400
+    return 'OK', 200
+
+@public.route('/list-directory', methods=['POST'])
+def list_directory():
+    import os, json
+    root = '/var/www/public/'
+    dir = request.form['directory']
+    try:
+        dirlist = os.listdir(os.path.join(root, dir))
+        return json.JSONEncoder().encode(dirlist)
+    except:
+        return 'Bad request', 400
+
+@public.route('/clear-directory', methods=['POST'])
+def clear_directory():
+    import os
+    root = '/var/www/public/'
+    dir = request.form['directory']
+    if dir not in ALLOWED_DIRECTORIES:
+        return 'Forbidden', 403
+    folder = os.path.join(root, dir)
+    for the_file in os.listdir(folder):
+        file_path = os.path.join(folder, the_file)
+        try:
+            if os.path.isfile(file_path):
+                os.unlink(file_path)
+        except Exception, e:
+            print '## clear_directory ## ' + e
+            return 'Bad request', 400
+    return 'OK', 200
+
+@public.route('/flash_led', methods=['POST'])
+def flash_led():
+    import pytronics
+    if pytronics.read_pin('LED') == '1':
+        pytronics.set_pin_low('LED')
+        message = "LED off"
+    else:
+        pytronics.set_pin_high('LED')
+        message = "LED on"
+    return (message)
+
 
 if __name__ == "__main__":
     public.run(host='127.0.0.1:5000', debug=True)

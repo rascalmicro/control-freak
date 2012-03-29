@@ -1,0 +1,29 @@
+/*Adjust demo.css*/
+body {
+    margin: 0.5em;
+}
+
+.rascalcontent {
+    width: 710px;
+}
+
+.email-input {
+    border: 2px solid #E7E8E9;
+    background-color: #111111;
+    width: 25em;
+    font-family:'Courier', sans-serif;
+    font-size: 1em;
+    margin-top: 10px;
+    margin-bottom: 20px;
+    color: #FFFFFF;
+}
+
+.email-body {
+    border: 3px solid #E7E8E9;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    font-family: 'Courier', sans-serif;
+    font-size: 1.25em;
+    background-color: #111111;
+    color: #FFFFFF;
+}

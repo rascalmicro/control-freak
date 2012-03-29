@@ -1,0 +1,54 @@
+body {
+    line-height: 1.4em;
+}
+
+.centered {
+    width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.zebra {
+    font-size: 0.8em;
+    line-height: 2em;
+}
+
+.log-display {
+    border: 2px solid #414243;
+    background-color: black;
+    font-family:'Courier', sans-serif;
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+
+tr.alt td {
+    background: #212223;
+}
+
+tr.over td {
+    color: #00ff00;
+}
+
+#login-form {
+    margin-top: 300px;
+    padding: 0; /* to reset -webkit-padding-start */
+}
+
+#password-field {
+    width: 300px;
+    font-size: 2em;
+    margin-right: 10px;
+}
+
+#message-panel {
+    float: right;
+    clear: none;
+    color: #EF4A42;
+    margin: 5px;
+    height: 40px;
+    width: 642px;
+}
+
+#reset {
+    width: 220px;
+}

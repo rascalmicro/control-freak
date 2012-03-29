@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Scope demo</title>
+    <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Droid+Sans|Molengo">
+    <link rel="stylesheet" type="text/css" href="/static/demo.css">
+    <link rel="shortcut icon" href="/static/favicon.ico">
+    <script src="/static/jquery-1.5.js"></script>
+    <!--[if lte IE 8]><script language="javascript" type="text/javascript" src="/static/excanvas.js"></script><![endif]-->
+    <script language="javascript" type="text/javascript" src="/static/jquery.jqplot.js"></script>
+    <link rel="stylesheet" type="text/css" href="/static/jquery.jqplot.css" />
+</head>
+<body>
+    <div class="rascalcontent">
+        <h1>Scope demo on Rascal24</h1>
+        <span class="log-display" id="strDate"></span>
+        <span class="log-display" id="strTemp"></span>
+        <span class="log-display" id="strLED"></span>
+        <br />
+        <div id="chart1" style="height:400px;width:900px;"></div>
+    </div>
+    <script language="javascript" type="text/javascript">
+
+    chartOptions = {
+        legend: {
+            show: true,
+            location: "nw" },
+        title: "Channel 0",
+        series: [
+            {label: "Channel 0", lineWidth:3, showMarker:false}
+        ],
+        axes: {
+            xaxis: {
+                label: "Time [seconds ago]",
+                min: 0,
+                max: 120,
+                pad: 0 },
+            yaxis: {
+                label: "Sensor voltage [V]",
+                min: 0,
+                max: 2.5 },
+        },
+        seriesColors: [ "#cd2820" ]
+    };
+
+    a0 = new Array();
+    var degrees = 0;
+    var deg2rad = 3.14159265 / 180.0;
+    var gain = 1.0;
+
+    setInterval(function() {
+        $.post("analog", function(response) {
+            data = $.parseJSON(response);
+
+            $('#strDate').text(data["date"]);
+            $('#strTemp').text(data["temp"]);
+            $('#strLED').text(data["led"]);
+
+            // Added by dsmall - overwrite A0
+            if (degrees > 350) {
+                degrees = 0;
+            }
+            data["A0"] = Math.sin(degrees * deg2rad) * gain + 1.25;
+
+            degrees += 10;
+            if(a0.length > chartOptions.axes.xaxis.max) {
+                a0.pop();
+            }
+            a0.unshift(data.A0);
+            $.jqplot("chart1", [a0], chartOptions).replot();
+        });
+    }, 1000);
+
+    function gain_up () {
+        gain *= 2.0;
+    }
+
+    function gain_down () {
+        gain /= 2.0;
+    }
+    </script>
+
+    <label for="gain_down">Gain control:</label><br />
+    <button type="button" id="gain_down" onclick="gain_down();">Decrease</button>
+    <button type="button" id="gain_up" onclick="gain_up();">Increase</button>
+</body>
+</html>

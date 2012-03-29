@@ -1,0 +1,148 @@
+body {
+    font-family: "Molengo","URW Gothic L",sans-serif;
+    font-size: 1em;
+    /* line-height: 1.4em; */
+    margin: 0;
+    color: #F8F8F8;
+    background-color: #616263;
+}
+
+.rascalcontent {
+    /* width: 1280px; */ 
+    width: 1260px; 
+    margin-left: auto;
+    margin-right: auto;
+}
+
+a {
+    color:#A4211A;
+    text-decoration: none;
+}
+
+li {
+    list-style-type: none;
+}
+
+input {
+    margin-top: 5px;
+    margin-bottom: 5px;
+    width: 120px;
+}
+
+.night {
+    background-color: #0A001F;
+}
+
+.small {
+    font-size: 0.8em;
+}
+
+.medium {
+    font-size: 0.9em;
+}
+
+/* topbar */
+#topbar {
+    height: 50px;
+    text-align: right;
+    line-height: 1.4em;
+    background-color: #414243;
+}
+
+#rascallogo {
+    clear: none;
+    float: left;
+    border: none;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    margin-left: -3px;
+}
+
+#nav {
+    margin: 0;
+    font-family: "Molengo","URW Gothic L",sans-serif;
+    font-size: 1em;
+}
+
+#nav li {
+    display: inline;
+}
+
+#nav a {
+    color: #E7E8E9;
+}
+
+/* Zurb awesome buttons */
+.awesome, .awesome:visited {
+    display: inline-block;
+    font-size: 16px;
+    padding: 8px 14px 9px;
+    color: #fff;
+    text-decoration: none;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -moz-box-shadow: 0 1px 3px rgba(0,0,0,0.5);
+    -webkit-box-shadow: 0 1px 3px rgba(0,0,0,0.5);
+    text-shadow: 0 -1px 1px rgba(0,0,0,0.25);
+    border-bottom: 1px solid rgba(0,0,0,0.25);
+    border-style: none;
+    position: relative;
+    cursor: pointer;
+}
+
+.awesome:hover {
+    background-color: #111; color: #fff;
+}
+
+.awesome:active {
+    top: 1px;
+}
+
+.small.awesome, .small.awesome:visited {
+    font-size: 11px;
+
+}
+.medium.awesome, .medium.awesome:visited {
+    font-size: 13px; font-weight: bold; line-height: 1; text-shadow: 0 -1px 1px rgba(0,0,0,0.25);
+}
+
+.large.awesome, .large.awesome:visited {
+    font-size: 16px; padding: 8px 14px 9px;
+}
+
+.blue.awesome, .blue.awesome:visited {
+    background-color: #51A8CB;
+}
+
+.blue.awesome:hover {
+    background-color: #475373;
+}
+.red.awesome, .red.awesome:visited {
+    background-color: #EF4A42;
+}
+
+.red.awesome:hover {
+    background-color: #872300;
+}
+/* end Zurb awesome buttons */
+
+@font-face {
+  font-family: 'DroidSans';
+  font-style: normal;
+  font-weight: normal;
+  src: url('fonts/DroidSans.ttf');
+}
+
+@font-face {
+  font-family: 'Molengo';
+  font-style: normal;
+  font-weight: normal;
+  src: url('fonts/Molengo-Regular.ttf');
+}
+
+@font-face {
+  font-family: 'VT323';
+  font-style: normal;
+  font-weight: normal;
+  src: url('fonts/VT323.ttf');
+}

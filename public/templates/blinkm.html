@@ -21,14 +21,14 @@
             <span id="text2" style="">Click anywhere in the box.</span>			
         </div>
     </div>
-	<script type="text/javascript">
-	$(function(){
-            $("#colorPicker2").mlColorPicker({'onChange': function(val){
-                $("#colorPicker2Span").css("background-color", "#" + val);
-                $("#text2").text("#" + val);
-                $.post("set-color", "color=" + val);
-            }});
-	});
-	</script>
+    <script type="text/javascript">
+    $(function(){
+        $("#colorPicker2").mlColorPicker({'onChange': function(val){
+            $("#colorPicker2Span").css("background-color", "#" + val);
+            $("#text2").text("#" + val);
+            $.post("set-color", "color=" + val);
+        }});
+    });
+    </script>
 </body>
 </html>

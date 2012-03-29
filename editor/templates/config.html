@@ -1,17 +1,21 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <title>Config</title>
-    <link rel="shortcut icon" href="/editor/static/favicon.ico">
-
-    <link rel="stylesheet" type="text/css" href="/editor/static/style.css">
     <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Droid+Sans|Molengo">
+    <link rel="shortcut icon" href="/editor/static/favicon.ico">
+    
+    <link rel="stylesheet" type="text/css" href="/editor/static/editor-all.css">
+    <link rel="stylesheet" type="text/css" href="/editor/static/editor-other.css">
+    <link rel="stylesheet" type="text/css" href="/editor/static/UISegmentedControl.css">
 
     <script src="http://code.jquery.com/jquery-1.5.js"></script>
+    <style>
+    </style>
 </head>
 <body>
     <div id="topbar">
         <div class="rascalcontent">
-            <a href="/editor/"><img id="rascallogo" src="/editor/static/rm-logo-words-only-light.png"></a>
+            <a href="/editor/"><img id="rascallogo" src="/editor/static/images/rm-logo-words-only-light.png"></a>
             <ul id="nav">
                 <li><a href="/editor/">editor</a> | </li>
                 <li><a href="/editor/log">log</a> | </li>
@@ -34,17 +38,82 @@
 {{ processes }}
         </pre>
         <hr />
+        <table width="100%">
+        <tr valign="top">
+        <td width="48%">
         <p>A weapon of mass destruction:</p>
         <form>
             <input id="reset" type="button" value="Destroy all my work" class="large red awesome" alt="Destroy all my work">
         </form>
         <p>If you click the "Destroy all my work" button, all the changes you've made to your Rascal's web interface will be deleted.</p>
-        <p>(What this really does is to return the Git repository in /var/www to its last committed state.)</p>
+        <p>(What this really does is to return the Git repository in /var/www to its last committed state.)</p></td>
+        <td width="4%">&nbsp;</td>
+        <td>
+        <p>Choose editor:</p>
+        <div class="Tabs segmentedControlBase" style="width: 300px;">
+            <input id="editor-cm" type="button" class="button segmentedControl selected" value="CodeMirror 2" />
+            <input id="editor-a" type="button" class="button segmentedControl" value="Ace" />
+        </div>
+        <div class="TabPanels">
+            <div id="editor-cm-desc" class="tabPanel selected">
+                <p><a href="http://codemirror.net/" name="CodeMirror" title="CodeMirror" target="_editor">{} CodeMirror /* In-browser code editing made bearable */</a><br />
+                CodeMirror is a JavaScript library that can be used to create a relatively
+                pleasant editor interface for code-like content ― computer programs, HTML markup and similar.
+                If a mode has been written for the language you are editing, the code will be coloured and
+                the editor will optionally help you with indentation.<br />
+                <a href="static/codemirror2/index.html" name="CodeMirror2" title="CodeMirror2" target="_editor">documentation</a>
+                </p>
+            </div>
+            <div id="editor-a-desc" class="tabPanel">
+                <p><a href="http://ace.ajax.org/" name="Ace" title="Ace" target="_editor">Ajax.org Cloud9 Editor</a><br />
+                Ace is a standalone code editor written in JavaScript.
+                The goal is to create a web based code editor that matches and extends the features, usability and
+                performance of existing native editors such as TextMate, Vim or Eclipse.
+                Ace is developed as the primary editor for Cloud9 IDE and the successor of the Mozilla Skywriter (Bespin) Project.<br />
+                <a href="https://github.com/ajaxorg/ace/wiki" name="Ace wiki" title="Ace wiki" target="_editor">wiki</a> |
+                <a href="https://github.com/ajaxorg/ace/wiki/Default-Keyboard-Shortcuts" name="Keyboard shortcuts" title="keyboard shortcuts" target="_editor">keyboard shortcuts</a> </p>
+            </div>
+        </div>
+        </td></tr></table>
     </div>
+    <div id="editor" style="display: none;">{{ editor }}</div>
+    
+    <script src="/editor/static/editor-resize.js"></script>
+    <script src="/editor/static/editor-other.js"></script>
     <script type="text/javascript">
-    $("#reset").click( function() {
-        $.post("/editor/reset", "text");
-    });
+        $("#reset").click( function() {
+            $.post("/editor/reset", "text");
+        });
+        
+        function selectEditor(editor) {
+            $('.segmentedControl, .tabPanel').removeClass('selected');
+            $('#' + editor + ', #' + editor + '-desc').addClass('selected');
+        }
+        
+        function setEditor (editor) {
+            $.post('/editor/set_editor', { editor: editor }, function (response) {
+                console.log('set_editor ' + editor + ': ' + response);
+                selectEditor(editor);
+            });
+        }
+
+        $('#editor-cm').click(function () {
+            setEditor('editor-cm');
+        });
+
+        $('#editor-a').click(function () {
+            setEditor('editor-a');
+        });
+
+        $(document).ready(function () {
+            selectEditor($('#editor').text());
+            adjustGeometry();
+            $(window).resize(function () {
+                resizeDelay(function () {
+                    adjustGeometry();
+                }, 500);
+            });
+        });
     </script>
 </body>
 </html>

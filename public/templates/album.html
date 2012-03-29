@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<!-- 24 Feb 2012 dsmall -->
+<!-- Requires: jquery, rascal-1.02, album.css, album.js, static/pictures folder, server.py support -->
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Rascal Album</title>
+    <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Droid+Sans%7CMolengo">
+    <link rel="stylesheet" type="text/css" href="/static/demo.css">
+    <link rel="stylesheet" type="text/css" href="/static/album.css">
+    <link rel="shortcut icon" href="/static/favicon.ico">
+    <script src="/static/jquery-1.5.js"></script>
+    <script src="/static/rascal-1.02.js"></script>
+</head>
+<body>
+    <div id="rascalcontent" class="rascalcontent">
+        <h1>Rascal Album</h1>
+        <span id="intro">You can drag more pictures onto the picture frame</span>
+        <div id="frame">
+            <div id="slideshow"></div>
+        </div>
+        <div id="buttons" align="center">
+            <input id="previous" type="button" value="&lt; Previous" class="large blue awesome left" />
+            <input id="auto" type="button" value="Slideshow" class="large blue awesome" />
+            <input id="next" type="button" value="Next &gt;" class="large blue awesome right" />
+        </div>
+        <p id="progress" /> 
+        <div id="status"></div>
+    </div>
+    
+    <script src="/static/album.js"></script>
+    
+    <script type="text/javascript">
+        /* Initialise Rascal library */
+        $(document).ready(function() {
+            // Initialise rascal-demo upload
+            var rd = rascal.dnd;
+            rd.container = 'frame';
+            rd.root = 'static/pictures/'
+            rd.filesDropped = uploadItems;
+            rd.init();
+            // Load images from the pictures folder
+            loadPictures();
+        });
+    </script>
+</body>
+</html>
