@@ -1,6 +1,6 @@
 # Updating Rascal to the latest control-freak Release
 
-Release of Mar 29, 2012
+Release of Apr 6, 2012
 
 The main changes in this release are:
 
@@ -42,13 +42,13 @@ To update to the latest release, proceed as follows, replacing NN with your Rasc
   
         [root@rascalNN:/var]: cd www/
         [root@rascalNN:/var/www]: git submodule
-        9d621390c80ac7cac6e9e3660162fd891a8c914e editor/static/codemirror2 (v2.22-56-g9d62139)
+        8feb48b37c3678a102b2de41e24f0f43bee86f50 editor/static/codemirror2 (v2.23-15-g8feb48b)
         [root@rascalNN:/var/www]: git submodule init
         Submodule 'editor/static/codemirror2' (git://github.com/marijnh/CodeMirror2.git) registered for path 'editor/static/codemirror2'
         [root@rascalNN:/var/www]: git submodule update
         Cloning into editor/static/codemirror2...
         ...
-        Submodule path 'editor/static/codemirror2': checked out '9d621390c80ac7cac6e9e3660162fd891a8c914e'
+        Submodule path 'editor/static/codemirror2': checked out '8feb48b37c3678a102b2de41e24f0f43bee86f50'
 
   6. Restart both web servers:
   
@@ -94,6 +94,5 @@ need to do the following:
 (requires TMP102 temperature sensor connected to Rascal I2C/TWI bus and
 ds_temp.py)
 
-dsmall 6 Apr 2012
 
    [1]: http://blog.hlh.co.uk/2012/02/07/hello-world-2/
