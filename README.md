@@ -41,6 +41,8 @@ To update to the latest release, proceed as follows, replacing NN with your Rasc
   5. Install CodeMirror:
   
         [root@rascalNN:/var]: cd www/
+        [root@rascalNN:/var/www]: git submodule
+        9d621390c80ac7cac6e9e3660162fd891a8c914e editor/static/codemirror2 (v2.22-56-g9d62139)
         [root@rascalNN:/var/www]: git submodule init
         Submodule 'editor/static/codemirror2' (git://github.com/marijnh/CodeMirror2.git) registered for path 'editor/static/codemirror2'
         [root@rascalNN:/var/www]: git submodule update
