@@ -92,23 +92,15 @@ def temperature():
 
 @public.route('/analog', methods=['POST'])
 def analog():
-    # from pytronics import read_analog
-    import pytronics, ds_temp
+    from pytronics import read_analog
     import json, time
     try:
         ad_ref = float(request.form['adref'])
     except KeyError:
         ad_ref = 3.3
-    if pytronics.read_pin('LED') == '1':
-        strLED = "LED is on"
-    else:
-        strLED = "LED is off"
     data = {
         "time" : float(time.time()),
-        "A0" : float(pytronics.read_analog('A0')) * ad_ref / 1024.0,
-        "date" : time.strftime("%d %b %Y %H:%M:%S %Z", time.localtime()),
-        "led" : strLED,
-        "temp" : format(float(ds_temp.read_sensor(0x48)), '.1f') + unichr(176) + 'C'
+        "A0" : float(read_analog('A0')) * ad_ref / 1024.0
     }
     return json.dumps(data)
 
@@ -162,7 +154,7 @@ def sprinkler():
     return ('Sprinkler toggled')
 
 
- # @rbtimer(5)
+# @rbtimer(5)
 def toggle_led(num):
     import pytronics
     if pytronics.read_pin('LED') == '1':
