@@ -1,19 +1,13 @@
 <!DOCTYPE html>
-<!-- 3 Mar 2011 dsmall Updated (JSLint CSSLint) -->
+<!-- 8 Apr 2012 dsmall Added Sending... -->
 <html>
 <head>
     <meta charset="utf-8">
     <title>Send an email</title>
-    <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Droid+Sans|Molengo">
     <link rel="stylesheet" type="text/css" href="/static/demo.css">
     <link rel="stylesheet" type="text/css" href="/static/email.css">
     <link rel="shortcut icon" href="/static/favicon.ico">
     <script src="/static/jquery-1.5.js"></script>
-    <!--[if IE]><script language="javascript" type="text/javascript" src="/excanvas.js"></script><![endif]-->
-<!-- 
-    <script language="javascript" type="text/javascript" src="/static/jquery.jqplot.js"></script>
-    <link rel="stylesheet" type="text/css" href="/static/jquery.jqplot.css" />
- -->
 </head>
 <body>
     <div class="rascalcontent">
@@ -31,15 +25,21 @@
         
         <input id="send-email" type="button" value="Send Email" class="large red awesome" />
         <input id="clear-form" type="button" value="Clear Form" class="large blue awesome" />
-        <div id="result"></div>
+        <div id="result">{{ help }}</div>
     </div>
     
     <script language="javascript" type="text/javascript">
-        var $;
+        // Uncomment next line for JSLint
+        // var $;
         
         $("#send-email").click(function () {
             "use strict";
-            $('#result').empty();
+            $('#result').empty()
+                .text('Sending...')
+                .css("color", "")
+                .css("visibility", "visible")
+                .hide()
+                .fadeTo(500, 1);
             $.post("/send-email",
                     { sender: $("#sender").val(), recipients: $("#recipients").val(),
                     subject: $("#subject").val(), body: $("#email-body").val() },

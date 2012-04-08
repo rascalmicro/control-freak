@@ -1,6 +1,6 @@
 # Updating Rascal to the latest control-freak Release
 
-Release of Apr 6, 2012
+Release of Apr 8, 2012
 
 The main changes in this release are:
 
@@ -68,13 +68,18 @@ world][1] for more info.
 **Upload CF** - upload image files using Choose File dialog  
 **Upload DD** - upload image files using drag and drop from desktop
 
-> _- before running the above, use the Create Folder icon to create a
+> _- before running the above, click the Create Folder icon to create a
 directory static/uploads/_
 
 **Album** - upload image files using drag and drop and view as picture album
 
-> _- before running album, use the Create Folder icon to create a directory
+> _- before running album, click the Create Folder icon to create a directory
 static/pictures/_
+
+**Email** - sends an email message via an external SMTP server
+
+> _- requires an external email account that provides an SMTP server, for example a gmail account.
+To set up Rascal to send emails, please follow the instructions at the bottom of the email page._
 
 ### ACE Editor
 
@@ -86,13 +91,6 @@ need to do the following:
   3. Tested with ACE 2011.08.02, Version 0.2.0.
   4. Choose between CodeMirror and ACE on the editor config page
 
-### Other Demos
-
-**email** - send email message via external SMTP server (requires ds_mail.py)
-
-**scope** - simulated scope with UTC time, current temperature and LED status
-(requires TMP102 temperature sensor connected to Rascal I2C/TWI bus and
-ds_temp.py)
 
 
    [1]: http://blog.hlh.co.uk/2012/02/07/hello-world-2/
