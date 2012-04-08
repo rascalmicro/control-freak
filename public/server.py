@@ -180,12 +180,14 @@ def ntp_daemon(num):
 
 @public.route('/email.html')
 def email_form():
-    ##### Delete next three lines, then uncomment the following line and fill in your email address #####
+    ##### Delete this section to get rid of the help message  #####
     return render_template('email.html', help='Before using this page, please edit smtp_lib.py and \
     enter details of the SMTP server you will be using to send email. To get rid of this message and \
     automatically fill in the Sender email address, edit procedure email_form() in server.py. \
     After editing either of these files, remember to click the Reload pytronics button to ensure \
     that the server is running the latest version of the code.')
+    ##### Delete up to here #####
+    # After deletion, uncomment the next line and fill in your Rascal name and email address
     # return render_template('email.html', sender='rascalNN <username@gmail.com>')
 
 @public.route('/send-email', methods=['POST'])
