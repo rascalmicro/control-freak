@@ -1,35 +1,9 @@
 // Support for ACE
 
-// /var/www/public/static/images/progressbg_420.gif
-function showPicture(path) {
-    var rp = rascal.picture,
-        fpath = path.split(ROOT).pop(),
-        frp = $('#frame-p');
-    console.log('showPicture ' + path);
-    // Set up geometry
+function setPictureFrameSize (frp) {
+    "use strict";
     frp.height($('#ace-editor').height())
         .width($('#ace-editor').width());
-    if (frp.css('visibility') !== 'visible') {
-        // $('#ace-editor').css('visibility', 'hidden');
-        frp.css('visibility', 'visible')
-            .hide()
-            .fadeTo('fast', 1);
-    }
-    // Set up picture
-    if (DEBUG_ON_MAC) {
-        rp.imgRoot = 'http://localhost:5000/';
-    }
-    rp.container = 'frame-p';
-    rp.caption = 'location-bar';
-    rp.show(fpath);
-}
-
-function hidePicture() {
-    if (rascal.picture.showing) {
-        $('#frame-p').css('visibility', 'hidden');
-        // $('#ace-editor').css('visibility', 'visible');
-        rascal.picture.empty();
-    }
 }
 
 function editorSetMode(ext) {
@@ -87,6 +61,7 @@ function initEditor() {
     editor.getSession().setUseWrapMode(true);
     editor.getSession().setWrapLimitRange(null, null);
 //     editor.getSession().setWrapLimitRange(80, 80);
+    editor.getSession().on('change', fileChanged);
 }
 
 // Manage preferences

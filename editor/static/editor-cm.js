@@ -1,33 +1,9 @@
 // Support for CodeMirror2
 
-// /var/www/public/static/images/progressbg_420.gif
-function showPicture(path) {
-    var rp = rascal.picture,
-        fpath = path.split(ROOT).pop(),
-        frp = $('#frame-p');
-    console.log('showPicture ' + path);
-    // Set up geometry and show frame
+function setPictureFrameSize (frp) {
+    "use strict";
     frp.height($('.CodeMirror-scroll').height())
         .width($('.CodeMirror-scroll').width());
-    if (frp.css('visibility') !== 'visible') {
-        frp.css('visibility', 'visible')
-        .hide()
-        .fadeTo('fast', 1);
-    }
-    // Set up picture
-    if (DEBUG_ON_MAC) {
-        rp.imgRoot = 'http://localhost:5000/';
-    }
-    rp.container = 'frame-p';
-    rp.caption = 'location-bar';
-    rp.show(fpath);
-}
-
-function hidePicture() {
-    if (rascal.picture.showing) {
-        $('#frame-p').css('visibility', 'hidden');
-        rascal.picture.empty();
-    }
 }
 
 function editorSetMode(ext) {
@@ -76,8 +52,8 @@ function initEditor() {
         indentUnit: 4,
 //         enterMode: 'keep',
         electricChars: false,
+        onChange: fileChanged,
         lineWrapping: true
-//         onChange: fileChanged,
     });
 }
 

@@ -1,31 +1,132 @@
 // var $, CodeMirror, rascal;
 
-// var bFileChanged = true;
-// 
-// function fileChanged () {
-//     if (!bFileChanged) {
-//         $('#location-bar').html($('#location-bar').html() + '&nbsp;*');
-//         bFileChanged = true;
-//     }
-// }
-
 // Set up globals
 var ROOT = '/var/www/public/';
 var IMAGE_EXTENSIONS = [ 'png', 'jpg', 'jpeg', 'gif', 'ico' ];
 var editor;
 var preferences = { };
 
+// bFileChanged is set by typing in editor window
+// When a file is clicked in fileTree and bFileChanged is true, the save dialog is displayed
+//  and execution pauses in an Interval loop, waiting for status to change
+// If user chooses Save, status is set to 2, loop calls Save and sets status to 1. When
+//  save completes, bFileChanged is set to false (which deals with the case when user clicks
+//  normal Save button or types Cmd/Ctrl-S) and if status is 1, it is set to 0
+// If user clicks Don't Save, bFileChanged is set to false and status to 0
+// After a new file is loaded (which triggers a change), bFileChanged is set to false
+var bFileChanged = false;
+
+
 // fileTree operations
+function showPicture(path) {
+    var rp = rascal.picture,
+        fpath = path.split(ROOT).pop(),
+        frp = $('#frame-p');
+    console.log('showPicture ' + path);
+    // Set up geometry and show frame
+    setPictureFrameSize (frp);
+    if (frp.css('visibility') !== 'visible') {
+        frp.css('visibility', 'visible')
+        .hide()
+        .fadeTo('fast', 1);
+    }
+    // Set up picture
+    if (DEBUG_ON_MAC) {
+        rp.imgRoot = 'http://localhost:5000/';
+    }
+    rp.container = 'frame-p';
+    rp.caption = 'location-bar';
+    rp.show(fpath);
+}
+
+function hidePicture() {
+    if (rascal.picture.showing) {
+        $('#frame-p').css('visibility', 'hidden');
+        rascal.picture.empty();
+    }
+}
+
+// Sets global bFileChanged Boolean and indicator
+function fileChanged () {
+    if (!bFileChanged) {
+        $('#location-bar').html($('#location-bar').html() + '&nbsp;◆');
+        bFileChanged = true;
+    }
+}
+
+// Clears file change indicator, saves path
 function displayLocation(path) {
     "use strict";
     var fpath = path.split(ROOT).pop();
+    var apath;
     if (fpath.match(/templates\//)) {
-        $('#location-bar').html('<a href="' + fpath.split('templates').pop() + '">' + fpath + '</a>');
+        apath = fpath.split('templates').pop();
+        if (DEBUG_ON_MAC) {
+            apath = 'http://localhost:5000/' + apath;
+        }
+        $('#location-bar').html('<a href="' + apath + '">' + fpath + '</a>');
     } else {
         $('#location-bar').text(fpath);
     }
     $('#path').val(fpath);
 }
+
+saveCancel = {
+    path: '',
+    status: -1,
+    int_status: undefined,
+    displayFile: function () {
+        var sc = saveCancel, ext;
+        if (sc.status === 2) {
+            sc.status = 1;
+            saveFile();
+        } else if (sc.status === 0) {
+            ext = sc.path.split('.').pop().toLowerCase();
+            if ($.inArray(ext, IMAGE_EXTENSIONS) >= 0) {
+                showPicture(sc.path);
+            } else {
+                hidePicture();
+                $.post('/editor/read', 'path=' + sc.path.split(ROOT).pop(), function (response) {
+                    editorSetText(response, ext);
+                    displayLocation(saveCancel.path);
+                    bFileChanged = false;
+                });
+            }
+            if (sc.int_status !== undefined) {
+                sc.int_status = clearInterval(sc.int_status);
+            }
+        } else {
+            console.log('saveCancel: waiting for user');
+        }
+    },
+    init: function (path) {
+        "use strict";
+        var sc = saveCancel;
+        sc.path = path;
+        if (bFileChanged) {
+            $('#overlay-s').css('visibility', 'visible');
+            $('#save-file-message').text('Save changes to "' + $('#path').val() + '"?');
+            sc.status = -1;
+            sc.int_status = setInterval(saveCancel.displayFile, 500);
+        } else {
+            sc.status = 0;
+            sc.displayFile();
+        }
+    }
+}
+
+$('#save-yes').click(function () {
+    "use strict";
+    saveCancel.status = 2;
+    $('#overlay-s').css('visibility', 'hidden');
+});
+
+$('#save-no').click(function () {
+    "use strict";
+    bFileChanged = false;
+    saveCancel.status = 0;
+    $('#overlay-s').css('visibility', 'hidden');
+});
 
 function displayTree(path) {
     "use strict";
@@ -37,16 +138,17 @@ function displayTree(path) {
         expandOnce: true,
         extendBindTree: rascal.dnd.bindTree
     }, function (path) {
-        var ext = path.split('.').pop().toLowerCase();
-        if ($.inArray(ext, IMAGE_EXTENSIONS) >= 0) {
-            showPicture(path);
-        } else {
-            hidePicture();
-            $.post('/editor/read', 'path=' + path.split(ROOT).pop(), function (response) {
-                editorSetText(response, ext);
-                displayLocation(path);
-            });
-        }
+        saveCancel.init(path);
+//         var ext = path.split('.').pop().toLowerCase();
+//         if ($.inArray(ext, IMAGE_EXTENSIONS) >= 0) {
+//             showPicture(path);
+//         } else {
+//             hidePicture();
+//             $.post('/editor/read', 'path=' + path.split(ROOT).pop(), function (response) {
+//                 editorSetText(response, ext);
+//                 displayLocation(path);
+//             });
+//         }
     });
 }
 
@@ -143,7 +245,13 @@ function saveMsg(msg) {
 function saveFile() {
     "use strict";
     var s = editorGetText();
-    $.post('/editor/save', { path: $('#path').val(), text: s });
+    $.post('/editor/save', { path: $('#path').val(), text: s }, function (response) {
+        displayLocation($('#path').val());
+        bFileChanged = false;
+        if (saveCancel.status === 1) {
+            saveCancel.status = 0;
+        }
+    });
     $('#save-progress').css('background-position', '-120px');
     $('#save-progress').animate({ 'background-position': 0 }, 1000, function () {
         saveMsg('Saved file');
@@ -273,8 +381,8 @@ function initPreferences () {
 
 $('#preferences').click(function () {
     "use strict";
-    $('#overlay-p').css('visibility', 'visible');
-    console.log('Preferences ' + JSON.stringify(preferences));
+     $('#overlay-p').css('visibility', 'visible');
+     console.log('Preferences ' + JSON.stringify(preferences));
 });
 
 $('#cancel-prefs').click(function () {
