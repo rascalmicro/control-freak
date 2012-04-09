@@ -14,8 +14,27 @@ var preferences = { };
 //  normal Save button or types Cmd/Ctrl-S) and if status is 1, it is set to 0
 // If user clicks Don't Save, bFileChanged is set to false and status to 0
 // After a new file is loaded (which triggers a change), bFileChanged is set to false
+var bTrackChanges = false;
 var bFileChanged = false;
 
+function trackChanges(enable) {
+    if (enable) {
+        bFileChanged = false;
+        bTrackChanges = true;
+    } else {
+        bTrackChanges = false;
+    }
+}
+
+// Sets global bFileChanged Boolean and indicator
+function fileChanged () {
+    if (bTrackChanges) {
+        if (!bFileChanged) {
+            bFileChanged = true;
+            flagLocation();
+        }
+    }
+}
 
 // fileTree operations
 function showPicture(path) {
@@ -46,14 +65,6 @@ function hidePicture() {
     }
 }
 
-// Sets global bFileChanged Boolean and indicator
-function fileChanged () {
-    if (!bFileChanged) {
-        $('#location-bar').html($('#location-bar').html() + '&nbsp;◆');
-        bFileChanged = true;
-    }
-}
-
 // Clears file change indicator, saves path
 function displayLocation(path) {
     "use strict";
@@ -71,63 +82,84 @@ function displayLocation(path) {
     $('#path').val(fpath);
 }
 
-saveCancel = {
+function flagLocation() {
+    var lb;
+    if (bFileChanged) {
+        lb = $('#location-bar');
+        lb.html(lb.html() + '&nbsp;◆');
+    }
+}
+
+function clearLocation() {
+    $('#location-bar').html('&nbsp;');
+    $('#path').val('');
+}
+
+// Load a file into the edit buffer with optional save of existing changed file
+// The load function is called synchronously with status = 0 if the previous file was not changed
+// If it was changed, the save file dialog is displayed and load called asynchronously with status = -1
+// If the user chooses to save the file, status is set to 2, saveFile is called and status lowered to 1
+//  and, when the save completes, to 0
+// If the user chooses not to save the file, status is set to 0
+// When status = 0, the new picture or file is loaded and, for files, change tracking is resumed
+loadFile = {
     path: '',
     status: -1,
     int_status: undefined,
-    displayFile: function () {
-        var sc = saveCancel, ext;
-        if (sc.status === 2) {
-            sc.status = 1;
+    load: function () {
+        var lf = loadFile, ext;
+        if (lf.status === 2) {
+            lf.status = 1;
             saveFile();
-        } else if (sc.status === 0) {
-            ext = sc.path.split('.').pop().toLowerCase();
+        } else if (lf.status === 0) {
+            ext = lf.path.split('.').pop().toLowerCase();
             if ($.inArray(ext, IMAGE_EXTENSIONS) >= 0) {
-                showPicture(sc.path);
+                showPicture(lf.path);
             } else {
                 hidePicture();
-                $.post('/editor/read', 'path=' + sc.path.split(ROOT).pop(), function (response) {
+                $.post('/editor/read', 'path=' + lf.path.split(ROOT).pop(), function (response) {
                     editorSetText(response, ext);
-                    displayLocation(saveCancel.path);
-                    bFileChanged = false;
+                    displayLocation(loadFile.path);
+                    trackChanges(true);
                 });
             }
-            if (sc.int_status !== undefined) {
-                sc.int_status = clearInterval(sc.int_status);
+            if (lf.int_status !== undefined) {
+                lf.int_status = clearInterval(lf.int_status);
             }
         } else {
-            console.log('saveCancel: waiting for user');
+            console.log('loadFile: waiting for user');
         }
     },
     init: function (path) {
         "use strict";
-        var sc = saveCancel;
-        sc.path = path;
+        var lf = loadFile;
+        lf.path = path;
         if (bFileChanged) {
             $('#overlay-s').css('visibility', 'visible');
             $('#save-file-message').text('Save changes to "' + $('#path').val() + '"?');
-            sc.status = -1;
-            sc.int_status = setInterval(saveCancel.displayFile, 500);
+            lf.status = -1;
+            lf.int_status = setInterval(loadFile.load, 500);
         } else {
-            sc.status = 0;
-            sc.displayFile();
+            lf.status = 0;
+            lf.load();
         }
     }
 }
 
 $('#save-yes').click(function () {
     "use strict";
-    saveCancel.status = 2;
+    loadFile.status = 2;
     $('#overlay-s').css('visibility', 'hidden');
 });
 
 $('#save-no').click(function () {
     "use strict";
+    loadFile.status = 0;
     bFileChanged = false;
-    saveCancel.status = 0;
     $('#overlay-s').css('visibility', 'hidden');
 });
 
+// The fileTree callback function is called when the user clicks a file
 function displayTree(path) {
     "use strict";
     $('#filetree').fileTree({
@@ -138,17 +170,8 @@ function displayTree(path) {
         expandOnce: true,
         extendBindTree: rascal.dnd.bindTree
     }, function (path) {
-        saveCancel.init(path);
-//         var ext = path.split('.').pop().toLowerCase();
-//         if ($.inArray(ext, IMAGE_EXTENSIONS) >= 0) {
-//             showPicture(path);
-//         } else {
-//             hidePicture();
-//             $.post('/editor/read', 'path=' + path.split(ROOT).pop(), function (response) {
-//                 editorSetText(response, ext);
-//                 displayLocation(path);
-//             });
-//         }
+        trackChanges(false);
+        loadFile.init(path);
     });
 }
 
@@ -187,6 +210,7 @@ function moveItem(src, dst) {
         }
         if (src.split(ROOT).pop() === $('#path').val()) {
             displayLocation((dst + src.split('/').pop()).split(ROOT).pop());
+            flagLocation();
         }
     });
 }
@@ -202,6 +226,9 @@ $('li.file').live('mouseenter mouseleave', function (event) {
             var jqel;
             if (!deleteFileBusy) {
                 deleteFileBusy = true;
+                trackChanges(false);
+                clearLocation();                
+                bFileChanged = false;
                 jqel = $(this).parent();
                 $.post('/editor/delete_template', { filename: $(this).siblings('a').text() }, function () {
                     deleteFileBusy = false;
@@ -248,8 +275,8 @@ function saveFile() {
     $.post('/editor/save', { path: $('#path').val(), text: s }, function (response) {
         displayLocation($('#path').val());
         bFileChanged = false;
-        if (saveCancel.status === 1) {
-            saveCancel.status = 0;
+        if (loadFile.status === 1) {
+            loadFile.status = 0;
         }
     });
     $('#save-progress').css('background-position', '-120px');

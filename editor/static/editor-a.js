@@ -53,6 +53,7 @@ function editorGetText () {
 }
 
 function initEditor() {
+    trackChanges(false);
     editor = ace.edit("ace-editor");
     editor.setTheme("ace/theme/textmate");
     // editor.setTheme("ace/theme/cobalt");
