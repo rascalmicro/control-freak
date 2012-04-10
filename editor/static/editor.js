@@ -95,69 +95,53 @@ function clearLocation() {
     $('#path').val('');
 }
 
+function loadFile(path) {
+    ext = path.split('.').pop().toLowerCase();
+    if ($.inArray(ext, IMAGE_EXTENSIONS) >= 0) {
+        showPicture(path);
+    } else {
+        hidePicture();
+        $.post('/editor/read', 'path=' + path.split(ROOT).pop(), function (response) {
+            editorSetText(response, ext);
+            displayLocation(path);
+            trackChanges(true);
+        });
+    }
+}
+
 // Load a file into the edit buffer with optional save of existing changed file
-// The load function is called synchronously with status = 0 if the previous file was not changed
-// If it was changed, the save file dialog is displayed and load called asynchronously with status = -1
+// The save file dialog is displayed and wait called asynchronously with status = -1
 // If the user chooses to save the file, status is set to 2, saveFile is called and status lowered to 1
 //  and, when the save completes, to 0
 // If the user chooses not to save the file, status is set to 0
 // When status = 0, the new picture or file is loaded and, for files, change tracking is resumed
-loadFile = {
+querySave = {
     path: '',
     status: -1,
     int_status: undefined,
-    load: function () {
-        var lf = loadFile, ext;
-        if (lf.status === 2) {
-            lf.status = 1;
+    wait: function () {
+        var qs = querySave;
+        if (qs.status === 2) {
+            qs.status = 1;
             saveFile();
-        } else if (lf.status === 0) {
-            ext = lf.path.split('.').pop().toLowerCase();
-            if ($.inArray(ext, IMAGE_EXTENSIONS) >= 0) {
-                showPicture(lf.path);
-            } else {
-                hidePicture();
-                $.post('/editor/read', 'path=' + lf.path.split(ROOT).pop(), function (response) {
-                    editorSetText(response, ext);
-                    displayLocation(loadFile.path);
-                    trackChanges(true);
-                });
-            }
-            if (lf.int_status !== undefined) {
-                lf.int_status = clearInterval(lf.int_status);
-            }
+        } else if (qs.status === 0) {
+            qs.int_status = clearInterval(qs.int_status);
+            loadFile(qs.path);
         } else {
-            console.log('loadFile: waiting for user');
+            console.log('querySave: waiting for user');
         }
     },
     init: function (path) {
         "use strict";
-        var lf = loadFile;
-        lf.path = path;
-        if (bFileChanged) {
-            $('#overlay-s').css('visibility', 'visible');
-            $('#save-file-message').text('Save changes to "' + $('#path').val() + '"?');
-            lf.status = -1;
-            lf.int_status = setInterval(loadFile.load, 500);
-        } else {
-            lf.status = 0;
-            lf.load();
-        }
+        var qs = querySave;
+        qs.path = path;
+        qs.status = -1;
+        $('#overlay-s').css('visibility', 'visible');
+        $('#save-file-message').text('Save changes to "' + $('#path').val() + '"?');
+        qs.int_status = setInterval(querySave.wait, 500);
+        qs.wait();
     }
 }
-
-$('#save-yes').click(function () {
-    "use strict";
-    loadFile.status = 2;
-    $('#overlay-s').css('visibility', 'hidden');
-});
-
-$('#save-no').click(function () {
-    "use strict";
-    loadFile.status = 0;
-    bFileChanged = false;
-    $('#overlay-s').css('visibility', 'hidden');
-});
 
 // The fileTree callback function is called when the user clicks a file
 function displayTree(path) {
@@ -170,8 +154,17 @@ function displayTree(path) {
         expandOnce: true,
         extendBindTree: rascal.dnd.bindTree
     }, function (path) {
-        trackChanges(false);
-        loadFile.init(path);
+        // If already loaded do nothing
+        console.log('New path ' + path.split(ROOT).pop());
+        console.log('Old path ' + $('#path').val());
+        if (path.split(ROOT).pop() !== $('#path').val()) {
+            trackChanges(false);
+            if (!bFileChanged) {
+                loadFile(path);
+            } else {
+                querySave.init(path);
+            }
+        }
     });
 }
 
@@ -275,8 +268,8 @@ function saveFile() {
     $.post('/editor/save', { path: $('#path').val(), text: s }, function (response) {
         displayLocation($('#path').val());
         bFileChanged = false;
-        if (loadFile.status === 1) {
-            loadFile.status = 0;
+        if (querySave.status === 1) {
+            querySave.status = 0;
         }
     });
     $('#save-progress').css('background-position', '-120px');
@@ -416,6 +409,19 @@ $('#cancel-prefs').click(function () {
     "use strict";
     $('#overlay-p').css('visibility', 'hidden');
     console.log('Preferences ' + JSON.stringify(preferences));
+});
+
+$('#save-yes').click(function () {
+    "use strict";
+    querySave.status = 2;
+    $('#overlay-s').css('visibility', 'hidden');
+});
+
+$('#save-no').click(function () {
+    "use strict";
+    querySave.status = 0;
+    bFileChanged = false;
+    $('#overlay-s').css('visibility', 'hidden');
 });
 
 // Reload pytronics
