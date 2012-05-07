@@ -87,6 +87,11 @@ a[draggable=true] {
 }
 
 #location-bar a {
+    /* color: #EF4A42; */
+    color: #F8F8F8;
+}
+
+#location-bar a.changed {
     color: #EF4A42;
 }
 
@@ -122,11 +127,15 @@ a[draggable=true] {
 }
 
 .dialog {
-    width:300px;
+    width: 300px;
     margin: 300px auto 0;
     background-color: #414243;
     border: 3px solid #616263;
     padding:15px;
+}
+
+.dialog.wide {
+    width: 420px;
 }
 
 input[type="checkbox"] {

@@ -10,6 +10,7 @@ var rascal = {
         root: '/var/www/public/',
         container: 'filetree',
         notDraggable: [],
+        changedFile: undefined,
         itemDropped: function (src, dst) {
             "use strict";
         },
@@ -113,6 +114,9 @@ var rascal = {
                 dragTargets[i].addEventListener('dragover', rascal.dnd.handleDragOver, false);
                 dragTargets[i].addEventListener('drop', rascal.dnd.handleDrop, false);
                 dragTargets[i].addEventListener('dragleave', rascal.dnd.handleDragLeave, false);
+            }
+            if (rascal.dnd.changedFile !== undefined) {
+                $('LI A[rel="' + rascal.dnd.changedFile + '"]').addClass('changed');
             }
         }
     },
