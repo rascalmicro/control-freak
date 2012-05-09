@@ -5,6 +5,7 @@ var ROOT = '/var/www/public/';
 var IMAGE_EXTENSIONS = [ 'png', 'jpg', 'jpeg', 'gif', 'ico' ];
 var EXCEPTIONS = ['/var/www/public/server.py',
         '/var/www/public/static/', '/var/www/public/templates/']
+var DEFAULT_PICTURE = 'static/images/picture_help.png'
 var editor;
 var preferences = { };
 
@@ -59,7 +60,10 @@ function showPicture(path) {
     var rp = rascal.picture,
         fpath = path.split(ROOT).pop(),
         frp = $('#frame-p');
-    console.log('showPicture ' + path);
+    console.log('showPicture ' + fpath);
+    if (!fpath.match(/static\//)) {
+        fpath = DEFAULT_PICTURE;
+    }
     // Set up geometry and show frame
     setPictureFrameSize (frp);
     if (frp.css('visibility') !== 'visible') {
