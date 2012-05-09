@@ -123,7 +123,6 @@ def dirlist(d): # This function heavily based on Martin Skou's connector script 
     noneditable = ["pyc", "pyo"]
     r=['<ul class="jqueryFileTree" style="display: none;">']
     try:
-        r=['<ul class="jqueryFileTree" style="display: none;">']
         for f in sorted(os.listdir(d), key=unicode.lower):
             ff=os.path.join(d,f)
             if os.path.isdir(ff):
@@ -209,12 +208,13 @@ def new_template():
     f.close()
     return 'OK', 200
 
-@editor.route('/editor/delete_template', methods=['POST'])
+@editor.route('/editor/delete_file', methods=['POST'])
 @login_required
-def delete_template():
+def delete_file():
     import subprocess
-    print "Deleting template: " + request.form['filename']
-    res = subprocess.call(['rm', '/var/www/public/templates/' + request.form['filename']])
+    fname = request.form['filename']
+    print "Deleting file: " + fname
+    res = subprocess.call(['rm', '/var/www/public/' + fname])
     if res <> 0:
         return 'Bad Request', 400
     return 'OK', 200
@@ -231,6 +231,17 @@ def new_folder():
         res = subprocess.call(['mkdir', path])
         if res <> 0:
             return 'Bad Request', 400
+    return 'OK', 200
+
+@editor.route('/editor/delete_folder', methods=['POST'])
+@login_required
+def delete_folder():
+    import subprocess
+    fname = request.form['filename']
+    print "Deleting folder: " + fname
+    res = subprocess.call(['rm', '-rf', '/var/www/public/' + fname])
+    if res <> 0:
+        return 'Bad Request', 400
     return 'OK', 200
 
 # Save button

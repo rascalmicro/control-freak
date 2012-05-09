@@ -3,6 +3,8 @@
 // Set up globals
 var ROOT = '/var/www/public/';
 var IMAGE_EXTENSIONS = [ 'png', 'jpg', 'jpeg', 'gif', 'ico' ];
+var EXCEPTIONS = ['/var/www/public/server.py',
+        '/var/www/public/static/', '/var/www/public/templates/']
 var editor;
 var preferences = { };
 
@@ -168,9 +170,9 @@ function displayTree(path) {
         extendBindTree: rascal.dnd.bindTree
     }, function (path) {
         // If already loaded do nothing
-        console.log('New path ' + path.split(ROOT).pop());
-        console.log('Old path ' + $('#path').val());
-        if (path.split(ROOT).pop() !== $('#path').val()) {
+        // console.log('New path ' + path.split(ROOT).pop());
+        // console.log('Old path ' + $('#path').val());
+        // if (path.split(ROOT).pop() !== $('#path').val()) {
             if (!bFileChanged) {
                 loadFile(path);
             } else {
@@ -180,10 +182,137 @@ function displayTree(path) {
                     }
                 });
             }
-        }
+        // }
     });
 }
 
+// File or folder deletion
+queryDelete = {
+    callback: function (status) {
+         "use strict";
+    },
+    status: -1,
+    int_status: undefined,
+    wait: function () {
+        var qd = queryDelete;
+        if ((qd.status === 1) || (qd.status === 0)) {
+            qd.int_status = clearInterval(qd.int_status);
+            qd.callback(qd.status);
+        } else {
+            console.log('queryDelete: waiting for user');
+        }
+    },
+    init: function (which, path, callback) {
+        "use strict";
+        var qd = queryDelete;
+        qd.callback = callback;
+        qd.status = -1;
+        $('#overlay-d').css('visibility', 'visible');
+        if (which === FILE) {
+            $('#delete-file-message').text('Delete file "' + path + '"?');
+        } else {
+            $('#delete-file-message').text('Delete folder "' + path + '"?');
+        }
+        qd.int_status = setInterval(queryDelete.wait, 500);
+        qd.wait();
+    }
+}
+
+var FILE = 0;
+var FOLDER = 1;
+var deleteFileBusy = false;     // Use semaphore to avoid repeated deletions
+
+$('li.file').live('mouseenter mouseleave', function (event) {
+    "use strict";
+    var fpath;
+    if (event.type === 'mouseenter') {
+        fpath = $(this).children('a').attr('rel');
+        if ($.inArray(fpath, EXCEPTIONS) === -1) {
+            $(this).children('a').addClass('selected');
+            $(this).children('img').addClass('selected');
+            $(this).children('img').click(function () {
+                var jqel, path;
+                if (!deleteFileBusy) {
+                    deleteFileBusy = true;
+                    jqel = $(this).parent();
+                    path = fpath.split(ROOT).pop();
+                    queryDelete.init(FILE, path, function (status) {
+                        if (status === 1) {
+                            console.log('DELETE ' + path);
+                            if (path === $('#path').val()) {
+                                if (bFileChanged) {
+                                    bFileChanged = false;
+                                    unhighlightChanged();
+                                }
+                                trackChanges(false);
+                                editorSetText('');
+                                clearLocation();
+                                hidePicture();
+                            }
+                            $.post('/editor/delete_file', { filename: path }, function (response) {
+                                console.log('DELETE_FILE ' + response);
+                                jqel.hide('slow');
+                                saveMsg('File deleted');
+                            });
+                        } else {
+                            console.log('DELETE cancel');
+                        }
+                        deleteFileBusy = false;
+                    });
+                }
+            });
+        }
+    } else {
+        $(this).children('a').removeClass('selected');
+        $(this).children('img').removeClass('selected');
+    }
+});
+
+$('li.directory.expanded').live('mouseenter mouseleave', function (event) {
+    "use strict";
+    var fpath;
+    if ($(this).children('ul').children().size() === 0) {
+        if (event.type === 'mouseenter') {
+            fpath = $(this).children('a').attr('rel');
+            if ($.inArray(fpath, EXCEPTIONS) === -1) {
+                $(this).children('a').addClass('selected');
+                $(this).children('img').addClass('selected');
+                $(this).children('img').click(function () {
+                    var jqel, path;
+                    if (!deleteFileBusy) {
+                        deleteFileBusy = true;
+                        jqel = $(this).parent();
+                        path = fpath.split(ROOT).pop();
+                        queryDelete.init(FOLDER, path, function (status) {
+                            if (status === 1) {
+                                console.log('DELETE ' + path);
+                                $.post('/editor/delete_folder', { filename: path }, function (response) {
+                                    console.log('DELETE_FOLDER ' + response);
+                                    jqel.hide('slow');
+                                    saveMsg('Folder deleted');
+                                });
+                            } else {
+                                console.log('DELETE cancel');
+                            }
+                            deleteFileBusy = false;
+                        });
+                    }
+                });
+            }
+        } else {
+            $(this).children('a').removeClass('selected');
+            $(this).children('img').removeClass('selected');
+        }
+    }
+});
+
+$('li.directory.collapsed a.selected').live('mouseenter mouseleave', function (event) {
+    "use strict";
+    $(this).removeClass('selected');
+    $(this).parent().children('img').removeClass('selected');
+});
+
+// Move a file or folder (initiated by DnD)
 function moveItem(src, dst) {
     "use strict";
     console.log('moveItem ' + src + ' ' + dst);
@@ -226,44 +355,12 @@ function moveItem(src, dst) {
     });
 }
 
-var deleteFileBusy = false;     // Use semaphore to avoid repeated deletions
-
-$('li.file').live('mouseenter mouseleave', function (event) {
-    "use strict";
-    if (event.type === 'mouseenter') {
-        $(this).children('a').addClass('selected');
-        $(this).children('img').addClass('selected');
-        $(this).children('img').click(function () {
-            var jqel;
-            if (!deleteFileBusy) {
-                deleteFileBusy = true;
-                trackChanges(false);
-                if (bFileChanged) {
-                    bFileChanged = false;
-                    unhighlightChanged();
-                }
-                clearLocation();                
-                jqel = $(this).parent();
-                $.post('/editor/delete_template', { filename: $(this).siblings('a').text() }, function () {
-                    deleteFileBusy = false;
-                    jqel.hide('slow');
-                    editorSetText('File deleted.');
-                });
-            }
-        });
-    } else {
-        $(this).children('a').removeClass('selected');
-        $(this).children('img').removeClass('selected');
-    }
-});
-
 function initRascalDnd() {
     "use strict";
     var rd = rascal.dnd;
     rd.root = ROOT;
     rd.container = 'filetree';
-    rd.notDraggable = ['/var/www/public/server.py',
-            '/var/www/public/static/', '/var/www/public/templates/'];
+    rd.notDraggable = EXCEPTIONS;
     rd.itemDropped = moveItem;
     rd.filesDropped = uploadItems;
     rd.init();
@@ -465,6 +562,18 @@ $('#save-cancel').click(function () {
     "use strict";
     querySave.status = 0;
     $('#overlay-s').css('visibility', 'hidden');
+});
+
+$('#delete-yes').click(function () {
+    "use strict";
+    queryDelete.status = 1;
+    $('#overlay-d').css('visibility', 'hidden');
+});
+
+$('#delete-cancel').click(function () {
+    "use strict";
+    queryDelete.status = 0;
+    $('#overlay-d').css('visibility', 'hidden');
 });
 
 // Reload pytronics
