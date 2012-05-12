@@ -43,23 +43,23 @@ def sendmail(sender, recipients, subject, body):
                 server.login(LOGIN, PASSWORD)
             resdict = server.sendmail(sender, toaddrs, msg.as_string())
             if len(resdict) == 0:
-               result = (0, 'Email sent')
+                result = (0, 'Email sent')
             else:
-               sendmail_log(resdict)
-               result = (1, 'Can\'t send to some recipients, see log')
+                sendmail_log(resdict)
+                result = (1, 'Can\'t send to some recipients, see log')
         except smtplib.SMTPRecipientsRefused as resdict:
-           sendmail_log (resdict)
-           result = (1, 'Can\'t send to any recipients, see log')
+            sendmail_log (resdict)
+            result = (1, 'Can\'t send to any recipients, see log')
         except smtplib.SMTPHeloError:
-           result = (1, 'The server didn\'t reply properly to the HELO greeting')
+            result = (1, 'The server didn\'t reply properly to the HELO greeting')
         except smtplib.SMTPSenderRefused:
-           result = (1, 'The server didn\'t accept the sender')
+            result = (1, 'The server didn\'t accept the sender')
         except smtplib.SMTPAuthenticationError:
-           result = (1, 'The server didn\'t accept the login/password')
+            result = (1, 'The server didn\'t accept the login/password')
         except SMTPDataError:
-           result = (1, 'The server replied with an unexpected error code')
+            result = (1, 'The server replied with an unexpected error code')
         except:
-           result = (1, 'Unexpected error')
+            result = (1, 'Unexpected error')
         server.quit()
     except smtplib.SMTPConnectError:
         result = (1, 'Could not connect to server')

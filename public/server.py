@@ -178,6 +178,8 @@ def ntp_daemon(num):
     except:
         print '## NTPD ## Failed.'
 
+##### The following procedures support sending email via SMTP #####
+# They are used by email.html
 @public.route('/email.html')
 def email_form():
     ##### Delete this section to get rid of the help message  #####
@@ -208,11 +210,17 @@ def send_email():
         "message" : result[1]
     }
     return json.dumps(data)
+##### End of email procedures
 
+#### The following procedures support file upload #####
+# They are called from rascal-1.03.js and used by upload-cf.html, upload-dd.html and album.html
 def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
-    
+
+def allowed_folder(folder):
+    return folder in ALLOWED_DIRECTORIES
+
 @public.route('/xupload', methods=['POST'])
 def xupload_file():
     import os
@@ -226,7 +234,13 @@ def xupload_file():
             if not allowed_file(filename):
                 print '## xupload ## bad file type ' + filename
                 return 'Forbidden', 403
-            folder = request.headers['X-Folder']
+            try:
+                folder = request.headers['X-Folder']
+            except:
+                folder = ''
+            if not allowed_folder(folder):
+                print '## xupload ## bad folder ' + folder
+                return 'Forbidden', 403
             fpath = os.path.join(root, os.path.join(folder, filename))
             # Write out the stream
             f = file(fpath, 'wb')
@@ -267,7 +281,9 @@ def clear_directory():
             print '## clear_directory ## ' + e
             return 'Bad request', 400
     return 'OK', 200
+##### End of upload procedures #####
 
+# Called from hello.html
 @public.route('/flash_led', methods=['POST'])
 def flash_led():
     import pytronics

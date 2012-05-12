@@ -48,7 +48,8 @@ function initEditor() {
     trackChanges(false);
     editor = CodeMirror.fromTextArea(document.getElementById('code'), {
         mode: 'text', // text mode doesn't exist explicitly, but setting it provokes plain text by default
-        theme: 'night',
+//        theme: 'night',
+        theme: 'blackboard',
         tabSize: 4,
         indentUnit: 4,
 //         enterMode: 'keep',
