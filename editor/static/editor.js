@@ -448,11 +448,13 @@ function uploadComplete(directory) {
     }
 }
 
+// chrome maps javascript files to text/javascript, firefox to application/x-javascript
 function uploadInit(files, dst) {
     var ru = rascal.upload;
     // set up postUrl, allowed types, progress, status and complete
     ru.postUrl = '/editor/xupload';
-    ru.allowedTypes = [ 'image/', 'text/html', 'text/css', 'application/x-javascript', 'text/x-python-script' ];
+    ru.allowedTypes = [ 'image/', 'text/html', 'text/css', 'text/javascript',
+        'application/x-javascript', 'text/x-python-script' ];
     ru.progress = saveProgress;
     ru.status = uploadStatus;
     ru.complete = uploadComplete;

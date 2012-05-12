@@ -5,7 +5,7 @@ from flaskext.login import (LoginManager, current_user, login_required,
 from jinja2 import TemplateNotFound
 from werkzeug import secure_filename
 
-ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif', 'html', 'css', 'js', 'py'])
+ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif', 'ico', 'html', 'css', 'js', 'py'])
 
 editor = Flask(__name__)
 
@@ -272,7 +272,10 @@ def xupload_file():
             if not allowed_file(filename):
                 print '## xupload ## bad file type ' + filename
                 return 'Forbidden', 403
-            folder = request.headers['X-Folder']
+            try:
+                folder = request.headers['X-Folder']
+            except:
+                folder = ''
             fpath = os.path.join(root, os.path.join(folder, filename))
             # Write out the stream
             f = file(fpath, 'wb')
