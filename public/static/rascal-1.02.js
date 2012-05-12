@@ -2,7 +2,7 @@
 
 // NB Event handlers need to be named and static to avoid duplication
 // Uncomment next line before running JSLint
-// var $, console, document, XMLHttpRequest, alert, clearInterval, setInterval;
+// var $;
 
 var rascal = {
     // Add drag and drop to jquery.filetree
@@ -10,6 +10,7 @@ var rascal = {
         root: '/var/www/public/',
         container: 'filetree',
         notDraggable: [],
+        changedFile: undefined,
         itemDropped: function (src, dst) {
             "use strict";
         },
@@ -114,6 +115,9 @@ var rascal = {
                 dragTargets[i].addEventListener('drop', rascal.dnd.handleDrop, false);
                 dragTargets[i].addEventListener('dragleave', rascal.dnd.handleDragLeave, false);
             }
+            if (rascal.dnd.changedFile !== undefined) {
+                $('LI A[rel="' + rascal.dnd.changedFile + '"]').addClass('changed');
+            }
         }
     },
     // Support for file upload
@@ -122,12 +126,15 @@ var rascal = {
         directory: 'static/uploads/',
         allowedTypes: [ 'image/' ],
         maxFileBytes: 1024 * 1024,
+        timeout: 40,
         totalBytes: 0,
         loadedBytes: 0,
         files: [],
         nextFile: -1,
         int_inFlight: undefined,
         inFlight: 0,
+        inflightXhr: undefined,
+        countDown: 0,
         lastUpload: '',
         progress: function (pc) {
             "use strict";
@@ -163,6 +170,8 @@ var rascal = {
                             rascal.upload.loadedBytes += file.size;
                             // console.log('Upload complete ' + file.name);
                             rascal.upload.lastUpload = file.name;
+                        } else if (xhr.status === 0) {
+                            rascal.upload.status('Upload of ' + file.name + ' aborted');
                         } else {
                             rascal.upload.status('Upload of ' + file.name +
                                 ' failed (' + xhr.status + ' ' + xhr.statusText + ')');
@@ -185,6 +194,7 @@ var rascal = {
                     xhr.setRequestHeader('Content-Type', file.type);
                     xhr.send(file);
                     rascal.upload.inFlight = 1;
+                    rascal.upload.inflightXhr = xhr;
                     // console.log('Upload sent ' + file.name);
                 } catch (err) {
                     alert('XMLHttpRequest error ' + err.description);
@@ -201,13 +211,19 @@ var rascal = {
                 if (ru.nextFile < ru.files.length) {
                     f = ru.files[ru.nextFile];
                     // ru.status('Uploading ' + f.name);
+                    ru.countDown = ru.timeout;
                     ru.uploadFile(f);
                 } else {
                     ru.int_inFlight = clearInterval(ru.int_inFlight);
                     ru.complete(ru.directory);
                 }
             } else {
-                console.log('Waiting for file ' + ru.nextFile);
+                ru.countDown -= 1;
+                console.log('Waiting for file ' + ru.nextFile + ' (' + ru.countDown + ')');
+                if (ru.countDown <= 0) {
+                    ru.status('Timed out while uploading');
+                    ru.inflightXhr.abort();
+                }
             }
         },
         filesDropped: function (files, dst) {

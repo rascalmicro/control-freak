@@ -1,5 +1,18 @@
 # Updating Rascal to the latest control-freak Release
 
+Update of May 12, 2012
+
+Updates include:
+
+  * CodeMirror v2.24
+  * CodeMirror theme set to Blackboard (was Night)
+  * Warning dialogue if about to overwrite unsaved changed in edit window
+  * Delete any file or empty folder with warning dialogue 
+
+(Instructions for updating CodeMirror to follow)
+
+---
+
 Release of Apr 8, 2012
 
 The main changes in this release are:
@@ -7,9 +20,8 @@ The main changes in this release are:
   * Editor window can be resized
   * View image files in editor
   * File tree can be scrolled
-  * Drag and drop files or folders in file tree
-  * Drag file from desktop to file tree. Allowed types are image, html, css,
-javascript and python
+  * Drag and drop files or folders within file tree
+  * Drag file from desktop to file tree. Allowed types are image, html, css, javascript and python
   * Create new folder
   * On Mac, Command-S saves file (in addition to Ctrl-S and the Save button)
 

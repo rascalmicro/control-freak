@@ -39,6 +39,10 @@ ul.jqueryFileTree a.dragover {
     background-color: #414243;
 }
 
+ul.jqueryFileTree a.changed {
+    color: #EF4A42;
+}
+
 /* Visibility hidden causes issues after scrolling with Webkit and Chrome */
 ul.jqueryFileTree img {
     /* visibility: hidden; */
