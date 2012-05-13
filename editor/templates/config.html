@@ -1,14 +1,14 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <title>Config</title>
-    <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Droid+Sans|Molengo">
+    <!-- <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Droid+Sans|Molengo"> -->
     <link rel="shortcut icon" href="/editor/static/favicon.ico">
     
-    <link rel="stylesheet" type="text/css" href="/editor/static/editor-all.css">
-    <link rel="stylesheet" type="text/css" href="/editor/static/editor-other.css">
-    <link rel="stylesheet" type="text/css" href="/editor/static/UISegmentedControl.css">
+    <link rel="stylesheet" type="text/css" href="/editor/static/css/editor-all.css">
+    <link rel="stylesheet" type="text/css" href="/editor/static/css/editor-other.css">
+    <link rel="stylesheet" type="text/css" href="/editor/static/css/UISegmentedControl.css">
 
-    <script src="http://code.jquery.com/jquery-1.5.js"></script>
+    <script src="/editor/static/js/jquery-1.7.2.js"></script>
     <style>
     </style>
 </head>
@@ -71,15 +71,17 @@
                 performance of existing native editors such as TextMate, Vim or Eclipse.
                 Ace is developed as the primary editor for Cloud9 IDE and the successor of the Mozilla Skywriter (Bespin) Project.<br />
                 <a href="https://github.com/ajaxorg/ace/wiki" name="Ace wiki" title="Ace wiki" target="_editor">wiki</a> |
-                <a href="https://github.com/ajaxorg/ace/wiki/Default-Keyboard-Shortcuts" name="Keyboard shortcuts" title="keyboard shortcuts" target="_editor">keyboard shortcuts</a> </p>
+                <a href="https://github.com/ajaxorg/ace/wiki/Default-Keyboard-Shortcuts" name="Keyboard shortcuts" title="keyboard shortcuts" target="_editor">keyboard shortcuts</a> |
+                <a href="http://localhost:5001/static/ace/build/kitchen-sink.html" name="kitchen sink demo" title="kitchen sink demo" target="_editor">kitchen sink demo</a>
+                </p>
             </div>
         </div>
         </td></tr></table>
     </div>
     <div id="editor" style="display: none;">{{ editor }}</div>
     
-    <script src="/editor/static/editor-resize.js"></script>
-    <script src="/editor/static/editor-other.js"></script>
+    <script src="/editor/static/js/editor-resize.js"></script>
+    <script src="/editor/static/js/editor-other.js"></script>
     <script type="text/javascript">
         $("#reset").click( function() {
             $.post("/editor/reset", "text");

@@ -130,19 +130,19 @@ input {
   font-family: 'DroidSans';
   font-style: normal;
   font-weight: normal;
-  src: url('fonts/DroidSans.ttf');
+  src: url('/editor/static/fonts/DroidSans.ttf');
 }
 
 @font-face {
   font-family: 'Molengo';
   font-style: normal;
   font-weight: normal;
-  src: url('fonts/Molengo-Regular.ttf');
+  src: url('/editor/static/fonts/Molengo-Regular.ttf');
 }
 
 @font-face {
   font-family: 'VT323';
   font-style: normal;
   font-weight: normal;
-  src: url('fonts/VT323.ttf');
+  src: url('/editor/static/fonts/VT323.ttf');
 }

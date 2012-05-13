@@ -96,7 +96,7 @@ function displayLocation(path) {
     if (fpath.match(/templates\//)) {
         apath = fpath.split('templates').pop();
         if (DEBUG_ON_MAC) {
-            apath = 'http://localhost:5000/' + apath;
+            apath = 'http://localhost:5000' + apath;
         }
     }
     $('#location-bar').html('<a href="' + apath + '">' + fpath + '</a>');
@@ -132,6 +132,9 @@ function loadFile(path) {
 // status lowered to 1 and then, when the save completes, to 0
 // If the user chooses not to save the file, status is set to 0
 // When status = 0, the callback function is executed
+var SAVE = 0
+var REVERT = 1;
+
 querySave = {
     callback: function (status) {
          "use strict";
@@ -150,13 +153,18 @@ querySave = {
             console.log('querySave: waiting for user');
         }
     },
-    init: function (callback) {
+    init: function (which, callback) {
         "use strict";
         var qs = querySave;
         qs.callback = callback;
         qs.status = -1;
-        $('#overlay-s').css('visibility', 'visible');
-        $('#save-file-message').text('Save changes to "' + $('#path').val() + '"?');
+        if (which === SAVE) {
+            $('#overlay-s').css('visibility', 'visible');
+            $('#save-file-message').html('Do you want to save the changes you made to the file "' + $('#path').val() + '"?<br/>Your changes will be lost if you don\'t save them.');
+        } else {
+            $('#overlay-r').css('visibility', 'visible');
+            $('#revert-file-message').text('Are you sure you want to revert the file "' + $('#path').val() + '" to its original state?');
+        }
         qs.int_status = setInterval(querySave.wait, 500);
         qs.wait();
     }
@@ -180,7 +188,13 @@ function displayTree(path) {
             if (!bFileChanged) {
                 loadFile(path);
             } else {
-                querySave.init(function (status) {
+                var which;
+                if (path.split(ROOT).pop() !== $('#path').val()) {
+                    which = SAVE;
+                } else {
+                    which = REVERT;
+                }
+                querySave.init(which, function (status) {
                     if (status === 1) {
                         loadFile(path);
                     }
@@ -191,6 +205,9 @@ function displayTree(path) {
 }
 
 // File or folder deletion
+var FILE = 0;
+var FOLDER = 1;
+
 queryDelete = {
     callback: function (status) {
          "use strict";
@@ -213,17 +230,15 @@ queryDelete = {
         qd.status = -1;
         $('#overlay-d').css('visibility', 'visible');
         if (which === FILE) {
-            $('#delete-file-message').text('Delete file "' + path + '"?');
+            $('#delete-file-message').text('Are you sure you want to delete the file "' + path + '"?');
         } else {
-            $('#delete-file-message').text('Delete folder "' + path + '"?');
+            $('#delete-file-message').text('Are you sure you want to delete the folder "' + path + '"?');
         }
         qd.int_status = setInterval(queryDelete.wait, 500);
         qd.wait();
     }
 }
 
-var FILE = 0;
-var FOLDER = 1;
 var deleteFileBusy = false;     // Use semaphore to avoid repeated deletions
 
 $('li.file').live('mouseenter mouseleave', function (event) {
@@ -468,7 +483,7 @@ function uploadItems(files, dst) {
     if (!bFileChanged) {
         uploadInit(files, dst);
     } else {
-        querySave.init(function (status) {
+        querySave.init(SAVE, function (status) {
             if (status === 1) {
                 uploadInit(files, dst);
             }
@@ -569,6 +584,21 @@ $('#save-cancel').click(function () {
     querySave.status = 0;
     $('#overlay-s').css('visibility', 'hidden');
 });
+
+$('#revert-yes').click(function () {
+    "use strict";
+    querySave.status = 1;
+    bFileChanged = false;
+    unhighlightChanged();
+    $('#overlay-r').css('visibility', 'hidden');
+});
+
+$('#revert-cancel').click(function () {
+    "use strict";
+    querySave.status = 0;
+    $('#overlay-r').css('visibility', 'hidden');
+});
+
 
 $('#delete-yes').click(function () {
     "use strict";
