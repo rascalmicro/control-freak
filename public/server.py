@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request
-# from uwsgidecorators import *
+from uwsgidecorators import *
 import time
 
 public = Flask(__name__)
@@ -92,15 +92,23 @@ def temperature():
 
 @public.route('/analog', methods=['POST'])
 def analog():
-    from pytronics import read_analog
+    # from pytronics import read_analog
+    import pytronics, ds_temp
     import json, time
     try:
         ad_ref = float(request.form['adref'])
     except KeyError:
         ad_ref = 3.3
+    if pytronics.read_pin('LED') == '1':
+        strLED = "LED is on"
+    else:
+        strLED = "LED is off"
     data = {
         "time" : float(time.time()),
-        "A0" : float(read_analog('A0')) * ad_ref / 1024.0
+        "A0" : float(pytronics.read_analog('A0')) * ad_ref / 1024.0,
+        "date" : time.strftime("%d %b %Y %H:%M:%S %Z", time.localtime()),
+        "led" : strLED,
+        "temp" : format(float(ds_temp.read_sensor(0x48)), '.1f') + unichr(176) + 'C'
     }
     return json.dumps(data)
 
@@ -154,7 +162,7 @@ def sprinkler():
     return ('Sprinkler toggled')
 
 
-# @rbtimer(5)
+@rbtimer(5)
 def toggle_led(num):
     import pytronics
     if pytronics.read_pin('LED') == '1':
@@ -164,10 +172,10 @@ def toggle_led(num):
 
         
 # @cron(0, -1, -1, -1, -1)
-# @cron(0, 0, -1, -1, -1)
-# @cron(0, 6, -1, -1, -1)
-# @cron(0, 12, -1, -1, -1)
-# @cron(0, 18, -1, -1, -1)
+@cron(0, 0, -1, -1, -1)
+@cron(0, 6, -1, -1, -1)
+@cron(0, 12, -1, -1, -1)
+@cron(0, 18, -1, -1, -1)
 def ntp_daemon(num):
     import subprocess
     cmd = 'ntpdate uk.pool.ntp.org'
@@ -180,17 +188,10 @@ def ntp_daemon(num):
 
 ##### The following procedures support sending email via SMTP #####
 # They are used by email.html
+@public.route('/')
 @public.route('/email.html')
 def email_form():
-    ##### Delete this section to get rid of the help message  #####
-    return render_template('email.html', help='Before using this page, please edit smtp_lib.py and \
-    enter details of the SMTP server you will be using to send email. To get rid of this message and \
-    automatically fill in the Sender email address, edit procedure email_form() in server.py. \
-    After editing either of these files, remember to click the Reload pytronics button to ensure \
-    that the server is running the latest version of the code.')
-    ##### Delete up to here #####
-    # After deletion, uncomment the next line and fill in your Rascal name and email address
-    # return render_template('email.html', sender='rascalNN <username@gmail.com>')
+    return render_template('email.html', sender='rascal24 <davids@hlh.co.uk>')
 
 @public.route('/send-email', methods=['POST'])
 def send_email():

@@ -14,15 +14,15 @@ def sendmail(sender, recipients, subject, body):
     # If your ISP doesn't provide an SMTP service, you can sign up with gmail
     # These settings are correct for gmail SMTP but you will need to provide
     # a LOCAL_HOST name for your Rascal and your gmail LOGIN and PASSWORD
-    HOST = 'smtp.gmail.com'     # Outgoing mail server
-    PORT = 587                  # Usually 25 or 587
-    LOCAL_HOST = 'rascalNN'     # Name of your Rascal
+    HOST = 'smtp.aa.net.uk'     # Outgoing mail server
+    PORT = 25                   # Usually 25 or 587
+    LOCAL_HOST = 'rascal24'     # Name of your Rascal
     TIMEOUT = 30.0              # Seconds
 
     # Fill in this section if the SMTP server requires TLS (gmail does)
-    USE_TLS = True              # True or False
-    LOGIN = 'username@gmail.com'
-    PASSWORD = 'YourGmailPassword'
+    USE_TLS = False             # True or False
+    LOGIN = ''
+    PASSWORD = ''
     
     ##### END OF SET UP #####
     
