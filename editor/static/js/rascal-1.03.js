@@ -1,4 +1,4 @@
-/* Library started by dsmall 2012 */
+/* Library started by dsmall 2012 v1.03 */
 
 // NB Event handlers need to be named and static to avoid duplication
 // Uncomment next line before running JSLint

@@ -138,6 +138,10 @@ a[draggable=true] {
     width: 420px;
 }
 
+.small.left {
+    text-align: left;
+}
+
 input[type="checkbox"] {
     width: 16px;
 }

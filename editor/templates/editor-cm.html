@@ -1,15 +1,16 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <title>Editor</title>
-    <link rel="shortcut icon" href="/editor/static/favicon.ico">
-    <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Droid+Sans|Molengo">
+    <link rel="shortcut icon" href="/editor/static/images/favicon.ico">
+    <!-- <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Droid+Sans|Molengo"> -->
 
     <link rel="stylesheet" type="text/css" href="/editor/static/codemirror2/lib/codemirror.css">
     <link rel="stylesheet" type="text/css" href="/editor/static/codemirror2/theme/night.css">
     <link rel="stylesheet" type="text/css" href="/editor/static/codemirror2/theme/blackboard.css">
-    <link rel="stylesheet" type="text/css" href="/editor/static/editor-all.css">
-    <link rel="stylesheet" type="text/css" href="/editor/static/editor.css">
-    <link rel="stylesheet" type="text/css" href="/editor/static/jquery.filetree.css">
+    
+    <link rel="stylesheet" type="text/css" href="/editor/static/css/editor-all.css">
+    <link rel="stylesheet" type="text/css" href="/editor/static/css/editor.css">
+    <link rel="stylesheet" type="text/css" href="/editor/static/css/jquery.filetree.css">
 
     <script src="/editor/static/codemirror2/lib/codemirror.js"></script>
     <script src="/editor/static/codemirror2/mode/css/css.js"></script>
@@ -18,9 +19,9 @@
     <script src="/editor/static/codemirror2/mode/htmlmixed/htmlmixed.js"></script>
     <script src="/editor/static/codemirror2/mode/python/python.js"></script>
     
-    <script src="/editor/static/jquery-1.5.js"></script>
-    <script src="/editor/static/jquery.filetree.js"></script>
-    <script src="/editor/static/rascal-1.02.js"></script>
+    <script src="/editor/static/js/jquery-1.7.2.js"></script>
+    <script src="/editor/static/js/jquery.filetree.js"></script>
+    <script src="/editor/static/js/rascal-1.03.js"></script>
     <style>
         .CodeMirror-scroll {
             /* height: 600px; */
@@ -116,26 +117,36 @@
             Save file<br />
             <div id="save-file-message" class="small">&nbsp;</div>
             <fieldset>
-                <input id="save-cancel" type="button" value="Cancel" class="large blue awesome" alt="Cancel" />
                 <input id="save-no" type="button" value="Don't Save" class="large blue awesome" alt="Don't Save" />
-                <input id="save-yes" type="button" value="Save..." class="large red awesome" alt="Save" />
+                <input id="save-cancel" type="button" value="Cancel" class="large blue awesome" alt="Cancel" />
+                <input id="save-yes" type="button" value="Save" class="large red awesome" alt="Save" />
             </fieldset>
         </div>
     </div>
-    <div id="overlay-d" class="overlay">OVERLAY DELETE
+     <div id="overlay-r" class="overlay">OVERLAY REVERT
+        <div id="save-file-dialog" class="dialog">
+            Revert file<br />
+            <div id="revert-file-message" class="small">&nbsp;</div>
+            <fieldset>
+                <input id="revert-yes" type="button" value="Revert" class="large red awesome" alt="Revert" />
+                <input id="revert-cancel" type="button" value="Cancel" class="large blue awesome" alt="Cancel" />
+            </fieldset>
+        </div>
+    </div>
+   <div id="overlay-d" class="overlay">OVERLAY DELETE
         <div id="delete-file-dialog" class="dialog">
             Delete file or folder<br />
             <div id="delete-file-message" class="small">&nbsp;</div>
             <fieldset>
+                <input id="delete-yes" type="button" value="Delete" class="large red awesome" alt="Delete" />
                 <input id="delete-cancel" type="button" value="Cancel" class="large blue awesome" alt="Cancel" />
-                <input id="delete-yes" type="button" value="Delete..." class="large red awesome" alt="Delete" />
             </fieldset>
         </div>
     </div>
 
-    <script src="/editor/static/editor-resize.js"></script>
-    <script src="/editor/static/editor-cm.js"></script>
-    <script src="/editor/static/editor.js"></script>
+    <script src="/editor/static/js/editor-resize.js"></script>
+    <script src="/editor/static/js/editor-cm.js"></script>
+    <script src="/editor/static/js/editor.js"></script>
     <script type="text/javascript">
             
         var delay = (function () {

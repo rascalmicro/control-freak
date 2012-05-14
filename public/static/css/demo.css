@@ -197,35 +197,35 @@ tr.over td {
   font-family: 'URW Gothic L';
   font-style: normal;
   font-weight: normal;
-  src: url('fonts/urw-gothic-l-book.ttf');
+  src: url('/static/fonts/urw-gothic-l-book.ttf');
 }
 
 @font-face {
   font-family: 'DroidSans';
   font-style: normal;
   font-weight: normal;
-  src: url('fonts/DroidSans.ttf');
+  src: url('/static/fonts/DroidSans.ttf');
 }
 
 @font-face {
   font-family: 'DroidSans-Bold';
   font-style: normal;
   font-weight: normal;
-  src: url('fonts/DroidSans-Bold.ttf');
+  src: url('/static/fonts/DroidSans-Bold.ttf');
 }
 
 @font-face {
   font-family: 'Molengo';
   font-style: normal;
   font-weight: normal;
-  src: url('fonts/Molengo-Regular.ttf');
+  src: url('/static/fonts/Molengo-Regular.ttf');
 }
 
 @font-face {
   font-family: 'VT323';
   font-style: normal;
   font-weight: normal;
-  src: url('fonts/VT323.ttf');
+  src: url('/static/fonts/VT323.ttf');
 }
 
 #serial-text {
