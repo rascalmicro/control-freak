@@ -1,0 +1,50 @@
+
+#mlColorPicker{
+	border:1px solid black;
+	background-color:#DDDDDD;
+	padding-bottom:5px;
+}
+
+#mlSelectedColorDiv{
+	float:left;
+	width:43px;
+	height:20px;
+	border:solid 1px black;
+	background-color:white;
+	margin:5px;
+}
+#mlCloseColorDiv{
+  border:solid 1px black;
+  background-color:white;
+  cursor: pointer;
+  float: right;
+  height: 12px;
+  line-height: 9px;
+  margin:5px;
+  text-align: center;
+  width: 10px;
+}
+#mlSelectedColorText{
+	float:left;
+	width:60px;
+	border:solid 1px black;
+	font-size:small;
+	margin:5px;
+}
+#mlColors{
+	float:left;
+	margin:0 5px 0 5px;
+	border-bottom:1px solid black;
+	border-right:1px solid black;
+	clear:both;
+	width:260px;
+	height:156px;
+}
+.mlColor{
+	border-left:1px solid black;
+	border-top:1px solid black;
+	float:left;
+	width:12px;
+	height:12px;
+}
+
