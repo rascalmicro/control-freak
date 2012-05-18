@@ -126,11 +126,19 @@ def dirlist(d): # This function heavily based on Martin Skou's connector script 
         for f in sorted(os.listdir(d), key=unicode.lower):
             ff=os.path.join(d,f)
             if os.path.isdir(ff):
+<<<<<<< HEAD
                 r.append('<li class="directory collapsed"><img src="/editor/static/css/file-icons/delete.png"><a href="#" rel="%s/">%s</a></li>' % (ff,f))
             else:
                 e=os.path.splitext(f)[1][1:] # get .ext and remove dot
                 if (e not in noneditable and f != '__init__.py'):
                     r.append('<li class="file ext_%s"><img src="/editor/static/css/file-icons/delete.png" rel="%s"><a href="#" rel="%s">%s</a></li>' % (e,ff,ff,f))
+=======
+                r.append('<li class="directory collapsed"><img src="/editor/static/images/file-icons/delete.png"><a href="#" rel="%s/">%s</a></li>' % (ff,f))
+            else:
+                e=os.path.splitext(f)[1][1:] # get .ext and remove dot
+                if (e not in noneditable and f != '__init__.py'):
+                    r.append('<li class="file ext_%s"><img src="/editor/static/images/file-icons/delete.png" rel="%s"><a href="#" rel="%s">%s</a></li>' % (e,ff,ff,f))
+>>>>>>> master
         r.append('</ul>')
     except Exception,e:
         r.append('Could not load directory: %s' % str(e))
@@ -179,12 +187,11 @@ BOILERPLATE = """<!DOCTYPE html>
     <meta charset="utf-8">
     <title></title>
     <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Droid+Sans|Molengo">
-    <link rel="stylesheet" type="text/css" href="/static/demo.css">
-    <link rel="shortcut icon" href="/static/favicon.ico">
-    <script src="/static/jquery-1.5.js"></script>
-    <!--[if IE]><script language="javascript" type="text/javascript" src="/excanvas.js"></script><![endif]-->
-    <script language="javascript" type="text/javascript" src="/static/jquery.jqplot.js"></script>
-    <link rel="stylesheet" type="text/css" href="/static/jquery.jqplot.css" />
+    <link rel="stylesheet" type="text/css" href="/static/css/demo.css">
+    <link rel="shortcut icon" href="/static/images/favicon.ico">
+    <script src="/static/js/jquery-1.7.2.js"></script>
+    <script language="javascript" type="text/javascript" src="/static/js/jquery.jqplot-1.0.0b2.js"></script>
+    <link rel="stylesheet" type="text/css" href="/static/css/jquery.jqplot-1.0.0b2.css" />
 </head>
 <body>
     <div class="rascalcontent">
