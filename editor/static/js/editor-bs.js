@@ -250,8 +250,8 @@ $('li.file').live('mouseenter mouseleave', function (event) {
     var fpath;
     if (event.type === 'mouseenter') {
         fpath = $(this).children('a').attr('rel');
+        $(this).children('a').addClass('selected');
         if ($.inArray(fpath, EXCEPTIONS) === -1) {
-            $(this).children('a').addClass('selected');
             $(this).children('img').addClass('selected');
             $(this).children('img').click(function () {
                 var jqel, path;
@@ -499,8 +499,12 @@ $('#new-template').click(function () {
     "use strict";
     $('#modal-t').modal('show')
     // $('#overlay-t').css('visibility', 'visible');
-    $('#template-name').focus();
 });
+
+$('#modal-t').on('shown', function () {
+    "use strict";
+    $('#template-name').focus();
+})
 
 $('#create-template').click(function () {
     "use strict";
@@ -525,8 +529,12 @@ $('#new-folder').click(function () {
     "use strict";
     $('#modal-f').modal('show')
     // $('#overlay-f').css('visibility', 'visible');
-    $('#folder-name').focus();
 });
+
+$('#modal-f').on('shown', function () {
+    "use strict";
+    $('#folder-name').focus();
+})
 
 $('#create-folder').click(function () {
     "use strict";

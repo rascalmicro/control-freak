@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>NOTES - Bootstrap</title>
+    <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Droid+Sans|Molengo">
+    <link rel="stylesheet" type="text/css" href="/static/css/demo.css">
+    <link rel="shortcut icon" href="/static/images/favicon.ico">
+    <script src="/static/js/jquery-1.7.2.js"></script>
+    <style>
+    	body { margin: 0.5em; }
+        .rascalcontent { width: 800px; }
+        ol li { list-style-type: decimal; } 
+        ul li { list-style-type: disc; }
+        a { color: #9FD4FF; text-decoration: none; }
+        a:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+    <div class="rascalcontent">
+        <h1>Editor in Bootstrap</h1>
+        <p>Here are the changes and additions needed to run the Bootstrap version of editor:</p>
+        <img src="static/images/R24_BS_Editor.png" />
+        <p>These fall into three groups:</p>
+        <ol>
+            <li>Addition of bootstrap css and js files.</li>
+            <li>Changes to config.html and __init__.py to allow you to choose between original version of the CodeMirror editor and the new Bootstrap version.</li>
+            <li>Files with "-bs" in their names are new versions of existing files updated to use Bootstrap. At this stage the previous files are unchanged, allowing us to run the original and Bootstrap versions side by side.</li>
+            <li>You need a version of CodeMirror later than v2.24.</li>
+        </ol>
+        <h2>Big Questions</h2>
+        <ul>
+            <li>Do we want to keep the original colour scheme (white text on a dark background)? Or just use the out-of-the box Bootstrap style (black text on white/pale grey)?</li>
+            <li>I've used the Bootstrap modal dialogues. There were two options - have the dialogue suddenly appear or have it fade in but also fly down from the top. I much prefer the fade in. The flying down, though initially surprising, is similar to dialogues in OS X Lion.</li>
+            <li>What about button colour? Bootstrap convention has blue as primary, orange as a warning and red for danger. I've largely kept to Rascal's black and red convention but tried Orange and Blue in the query save dialogue and just blue in revert. What do we think?</li>
+            <li>Need to remember to revert Bootstrap to the distribution version and fix difference (location of glyphicons) in an overlay CSS file.</li>
+        </ul>
+        <h2>Summing Up</h2>
+        <p>I think the Bootstrap version is an improvement. It's certainly simplified the CSS and made it easier to achieve a consistent look and feel. I think it's desirable to avoid looking like just another Bootstrap site. However this new version of editor looks to me more Rascal than Bootstrap.</p>
+        <p>The Preferences icon (gear wheel) does nothing yet but will set CodeMirror preferences and save them in editor.conf.</p>
+        <p>I suspect the next step will be to convert my demos to Bootstrap. This would be a good test of the new editor (as was writing this page) and allow me to try out icon buttons.</p>
+        <p>ds 20 May 2012</p>
+    </div>
+    <script language="javascript" type="text/javascript">
+    // You could add some Javascript between these script tags, if you want.
+    // jQuery and jqPlot are already included in the header above.
+    </script>
+</body>
+</html>
