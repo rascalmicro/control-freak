@@ -1,0 +1,45 @@
+body {
+    padding-top: 50px;
+    padding-bottom: 0;
+    font-family: "Molengo","URW Gothic L",sans-serif;
+    font-size: 1em;
+    /* line-height: 1.4em; */
+    color: #F8F8F8;
+    background-color: #666;
+}
+
+/* topbar */
+.brand.rascal {
+    padding-top: 5px;
+    padding-bottom: 10px;
+}
+
+.nav-collapse.rascal {
+    float: right;
+    padding-top: 5px;
+}
+
+.night { 
+    background-color: #0A001F;
+}
+
+@font-face {
+  font-family: 'DroidSans';
+  font-style: normal;
+  font-weight: normal;
+  src: url('/editor/static/fonts/DroidSans.ttf');
+}
+
+@font-face {
+  font-family: 'Molengo';
+  font-style: normal;
+  font-weight: normal;
+  src: url('/editor/static/fonts/Molengo-Regular.ttf');
+}
+
+@font-face {
+  font-family: 'VT323';
+  font-style: normal;
+  font-weight: normal;
+  src: url('/editor/static/fonts/VT323.ttf');
+}

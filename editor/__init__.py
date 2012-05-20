@@ -111,6 +111,8 @@ def start_edit():
     try:
         if os.path.exists(root + 'editor-a'):
             return render_template('editor-a.html', text_to_edit='Ace: No file selected')
+        elif os.path.exists(root + 'editor-bs'):
+            return render_template('editor-bs.html', text_to_edit='CodeMirror2 in Twitter Bootstrap')
         else:
             return render_template('editor-cm.html', text_to_edit='CodeMirror2: No file selected')
     except TemplateNotFound:
@@ -357,6 +359,8 @@ def config():
     root = '/var/www/editor/.'
     if os.path.exists(root + 'editor-a'):
         editor = 'editor-a'
+    elif os.path.exists(root + 'editor-bs'):
+        editor = 'editor-bs'
     else:
         editor = 'editor-cm'
     try:
