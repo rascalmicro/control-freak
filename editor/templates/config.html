@@ -50,9 +50,10 @@
         <td width="4%">&nbsp;</td>
         <td>
         <p>Choose editor:</p>
-        <div class="Tabs segmentedControlBase" style="width: 300px;">
+        <div class="Tabs segmentedControlBase" style="width: 450px;">
             <input id="editor-cm" type="button" class="button segmentedControl selected" value="CodeMirror 2" />
-            <input id="editor-a" type="button" class="button segmentedControl" value="Ace" />
+             <input id="editor-bs" type="button" class="button segmentedControl selected" value="Bootstrap" />
+           <input id="editor-a" type="button" class="button segmentedControl" value="Ace" />
         </div>
         <div class="TabPanels">
             <div id="editor-cm-desc" class="tabPanel selected">
@@ -64,7 +65,16 @@
                 <a href="static/codemirror2/index.html" name="CodeMirror2" title="CodeMirror2" target="_editor">documentation</a>
                 </p>
             </div>
-            <div id="editor-a-desc" class="tabPanel">
+             <div id="editor-bs-desc" class="tabPanel selected">
+                <p><a href="http://codemirror.net/" name="CodeMirror" title="CodeMirror" target="_editor">CodeMirror in Twitter Bootstrap</a><br />
+                CodeMirror is a JavaScript library that can be used to create a relatively
+                pleasant editor interface for code-like content ― computer programs, HTML markup and similar.
+                If a mode has been written for the language you are editing, the code will be coloured and
+                the editor will optionally help you with indentation.<br />
+                <a href="static/codemirror2/index.html" name="CodeMirror2" title="CodeMirror2" target="_editor">documentation</a>
+                </p>
+            </div>
+           <div id="editor-a-desc" class="tabPanel">
                 <p><a href="http://ace.ajax.org/" name="Ace" title="Ace" target="_editor">Ajax.org Cloud9 Editor</a><br />
                 Ace is a standalone code editor written in JavaScript.
                 The goal is to create a web based code editor that matches and extends the features, usability and
@@ -101,6 +111,10 @@
 
         $('#editor-cm').click(function () {
             setEditor('editor-cm');
+        });
+
+        $('#editor-bs').click(function () {
+            setEditor('editor-bs');
         });
 
         $('#editor-a').click(function () {
