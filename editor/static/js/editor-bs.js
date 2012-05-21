@@ -275,7 +275,10 @@ $('li.file').live('mouseenter mouseleave', function (event) {
                             $.post('/editor/delete_file', { filename: path }, function (response) {
                                 console.log('DELETE_FILE ' + response);
                                 jqel.hide('slow');
-                                saveMsg('File deleted');
+                                saveMsg('Deleted file');
+                            }).error(function (jqXHR, textStatus, errorThrown) {
+                                console.log('DELETE_FILE: ' + textStatus + ': ' + errorThrown);
+                                saveMsg('Delete file failed');
                             });
                         } else {
                             console.log('DELETE cancel');
@@ -312,7 +315,10 @@ $('li.directory.expanded').live('mouseenter mouseleave', function (event) {
                                 $.post('/editor/delete_folder', { filename: path }, function (response) {
                                     console.log('DELETE_FOLDER ' + response);
                                     jqel.hide('slow');
-                                    saveMsg('Folder deleted');
+                                    saveMsg('Deleted folder');
+                                }).error(function (jqXHR, textStatus, errorThrown) {
+                                    console.log('DELETE_FOLDER: ' + textStatus + ': ' + errorThrown);
+                                    saveMsg('Delete folder failed');
                                 });
                             } else {
                                 console.log('DELETE cancel');
@@ -375,6 +381,9 @@ function moveItem(src, dst) {
                 highlightChanged();
             }
         }
+    }).error(function (jqXHR, textStatus, errorThrown) {
+        console.log('moveItem: ' + textStatus + ': ' + errorThrown);
+        saveMsg('Move failed');
     });
 }
 
@@ -405,19 +414,36 @@ function saveMsg(msg) {
 
 function saveFile() {
     "use strict";
+    var p = $('#path').val();
     var s = editorGetText();
-    $.post('/editor/save', { path: $('#path').val(), text: s }, function (response) {
-        displayLocation($('#path').val());
-        bFileChanged = false;
-        unhighlightChanged();
-        if (querySave.status === 2) {
-            querySave.status = 1;
-        }
-    });
     $('#save-bar').css('width', '0%');
-    $('#save-bar').animate({ 'width': '100%' }, 1000, function () {
-        saveMsg('Saved file');
-    });
+    if (rascal.picture.showing) {
+        saveMsg('Can\'t save pictures');
+    } else if (p === '') {
+        saveMsg('Nothing to save');
+    } else {
+        console.log('saveFile: saving ' + p);
+        $.post('/editor/save', { path: p, text: s }, function (response) {
+            console.log('saveFile: ' + response);
+            displayLocation($('#path').val());
+            bFileChanged = false;
+            unhighlightChanged();
+            if (querySave.status === 2) {
+                querySave.status = 1;
+            }
+        }).error(function (jqXHR, textStatus, errorThrown) {
+            console.log('saveFile: ' + textStatus + ': ' + errorThrown);
+        });
+        $('#save-progress')
+            .addClass('progress-striped')
+            .addClass('active');
+        $('#save-bar').animate({ 'width': '100%' }, 1000, function () {
+            $('#save-progress')
+                .removeClass('active')
+                .removeClass('progress-striped');
+            saveMsg('Saved file');
+        });
+    }
 }
 
 // Function for binding ctrl keystrokes from Ganeshji Marwaha:
@@ -454,6 +480,9 @@ function uploadStatus (msg) {
 
 function uploadComplete(directory) {
     console.log('uploadComplete ' + ROOT + directory);
+    $('#save-progress')
+        .removeClass('active')
+        .removeClass('progress-striped');
     saveMsg('Upload complete');
     var dst = ROOT + directory,
         jqDst = $('li.directory > a[rel="' + dst + '"]');
@@ -475,6 +504,10 @@ function uploadInit(files, dst) {
     ru.allowedTypes = [ 'image/', 'text/html', 'text/css', 'text/javascript',
         'application/x-javascript', 'text/x-python-script' ];
     ru.progress = saveProgress;
+    $('#save-bar').css('width', '0%')
+    $('#save-progress')
+        .addClass('progress-striped')
+        .addClass('active');
     ru.status = uploadStatus;
     ru.complete = uploadComplete;
     trackChanges(false);
@@ -641,7 +674,15 @@ $('#delete-cancel').click(function () {
 // Reload pytronics
 $('#reload').click(function () {
     "use strict";
-    $.post('/editor/reload', 'text');
     $('#reload-bar').css('width', '0%');
-    $('#reload-bar').animate({ 'width': '100%' }, 10000);
+    $.post('/editor/reload', 'text');
+    $('#reload-progress')
+        .addClass('progress-striped')
+        .addClass('active');
+    $('#reload-bar').animate({ 'width': '100%' }, 10000, function () {
+        $('#reload-progress')
+            .removeClass('active')
+            .removeClass('progress-striped');
+        saveMsg('Reloaded Pytronics');
+    });
 });

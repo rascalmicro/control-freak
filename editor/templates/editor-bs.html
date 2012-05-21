@@ -48,14 +48,27 @@
         <div class="navbar-inner">
             <div class="container-fluid">
                 <a class="brand rascal" href="/editor/"><img id="rascallogo" src="/editor/static/images/rm-logo-words-only-light.png" /></a>
-                <div class="nav-collapse rascal">
-                    <ul class="nav">
+<!-- 
+                 <div class="nav-collapse rascal">
+                   <ul class="nav">
                         <li class="active"><a href="/editor/">editor</a></li>
                         <li><a href="/editor/log">log</a></li>
                         <li><a href="/editor/config">config</a></li>
                         <li><a href="/editor/monitor">monitor</a></li>
                         <li><a href="/editor/logout">log out</a></li>
                     </ul>            
+                </div>
+ -->
+                <div class="nav-collapse rascal">
+                    <ul class="nav_rascal">
+                        <li><a href="/editor/">editor</a> | </li>
+                        <li><a href="/editor/log">log</a> | </li>
+                        <li><a href="/editor/config">config</a> | </li>
+                        <li><a href="/editor/monitor">monitor</a></li>
+                    </ul>
+                    <ul class="nav_rascal">
+                        <li><a href="/editor/logout" class="logout">log out</a></li>
+                    </ul>
                 </div>
             </div>
         </div>
@@ -68,12 +81,12 @@
         </div>
         <div class="progress-bars">
             <div class="progress-reload">
-                <div class="progress progress-danger progress-striped rascal">
+                <div id="reload-progress" class="progress progress-danger rascal">
                     <div id="reload-bar" class="bar" style="width: 0%;"></div>
                 </div>
             </div>
             <div class="progress-save">
-                <div class="progress progress-danger progress-striped rascal">
+                <div id="save-progress" class="progress progress-danger rascal">
                     <div id="save-bar" class="bar" style="width: 0%;"></div>
                 </div>
             </div>
@@ -145,9 +158,9 @@
             <p id="save-file-message">&nbsp;</p>
         </div>
         <div class="modal-footer">
-            <a id="save-no" href="#" class="btn btn-warning">Don't Save</a>
+            <a id="save-no" href="#" class="btn btn-primary">Don't Save</a>
             <a id="save-cancel" href="#" class="btn">Cancel</a>
-            <a id="save-yes" href="#" class="btn btn-primary">Save</a>
+            <a id="save-yes" href="#" class="btn btn-danger">Save</a>
         </div>
     </div>
 
@@ -161,7 +174,7 @@
         </div>
         <div class="modal-footer">
             <a id="revert-cancel" href="#" class="btn">Cancel</a>
-            <a id="revert-yes" href="#" class="btn btn-primary">Revert</a>
+            <a id="revert-yes" href="#" class="btn btn-danger">Revert</a>
         </div>
     </div>
 

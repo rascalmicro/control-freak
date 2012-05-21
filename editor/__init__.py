@@ -250,11 +250,14 @@ def delete_folder():
 @login_required
 def save():
     root = '/var/www/public/'
-    path = secure_path(request.form['path'])
-    f = open(root + path, 'w')
-    f.write(request.form['text'])
-    f.close()
-    return '0'
+    try:
+        path = secure_path(request.form['path'])
+        f = open(root + path, 'w')
+        f.write(request.form['text'])
+        f.close()
+    except:
+        return 'Bad Request', 400
+    return 'OK', 200
 
 def allowed_file(filename):
     return '.' in filename and \
@@ -294,8 +297,12 @@ def xupload_file():
 @login_required
 def reload():
     import subprocess
-    subprocess.Popen(['touch', '/etc/uwsgi/public.ini'])
-    return render_template('editor.html')
+    res = subprocess.call(['touch', '/etc/uwsgi/public.ini'])
+    if res <> 0:
+        print '## reload ## error'
+        return 'Bad request', 400
+    print '## reload ## OK'
+    return 'OK', 200
 
 ## log page functions
 def tail(f, n, offset=None):
