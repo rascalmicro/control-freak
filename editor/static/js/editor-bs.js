@@ -48,12 +48,14 @@ function highlightChanged() {
     console.log('HighlightChanged ' + fpath);
     rascal.dnd.changedFile = fpath;
     $('LI A[rel="' + fpath + '"]').addClass('changed');
+    $('#location-bar').addClass('changed');
     $('#location-bar A').addClass('changed');
 }
 
 function unhighlightChanged() {
     rascal.dnd.changedFile = undefined;
     $('LI A').removeClass('changed');
+    $('#location-bar').removeClass('changed');
 }
 
 // fileTree operations
@@ -99,8 +101,10 @@ function displayLocation(path) {
         if (DEBUG_ON_MAC) {
             apath = 'http://localhost:5000' + apath;
         }
+        $('#location-bar').html('<a href="' + apath + '">' + fpath + '</a>');
+    } else {
+        $('#location-bar').text(fpath);
     }
-    $('#location-bar').html('<a href="' + apath + '">' + fpath + '</a>');
     $('#path').val(fpath);
 }
 
@@ -528,10 +532,10 @@ function uploadItems(files, dst) {
     }
 }
 
+// dialog handling
 $('#new-template').click(function () {
     "use strict";
     $('#modal-t').modal('show')
-    // $('#overlay-t').css('visibility', 'visible');
 });
 
 $('#modal-t').on('shown', function () {
@@ -547,8 +551,19 @@ $('#create-template').click(function () {
             console.log(response);
             displayTree('/var/www/public/templates/');
             $('#modal-t').modal('hide')
-            // $('#overlay-t').css('visibility', 'hidden');
+        }).error(function (jqXHR, textStatus, errorThrown) {
+            console.log('new_template: ' + textStatus + ': ' + errorThrown);
+            if (errorThrown === 'CONFLICT') {
+                $('#template-message').text('Template exists - please use a different name')
+                    .css('color', 'red');
+            } else {    // 'Bad Request'
+                $('#template-message').text('Template could not be created')
+                    .css('color', 'red');
+            }
+            $('#template-name').focus();
         });
+    } else {
+        $('#template-name').focus();
     }
 });
 
@@ -561,7 +576,6 @@ $('#cancel-template').click(function () {
 $('#new-folder').click(function () {
     "use strict";
     $('#modal-f').modal('show')
-    // $('#overlay-f').css('visibility', 'visible');
 });
 
 $('#modal-f').on('shown', function () {
@@ -577,7 +591,6 @@ $('#create-folder').click(function () {
             console.log(response);
             displayTree('/var/www/public/static/');
             $('#modal-f').modal('hide')
-            // $('#overlay-f').css('visibility', 'hidden');
         }).error(function (jqXHR, textStatus, errorThrown) {
             console.log('new_folder: ' + textStatus + ': ' + errorThrown);
             if (errorThrown === 'CONFLICT') {
@@ -587,14 +600,16 @@ $('#create-folder').click(function () {
                 $('#folder-message').text('Folder could not be created (mkdir returned an error)')
                     .css('color', 'red');
             }
+            $('#folder-name').focus();
         });
+    } else {
+        $('#folder-name').focus();
     }
 });
 
 $('#cancel-folder').click(function () {
     "use strict";
     $('#modal-f').modal('hide')
-    // $('#overlay-f').css('visibility', 'hidden');
 });
 
 function initPreferences () {
@@ -621,7 +636,6 @@ $('#save-yes').click(function () {
     "use strict";
     querySave.status = 3;
     $('#modal-s').modal('hide')
-    // $('#overlay-s').css('visibility', 'hidden');
 });
 
 $('#save-no').click(function () {
@@ -630,14 +644,12 @@ $('#save-no').click(function () {
     bFileChanged = false;
     unhighlightChanged();
     $('#modal-s').modal('hide')
-    // $('#overlay-s').css('visibility', 'hidden');
 });
 
 $('#save-cancel').click(function () {
     "use strict";
     querySave.status = 0;
     $('#modal-s').modal('hide')
-    // $('#overlay-s').css('visibility', 'hidden');
 });
 
 $('#revert-yes').click(function () {
@@ -646,43 +658,42 @@ $('#revert-yes').click(function () {
     bFileChanged = false;
     unhighlightChanged();
     $('#modal-r').modal('hide')
-    // $('#overlay-r').css('visibility', 'hidden');
 });
 
 $('#revert-cancel').click(function () {
     "use strict";
     querySave.status = 0;
     $('#modal-r').modal('hide')
-    // $('#overlay-r').css('visibility', 'hidden');
 });
-
 
 $('#delete-yes').click(function () {
     "use strict";
     queryDelete.status = 1;
     $('#modal-d').modal('hide')
-    // $('#overlay-d').css('visibility', 'hidden');
 });
 
 $('#delete-cancel').click(function () {
     "use strict";
     queryDelete.status = 0;
     $('#modal-d').modal('hide')
-    // $('#overlay-d').css('visibility', 'hidden');
 });
 
 // Reload pytronics
 $('#reload').click(function () {
     "use strict";
     $('#reload-bar').css('width', '0%');
-    $.post('/editor/reload', 'text');
-    $('#reload-progress')
-        .addClass('progress-striped')
-        .addClass('active');
-    $('#reload-bar').animate({ 'width': '100%' }, 10000, function () {
+    $.post('/editor/reload', function (response) {
         $('#reload-progress')
-            .removeClass('active')
-            .removeClass('progress-striped');
-        saveMsg('Reloaded Pytronics');
+            .addClass('progress-striped')
+            .addClass('active');
+        $('#reload-bar').animate({ 'width': '100%' }, 10000, function () {
+            $('#reload-progress')
+                .removeClass('active')
+                .removeClass('progress-striped');
+            saveMsg('Reloaded pytronics');
+        });
+    }).error(function (jqXHR, textStatus, errorThrown) {
+        console.log('reload: ' + textStatus + ': ' + errorThrown);
+        saveMsg('Reload pytronics failed');
     });
 });

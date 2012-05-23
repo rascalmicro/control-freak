@@ -30,7 +30,7 @@
 
 .progress-reload {
     float: right;
-    width: 120px;
+    width: 160px;
     margin-top: 5px; 
 }
 
@@ -67,6 +67,24 @@
     box-shadow: 0 0 3px #3A3A3A;
 }
 
+.row-fluid [class*="span"] {
+/* 
+  margin-left: 2.127659574%;
+  *margin-left: 2.0744680846382977%;
+ */
+  margin-left: 1.127659574%;
+  *margin-left: 1.0744680846382977%;
+}
+
+.row-fluid .span9 {
+/* 
+  width: 74.468085099%;
+  *width: 74.4148936096383%;
+ */
+  width: 75.468085099%;
+  *width: 75.4148936096383%;
+}
+
 #filetree {
     padding: 0 10px 0 0;
     /* border: 1px solid #414243; */
@@ -95,8 +113,11 @@ a[draggable=true] {
     padding-left: 8px;
 }
 
+#location-bar.changed {
+    color: #EF4A42;
+}
+
 #location-bar a {
-    /* color: #EF4A42; */
     color: #F8F8F8;
 }
 

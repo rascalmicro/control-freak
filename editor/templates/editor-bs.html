@@ -119,13 +119,14 @@
         </div> <!-- /row -->
     </div> <!-- /container -->
 
+    <!-- modal dialogues -->
     <div id="modal-t" class="modal fade hide rascal">
         <div class="modal-header">
             <button class="close" data-dismiss="modal">×</button>
             <h3>Create a new template</h3>
         </div>
         <div class="modal-body">
-            <p>The name you type should end in .html</p>
+            <p id="template-message">The name you type should end in .html</p>
             <input id="template-name" type="text" name="template-name" />
         </div>
         <div class="modal-footer">
@@ -158,7 +159,7 @@
             <p id="save-file-message">&nbsp;</p>
         </div>
         <div class="modal-footer">
-            <a id="save-no" href="#" class="btn btn-primary">Don't Save</a>
+            <a id="save-no" href="#" class="btn btn-warning">Don't Save</a>
             <a id="save-cancel" href="#" class="btn">Cancel</a>
             <a id="save-yes" href="#" class="btn btn-danger">Save</a>
         </div>
@@ -174,7 +175,7 @@
         </div>
         <div class="modal-footer">
             <a id="revert-cancel" href="#" class="btn">Cancel</a>
-            <a id="revert-yes" href="#" class="btn btn-danger">Revert</a>
+            <a id="revert-yes" href="#" class="btn btn-warning">Revert</a>
         </div>
     </div>
 
@@ -191,6 +192,7 @@
             <a id="delete-yes" href="#" class="btn btn-danger">Delete</a>
         </div>
     </div>
+    <!-- /modal dialogues -->
 
     <script src="/editor/static/js/editor-resize.js"></script>
     <script src="/editor/static/js/editor-cm.js"></script>

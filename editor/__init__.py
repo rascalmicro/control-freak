@@ -203,10 +203,15 @@ BOILERPLATE = """<!DOCTYPE html>
 @editor.route('/editor/new_template', methods=['POST'])
 @login_required
 def new_template():
+    import os
     name = secure_path(request.form['templateName'])
-    f = open('/var/www/public/templates/' + name, 'w')
-    f.write(BOILERPLATE)
-    f.close()
+    path = '/var/www/public/templates/' + name
+    if os.path.exists(path):
+        return 'Conflict', 409
+    else:
+        f = open(path, 'w')
+        f.write(BOILERPLATE)
+        f.close()
     return 'OK', 200
 
 @editor.route('/editor/delete_file', methods=['POST'])
@@ -299,9 +304,7 @@ def reload():
     import subprocess
     res = subprocess.call(['touch', '/etc/uwsgi/public.ini'])
     if res <> 0:
-        print '## reload ## error'
         return 'Bad request', 400
-    print '## reload ## OK'
     return 'OK', 200
 
 ## log page functions
