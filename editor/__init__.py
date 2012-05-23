@@ -111,6 +111,8 @@ def start_edit():
     try:
         if os.path.exists(root + 'editor-a'):
             return render_template('editor-a.html', text_to_edit='Ace: No file selected')
+        elif os.path.exists(root + 'editor-bs'):
+            return render_template('editor-bs.html', text_to_edit='CodeMirror2 in Twitter Bootstrap')
         else:
             return render_template('editor-cm.html', text_to_edit='CodeMirror2: No file selected')
     except TemplateNotFound:
@@ -201,10 +203,15 @@ BOILERPLATE = """<!DOCTYPE html>
 @editor.route('/editor/new_template', methods=['POST'])
 @login_required
 def new_template():
+    import os
     name = secure_path(request.form['templateName'])
-    f = open('/var/www/public/templates/' + name, 'w')
-    f.write(BOILERPLATE)
-    f.close()
+    path = '/var/www/public/templates/' + name
+    if os.path.exists(path):
+        return 'Conflict', 409
+    else:
+        f = open(path, 'w')
+        f.write(BOILERPLATE)
+        f.close()
     return 'OK', 200
 
 @editor.route('/editor/delete_file', methods=['POST'])
@@ -248,11 +255,14 @@ def delete_folder():
 @login_required
 def save():
     root = '/var/www/public/'
-    path = secure_path(request.form['path'])
-    f = open(root + path, 'w')
-    f.write(request.form['text'])
-    f.close()
-    return '0'
+    try:
+        path = secure_path(request.form['path'])
+        f = open(root + path, 'w')
+        f.write(request.form['text'])
+        f.close()
+    except:
+        return 'Bad Request', 400
+    return 'OK', 200
 
 def allowed_file(filename):
     return '.' in filename and \
@@ -292,8 +302,10 @@ def xupload_file():
 @login_required
 def reload():
     import subprocess
-    subprocess.Popen(['touch', '/etc/uwsgi/public.ini'])
-    return render_template('editor.html')
+    res = subprocess.call(['touch', '/etc/uwsgi/public.ini'])
+    if res <> 0:
+        return 'Bad request', 400
+    return 'OK', 200
 
 ## log page functions
 def tail(f, n, offset=None):
@@ -357,6 +369,8 @@ def config():
     root = '/var/www/editor/.'
     if os.path.exists(root + 'editor-a'):
         editor = 'editor-a'
+    elif os.path.exists(root + 'editor-bs'):
+        editor = 'editor-bs'
     else:
         editor = 'editor-cm'
     try:

@@ -1,0 +1,82 @@
+body {
+    padding-top: 50px;
+    padding-bottom: 0;
+    font-family: "Molengo","URW Gothic L",sans-serif;
+    font-size: 1em;
+    /* line-height: 1.4em; */
+    color: #F8F8F8;
+    background-color: #666;
+}
+
+/* topbar */
+.navbar-inner {
+  background-color: #424242;
+  background-image: -moz-linear-gradient(top, #4A4A4A, #3A3A3A);
+  background-image: -ms-linear-gradient(top, #4A4A4A, #3A3A3A);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#4A4A4A), to(#3A3A3A));
+  background-image: -webkit-linear-gradient(top, #4A4A4A, #3A3A3A);
+  background-image: -o-linear-gradient(top, #4A4A4A, #3A3A3A);
+  background-image: linear-gradient(top, #4A4A4A, #3A3A3A);
+  background-repeat: repeat-x;
+  -webkit-border-radius: 4px;
+     -moz-border-radius: 4px;
+          border-radius: 4px;
+  filter: progid:dximagetransform.microsoft.gradient(startColorstr='#4A4A4A', endColorstr='#3A3A3A', GradientType=0);
+  -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25), inset 0 -1px 0 rgba(0, 0, 0, 0.1);
+     -moz-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25), inset 0 -1px 0 rgba(0, 0, 0, 0.1);
+          box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25), inset 0 -1px 0 rgba(0, 0, 0, 0.1);
+}
+
+.brand.rascal {
+    padding-top: 5px;
+    padding-bottom: 10px;
+}
+
+.nav-collapse.rascal {
+    /* float: right; */
+    text-align: right;
+    padding-top: 5px;
+}
+
+.nav_rascal {
+    margin: 0;
+    font-family: "Molengo","URW Gothic L",sans-serif;
+    font-size: 1em;
+}
+
+.nav_rascal li {
+    display: inline;
+}
+
+.nav_rascal a {
+    color: #E7E8E9;
+}
+
+.nav_rascal a.logout {
+    color: #C6433C;
+}
+
+.night { 
+    background-color: #0A001F;
+}
+
+@font-face {
+  font-family: 'DroidSans';
+  font-style: normal;
+  font-weight: normal;
+  src: url('/editor/static/fonts/DroidSans.ttf');
+}
+
+@font-face {
+  font-family: 'Molengo';
+  font-style: normal;
+  font-weight: normal;
+  src: url('/editor/static/fonts/Molengo-Regular.ttf');
+}
+
+@font-face {
+  font-family: 'VT323';
+  font-style: normal;
+  font-weight: normal;
+  src: url('/editor/static/fonts/VT323.ttf');
+}

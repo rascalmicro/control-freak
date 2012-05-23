@@ -1,0 +1,149 @@
+/* This file is specific to the editor page */
+
+/* buttons and progress-bars */
+.buttons {
+    padding: 4px 0;
+}
+
+#save {
+    width: 120px;
+    font-family: 'Lucida Grande';
+    font-size: 16px;
+}
+
+#reload {
+    float: right;
+    width: 160px;
+    font-family: 'Lucida Grande';
+    font-size: 16px;
+}
+
+.progress-bars {
+}
+
+.progress-save {
+    float: left;
+    margin-top: 5px; 
+    width: 120px;
+    padding-right: 5px;
+}
+
+.progress-reload {
+    float: right;
+    width: 160px;
+    margin-top: 5px; 
+}
+
+.progress.rascal {
+    height: 10px;
+    margin-bottom: 8px;
+}
+
+/* http://stackoverflow.com/questions/9622043/turn-off-bootstraps-css3-transitions-on-progress-bars */
+.progress.rascal .bar {
+    -webkit-transition: none;
+    -moz-transition: none;
+    -ms-transition: none;
+    -o-transition: none;
+    transition: none;
+}
+
+#save-message {
+    visibility: hidden;
+    display: inline;
+}
+
+#save-message.warning {
+    color: red;
+}
+
+/* sidebar */
+.well.rascal {
+    padding: 3px;
+    margin-bottom: 5px;
+    border: 3px solid #424242;
+    -moz-box-shadow: 0 0 3px #3A3A3A;
+    -webkit-box-shadow: 0 0 3px #3A3A3A;
+    box-shadow: 0 0 3px #3A3A3A;
+}
+
+.row-fluid [class*="span"] {
+/* 
+  margin-left: 2.127659574%;
+  *margin-left: 2.0744680846382977%;
+ */
+  margin-left: 1.127659574%;
+  *margin-left: 1.0744680846382977%;
+}
+
+.row-fluid .span9 {
+/* 
+  width: 74.468085099%;
+  *width: 74.4148936096383%;
+ */
+  width: 75.468085099%;
+  *width: 75.4148936096383%;
+}
+
+#filetree {
+    padding: 0 10px 0 0;
+    /* border: 1px solid #414243; */
+    border: 1px solid #0A001F;
+    height: 461px;
+    overflow: auto;
+}
+
+#filetree.dragover {
+    border: 1px solid #8284B6;
+    box-shadow: 0 0 12px #6666DD;
+}
+
+a[draggable=true] {
+    -moz-user-select:none;
+    -khtml-user-drag: element;
+    cursor: move;
+}
+
+#preferences {
+    float: right;
+}
+
+/* editor */
+#location-bar {
+    padding-left: 8px;
+}
+
+#location-bar.changed {
+    color: #EF4A42;
+}
+
+#location-bar a {
+    color: #F8F8F8;
+}
+
+#location-bar a.changed {
+    color: #EF4A42;
+}
+
+#textfield {
+    position: relative;
+    /* margin-left: 360px; */
+    padding: 0px;
+}
+
+.frame {
+    position: absolute;
+    visibility: hidden;
+    top: 3px;
+    left: 3px;
+    background-color: #828282;
+    border: 3px solid #424242; 
+    -moz-box-shadow: 0 0 22px #111;
+    -webkit-box-shadow: 0 0 22px #111;
+    box-shadow: 0 0 22px #111;
+    z-index: 1000;
+}
+
+.modal.rascal {
+    color: #333;
+}
