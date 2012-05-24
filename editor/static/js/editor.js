@@ -45,14 +45,17 @@ function fileChanged() {
 
 function highlightChanged() {
     var fpath = ROOT + $('#path').val();
+    console.log('HighlightChanged ' + fpath);
     rascal.dnd.changedFile = fpath;
     $('LI A[rel="' + fpath + '"]').addClass('changed');
+    $('#location-bar').addClass('changed');
     $('#location-bar A').addClass('changed');
 }
 
 function unhighlightChanged() {
     rascal.dnd.changedFile = undefined;
     $('LI A').removeClass('changed');
+    $('#location-bar').removeClass('changed');
 }
 
 // fileTree operations
@@ -98,8 +101,10 @@ function displayLocation(path) {
         if (DEBUG_ON_MAC) {
             apath = 'http://localhost:5000' + apath;
         }
+        $('#location-bar').html('<a href="' + apath + '">' + fpath + '</a>');
+    } else {
+        $('#location-bar').text(fpath);
     }
-    $('#location-bar').html('<a href="' + apath + '">' + fpath + '</a>');
     $('#path').val(fpath);
 }
 
@@ -159,10 +164,12 @@ querySave = {
         qs.callback = callback;
         qs.status = -1;
         if (which === SAVE) {
-            $('#overlay-s').css('visibility', 'visible');
+            $('#modal-s').modal('show')
+            // $('#overlay-s').css('visibility', 'visible');
             $('#save-file-message').html('Do you want to save the changes you made to the file "' + $('#path').val() + '"?<br/>Your changes will be lost if you don\'t save them.');
         } else {
-            $('#overlay-r').css('visibility', 'visible');
+            $('#modal-r').modal('show')
+            // $('#overlay-r').css('visibility', 'visible');
             $('#revert-file-message').text('Are you sure you want to revert the file "' + $('#path').val() + '" to its original state?');
         }
         qs.int_status = setInterval(querySave.wait, 500);
@@ -228,7 +235,8 @@ queryDelete = {
         var qd = queryDelete;
         qd.callback = callback;
         qd.status = -1;
-        $('#overlay-d').css('visibility', 'visible');
+        $('#modal-d').modal('show')
+        // $('#overlay-d').css('visibility', 'visible');
         if (which === FILE) {
             $('#delete-file-message').text('Are you sure you want to delete the file "' + path + '"?');
         } else {
@@ -246,8 +254,8 @@ $('li.file').live('mouseenter mouseleave', function (event) {
     var fpath;
     if (event.type === 'mouseenter') {
         fpath = $(this).children('a').attr('rel');
+        $(this).children('a').addClass('selected');
         if ($.inArray(fpath, EXCEPTIONS) === -1) {
-            $(this).children('a').addClass('selected');
             $(this).children('img').addClass('selected');
             $(this).children('img').click(function () {
                 var jqel, path;
@@ -271,7 +279,10 @@ $('li.file').live('mouseenter mouseleave', function (event) {
                             $.post('/editor/delete_file', { filename: path }, function (response) {
                                 console.log('DELETE_FILE ' + response);
                                 jqel.hide('slow');
-                                saveMsg('File deleted');
+                                saveMsg('Deleted file');
+                            }).error(function (jqXHR, textStatus, errorThrown) {
+                                console.log('DELETE_FILE: ' + textStatus + ': ' + errorThrown);
+                                saveMsg('Delete file failed');
                             });
                         } else {
                             console.log('DELETE cancel');
@@ -308,7 +319,10 @@ $('li.directory.expanded').live('mouseenter mouseleave', function (event) {
                                 $.post('/editor/delete_folder', { filename: path }, function (response) {
                                     console.log('DELETE_FOLDER ' + response);
                                     jqel.hide('slow');
-                                    saveMsg('Folder deleted');
+                                    saveMsg('Deleted folder');
+                                }).error(function (jqXHR, textStatus, errorThrown) {
+                                    console.log('DELETE_FOLDER: ' + textStatus + ': ' + errorThrown);
+                                    saveMsg('Delete folder failed');
                                 });
                             } else {
                                 console.log('DELETE cancel');
@@ -371,6 +385,9 @@ function moveItem(src, dst) {
                 highlightChanged();
             }
         }
+    }).error(function (jqXHR, textStatus, errorThrown) {
+        console.log('moveItem: ' + textStatus + ': ' + errorThrown);
+        saveMsg('Move failed');
     });
 }
 
@@ -387,8 +404,8 @@ function initRascalDnd() {
 
 // file operations
 function saveProgress(pc) {
-    // console.log('progress ' + pc);
-    $('#save-progress').css('background-position', pc + '% 0');
+    console.log('progress ' + pc);
+    $('#save-bar').css('width', (100 - pc) + '%');
 }
 
 function saveMsg(msg) {
@@ -401,19 +418,36 @@ function saveMsg(msg) {
 
 function saveFile() {
     "use strict";
+    var p = $('#path').val();
     var s = editorGetText();
-    $.post('/editor/save', { path: $('#path').val(), text: s }, function (response) {
-        displayLocation($('#path').val());
-        bFileChanged = false;
-        unhighlightChanged();
-        if (querySave.status === 2) {
-            querySave.status = 1;
-        }
-    });
-    $('#save-progress').css('background-position', '-120px');
-    $('#save-progress').animate({ 'background-position': 0 }, 1000, function () {
-        saveMsg('Saved file');
-    });
+    $('#save-bar').css('width', '0%');
+    if (rascal.picture.showing) {
+        saveMsg('Can\'t save pictures');
+    } else if (p === '') {
+        saveMsg('Nothing to save');
+    } else {
+        console.log('saveFile: saving ' + p);
+        $.post('/editor/save', { path: p, text: s }, function (response) {
+            console.log('saveFile: ' + response);
+            displayLocation($('#path').val());
+            bFileChanged = false;
+            unhighlightChanged();
+            if (querySave.status === 2) {
+                querySave.status = 1;
+            }
+        }).error(function (jqXHR, textStatus, errorThrown) {
+            console.log('saveFile: ' + textStatus + ': ' + errorThrown);
+        });
+        $('#save-progress')
+            .addClass('progress-striped')
+            .addClass('active');
+        $('#save-bar').animate({ 'width': '100%' }, 1000, function () {
+            $('#save-progress')
+                .removeClass('active')
+                .removeClass('progress-striped');
+            saveMsg('Saved file');
+        });
+    }
 }
 
 // Function for binding ctrl keystrokes from Ganeshji Marwaha:
@@ -450,6 +484,9 @@ function uploadStatus (msg) {
 
 function uploadComplete(directory) {
     console.log('uploadComplete ' + ROOT + directory);
+    $('#save-progress')
+        .removeClass('active')
+        .removeClass('progress-striped');
     saveMsg('Upload complete');
     var dst = ROOT + directory,
         jqDst = $('li.directory > a[rel="' + dst + '"]');
@@ -471,6 +508,10 @@ function uploadInit(files, dst) {
     ru.allowedTypes = [ 'image/', 'text/html', 'text/css', 'text/javascript',
         'application/x-javascript', 'text/x-python-script' ];
     ru.progress = saveProgress;
+    $('#save-bar').css('width', '0%')
+    $('#save-progress')
+        .addClass('progress-striped')
+        .addClass('active');
     ru.status = uploadStatus;
     ru.complete = uploadComplete;
     trackChanges(false);
@@ -491,11 +532,16 @@ function uploadItems(files, dst) {
     }
 }
 
+// dialog handling
 $('#new-template').click(function () {
     "use strict";
-    $('#overlay-t').css('visibility', 'visible');
-    $('#template-name').focus();
+    $('#modal-t').modal('show')
 });
+
+$('#modal-t').on('shown', function () {
+    "use strict";
+    $('#template-name').focus();
+})
 
 $('#create-template').click(function () {
     "use strict";
@@ -504,21 +550,38 @@ $('#create-template').click(function () {
         $.post('/editor/new_template', { templateName: templateName }, function (response) {
             console.log(response);
             displayTree('/var/www/public/templates/');
-            $('#overlay-t').css('visibility', 'hidden');
+            $('#modal-t').modal('hide')
+        }).error(function (jqXHR, textStatus, errorThrown) {
+            console.log('new_template: ' + textStatus + ': ' + errorThrown);
+            if (errorThrown === 'CONFLICT') {
+                $('#template-message').text('Template exists - please use a different name')
+                    .css('color', 'red');
+            } else {    // 'Bad Request'
+                $('#template-message').text('Template could not be created')
+                    .css('color', 'red');
+            }
+            $('#template-name').focus();
         });
+    } else {
+        $('#template-name').focus();
     }
 });
 
 $('#cancel-template').click(function () {
     "use strict";
-    $('#overlay-t').css('visibility', 'hidden');
+    $('#modal-t').modal('hide')
+    // $('#overlay-t').css('visibility', 'hidden');
 });
 
 $('#new-folder').click(function () {
     "use strict";
-    $('#overlay-f').css('visibility', 'visible');
-    $('#folder-name').focus();
+    $('#modal-f').modal('show')
 });
+
+$('#modal-f').on('shown', function () {
+    "use strict";
+    $('#folder-name').focus();
+})
 
 $('#create-folder').click(function () {
     "use strict";
@@ -527,23 +590,26 @@ $('#create-folder').click(function () {
         $.post('/editor/new_folder', { folderName: folderName }, function (response) {
             console.log(response);
             displayTree('/var/www/public/static/');
-            $('#overlay-f').css('visibility', 'hidden');
+            $('#modal-f').modal('hide')
         }).error(function (jqXHR, textStatus, errorThrown) {
             console.log('new_folder: ' + textStatus + ': ' + errorThrown);
-            if (errorThrown === 'Conflict') {
+            if (errorThrown === 'CONFLICT') {
                 $('#folder-message').text('Folder exists - please use a different name')
                     .css('color', 'red');
             } else {    // 'Bad Request'
                 $('#folder-message').text('Folder could not be created (mkdir returned an error)')
                     .css('color', 'red');
             }
+            $('#folder-name').focus();
         });
+    } else {
+        $('#folder-name').focus();
     }
 });
 
 $('#cancel-folder').click(function () {
     "use strict";
-    $('#overlay-f').css('visibility', 'hidden');
+    $('#modal-f').modal('hide')
 });
 
 function initPreferences () {
@@ -555,20 +621,21 @@ function initPreferences () {
 
 $('#preferences').click(function () {
     "use strict";
-     $('#overlay-p').css('visibility', 'visible');
-     console.log('Preferences ' + JSON.stringify(preferences));
+    $('#reload-bar').css('width', '0%');
+     // $('#overlay-p').css('visibility', 'visible');
+     // console.log('Preferences ' + JSON.stringify(preferences));
 });
 
 $('#cancel-prefs').click(function () {
     "use strict";
-    $('#overlay-p').css('visibility', 'hidden');
-    console.log('Preferences ' + JSON.stringify(preferences));
+     $('#overlay-p').css('visibility', 'hidden');
+     console.log('Preferences ' + JSON.stringify(preferences));
 });
 
 $('#save-yes').click(function () {
     "use strict";
     querySave.status = 3;
-    $('#overlay-s').css('visibility', 'hidden');
+    $('#modal-s').modal('hide')
 });
 
 $('#save-no').click(function () {
@@ -576,13 +643,13 @@ $('#save-no').click(function () {
     querySave.status = 1;
     bFileChanged = false;
     unhighlightChanged();
-    $('#overlay-s').css('visibility', 'hidden');
+    $('#modal-s').modal('hide')
 });
 
 $('#save-cancel').click(function () {
     "use strict";
     querySave.status = 0;
-    $('#overlay-s').css('visibility', 'hidden');
+    $('#modal-s').modal('hide')
 });
 
 $('#revert-yes').click(function () {
@@ -590,32 +657,43 @@ $('#revert-yes').click(function () {
     querySave.status = 1;
     bFileChanged = false;
     unhighlightChanged();
-    $('#overlay-r').css('visibility', 'hidden');
+    $('#modal-r').modal('hide')
 });
 
 $('#revert-cancel').click(function () {
     "use strict";
     querySave.status = 0;
-    $('#overlay-r').css('visibility', 'hidden');
+    $('#modal-r').modal('hide')
 });
-
 
 $('#delete-yes').click(function () {
     "use strict";
     queryDelete.status = 1;
-    $('#overlay-d').css('visibility', 'hidden');
+    $('#modal-d').modal('hide')
 });
 
 $('#delete-cancel').click(function () {
     "use strict";
     queryDelete.status = 0;
-    $('#overlay-d').css('visibility', 'hidden');
+    $('#modal-d').modal('hide')
 });
 
 // Reload pytronics
 $('#reload').click(function () {
     "use strict";
-    $.post('/editor/reload', 'text');
-    $('#reload-progress').css('background-position', '-120px');
-    $('#reload-progress').animate({ 'background-position': 0 }, 10000);
+    $('#reload-bar').css('width', '0%');
+    $.post('/editor/reload', function (response) {
+        $('#reload-progress')
+            .addClass('progress-striped')
+            .addClass('active');
+        $('#reload-bar').animate({ 'width': '100%' }, 10000, function () {
+            $('#reload-progress')
+                .removeClass('active')
+                .removeClass('progress-striped');
+            saveMsg('Reloaded pytronics');
+        });
+    }).error(function (jqXHR, textStatus, errorThrown) {
+        console.log('reload: ' + textStatus + ': ' + errorThrown);
+        saveMsg('Reload pytronics failed');
+    });
 });
