@@ -1,17 +1,26 @@
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html lang="en">
 <head>
+    <meta charset="utf-8">
     <title>Editor</title>
-    <link rel="shortcut icon" href="/editor/static/images/favicon.ico">
-    <!-- <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Droid+Sans|Molengo"> -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="static/images/favicon.ico">
 
+    <link href="static/css/bootstrap-2.0.3.css" rel="stylesheet">
+    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <!-- <link href="../assets/css/bootstrap-responsive.css" rel="stylesheet"> -->
+        
+    <link rel="stylesheet" type="text/css" href="/editor/static/css/editor-all.css">
+    <link rel="stylesheet" type="text/css" href="/editor/static/css/editor.css">
+    <link rel="stylesheet" type="text/css" href="/editor/static/css/jquery.filetree.css">
+    
     <link rel="stylesheet" type="text/css" href="/editor/static/codemirror2/lib/codemirror.css">
     <link rel="stylesheet" type="text/css" href="/editor/static/codemirror2/theme/night.css">
     <link rel="stylesheet" type="text/css" href="/editor/static/codemirror2/theme/blackboard.css">
     
-    <link rel="stylesheet" type="text/css" href="/editor/static/css/editor-all.css">
-    <link rel="stylesheet" type="text/css" href="/editor/static/css/editor.css">
-    <link rel="stylesheet" type="text/css" href="/editor/static/css/jquery.filetree.css">
-
     <script src="/editor/static/codemirror2/lib/codemirror.js"></script>
     <script src="/editor/static/codemirror2/mode/css/css.js"></script>
     <script src="/editor/static/codemirror2/mode/javascript/javascript.js"></script>
@@ -19,130 +28,159 @@
     <script src="/editor/static/codemirror2/mode/htmlmixed/htmlmixed.js"></script>
     <script src="/editor/static/codemirror2/mode/python/python.js"></script>
     
-    <script src="/editor/static/js/jquery-1.7.2.js"></script>
+    <script src="static/js/jquery-1.7.2.js"></script>
     <script src="/editor/static/js/jquery.filetree.js"></script>
     <script src="/editor/static/js/rascal-1.03.js"></script>
+    <script src="static/js/bootstrap-2.0.3.js"></script>
+    
     <style>
         .CodeMirror-scroll {
             /* height: 600px; */
             height: 475px;
-            border: 3px solid #414243;
+            /* border: 3px solid #414243; */
         }
     </style>
 </head>
+
 <body>
-    <div id="topbar">
-        <div class="rascalcontent">
-            <a href="/editor/"><img id="rascallogo" src="/editor/static/images/rm-logo-words-only-light.png"></a>
-            <ul id="nav">
-                <li><a href="/editor/">editor</a> | </li>
-                <li><a href="/editor/log">log</a> | </li>
-                <li><a href="/editor/config">config</a> | </li>
-                <li><a href="/editor/monitor">monitor</a></li>
-            </ul>
-            <div class=metanav>
-                <a href="/editor/logout">log out</a>
+    <div class="navbar navbar-fixed-top">
+        <div class="navbar-inner">
+            <div class="container-fluid">
+                <a class="brand rascal" href="/editor/"><img id="rascallogo" src="/editor/static/images/rm-logo-words-only-light.png" /></a>
+                <div class="nav-collapse rascal">
+                    <ul class="nav_rascal">
+                        <li><a href="/editor/">editor</a> | </li>
+                        <li><a href="/editor/log">log</a> | </li>
+                        <li><a href="/editor/config">config</a> | </li>
+                        <li><a href="/editor/monitor">monitor</a></li>
+                    </ul>
+                    <ul class="nav_rascal">
+                        <li><a href="/editor/logout" class="logout">log out</a></li>
+                    </ul>
+                </div>
             </div>
         </div>
     </div>
-    <div class="rascalcontent">
-        <div id="buttons">
-            <input id="reload" type="button" value="Reload pytronics" class="large red awesome" alt="Reload pytronics">
-            <input id="save" type="button" value="Save" class="large red awesome" alt="Save">
+    
+    <div class="container-fluid">
+        <div class="buttons">
+            <input id="reload" type="button" value="Reload pytronics" class="btn btn-large btn-danger rascal" alt="Reload pytronics">
+            <input id="save" type="button" value="Save" class="btn btn-large btn-danger rascal" alt="Save">
         </div>
-        <div id="progress-bars">
-            <img id="save-progress" src="/editor/static/images/progressbar.gif">
-            <div id="save-message">Saved file</div>
-            <img id="reload-progress" src="/editor/static/images/progressbar.gif">
-        </div>
-        <div id="side-bar">
-            <div id="ft-background" class="night">
-                <div id="filetree"></div>
-            </div>
-            <div id="new-file-folder-bar" class="night">
-                <img id="new-template" src="/editor/static/images/oxygen-new-file-32x32.png" />
-                <img id="new-folder" src="/editor/static/images/oxygen-new-folder-32x32.png" />
-                <img id="preferences" src="/editor/static/images/oxygen-actions-32x32.png" />
-            </div>
-        </div>
-        <div id="editor">
-            <form>
-                <input id="path" type="hidden" name="path" value="{{ path }}">
-                <div id="location-bar" class="night">&nbsp;</div>
-                <div id="textfield">
-                    <textarea id="code" cols="100" rows="120" name="text">{{text_to_edit}}</textarea>
-                    <div id="frame-p" class="frame"></div>
+        <div class="progress-bars">
+            <div class="progress-reload">
+                <div id="reload-progress" class="progress progress-danger rascal">
+                    <div id="reload-bar" class="bar" style="width: 0%;"></div>
                 </div>
-            </form>
+            </div>
+            <div class="progress-save">
+                <div id="save-progress" class="progress progress-danger rascal">
+                    <div id="save-bar" class="bar" style="width: 0%;"></div>
+                </div>
+            </div>
+            <div id="save-message">Saved file</div> 
         </div>
     </div>
 
-    <div id="overlay-t" class="overlay">OVERLAY TEMPLATE
-        <div id="new-template-dialog" class="dialog">
-            Create a new template<br />
-            <div class="small">The name you type should end in .html</div>
-            <fieldset>
-                <input id="template-name" type="text" name="template-name" /><br />
-                <input id="create-template" type="button" value="Create" class="large red awesome" alt="Create" />
-                <input id="cancel-template" type="button" value="Cancel" class="large blue awesome" alt="Cancel" />
-            </fieldset>
+    <div class="container-fluid">
+        <div class="row-fluid">    
+            <div class="span3">
+                  <div class="well sidebar-nav rascal night">
+                        <div id="filetree">&nbsp;</div>
+                  </div><!--/.well -->
+                   <div class="well sidebar-nav rascal night">
+                        <img id="new-template" src="/editor/static/images/oxygen-new-file-32x32.png" />
+                        <img id="new-folder" src="/editor/static/images/oxygen-new-folder-32x32.png" />
+                        <img id="preferences" src="/editor/static/images/oxygen-actions-32x32.png" />
+                  </div><!--/.well -->
+            </div>
+            <div class="span9">
+                <input id="path" type="hidden" name="path" value="{{ path }}">
+                <div id="location-bar" class="well sidebar-nav rascal night">&nbsp;</div>
+                <div id="textfield">
+                    <div class="well sidebar-nav rascal night">
+                        <textarea id="code" cols="100" rows="120" name="text">{{text_to_edit}}</textarea>
+                    </div>
+                    <div id="frame-p" class="frame"></div>
+                </div>
+            </div>
+        </div> <!-- /row -->
+    </div> <!-- /container -->
+
+    <!-- modal dialogues -->
+    <div id="modal-t" class="modal fade hide rascal">
+        <div class="modal-header">
+            <button class="close" data-dismiss="modal">×</button>
+            <h3>Create a new template</h3>
+        </div>
+        <div class="modal-body">
+            <p id="template-message">The name you type should end in .html</p>
+            <input id="template-name" type="text" name="template-name" />
+        </div>
+        <div class="modal-footer">
+            <a id="cancel-template" href="#" class="btn">Cancel</a>
+            <a id="create-template" href="#" class="btn btn-danger">Create template</a>
         </div>
     </div>
-    <div id="overlay-f" class="overlay">OVERLAY FOLDER
-        <div id="new-folder-dialog" class="dialog">
-            Create a new folder in "static"<br />
-            <div id="folder-message" class="small">You will be able to drag it to another folder.</div>
-            <fieldset>
-                <input id="folder-name" type="text" name="folder-name" /><br />
-                <input id="create-folder" type="button" value="Create" class="large red awesome" alt="Create" />
-                <input id="cancel-folder" type="button" value="Cancel" class="large blue awesome" alt="Cancel" />
-            </fieldset>
+
+    <div id="modal-f" class="modal fade hide rascal">
+        <div class="modal-header">
+            <button class="close" data-dismiss="modal">×</button>
+            <h3>Create a new folder in "static"</h3>
+        </div>
+        <div class="modal-body">
+            <p id="folder-message">You will be able to drag it to another folder</p>
+            <input id="folder-name" type="text" name="folder-name" />
+        </div>
+        <div class="modal-footer">
+            <a id="cancel-folder" href="#" class="btn">Cancel</a>
+            <a id="create-folder" href="#" class="btn btn-danger">Create folder</a>
         </div>
     </div>
-    <div id="overlay-p" class="overlay">OVERLAY PREFERENCES
-        <div id="prefs-dialog" class="dialog">
-            CodeMirror Preferences<br />
-            <div id="folder-message" class="small">&nbsp;</div>
-            <fieldset class="medium" style="text-align: left;">
-                <input id="warn-save" type="checkbox" name="warn-delete" />Warn if changes not saved<br />
-                <input id="warn-delete" type="checkbox" name="warn-delete" />Warn before deleting<br />
-                <input id="lineWrapping" type="checkbox" name="lineWrapping" />Wrap lines<br />
-                <input id="lineNumbers" type="checkbox" name="lineNumbers" />Show line numbers<br />
-            </fieldset>
-            <input id="cancel-prefs" type="button" value="OK" class="large red awesome" alt="Cancel" />
+
+    <div id="modal-s" class="modal fade hide rascal">
+        <div class="modal-header">
+            <button class="close" data-dismiss="modal">×</button>
+            <h3>Save file</h3>
+        </div>
+        <div class="modal-body">
+            <p id="save-file-message">&nbsp;</p>
+        </div>
+        <div class="modal-footer">
+            <a id="save-no" href="#" class="btn btn-warning">Don't Save</a>
+            <a id="save-cancel" href="#" class="btn">Cancel</a>
+            <a id="save-yes" href="#" class="btn btn-danger">Save</a>
         </div>
     </div>
-    <div id="overlay-s" class="overlay">OVERLAY SAVE
-        <div id="save-file-dialog" class="dialog wide">
-            Save file<br />
-            <div id="save-file-message" class="small">&nbsp;</div>
-            <fieldset>
-                <input id="save-no" type="button" value="Don't Save" class="large blue awesome" alt="Don't Save" />
-                <input id="save-cancel" type="button" value="Cancel" class="large blue awesome" alt="Cancel" />
-                <input id="save-yes" type="button" value="Save" class="large red awesome" alt="Save" />
-            </fieldset>
+
+    <div id="modal-r" class="modal fade hide rascal">
+        <div class="modal-header">
+            <button class="close" data-dismiss="modal">×</button>
+            <h3>Revert file</h3>
+        </div>
+        <div class="modal-body">
+            <p id="revert-file-message">&nbsp;</p>
+        </div>
+        <div class="modal-footer">
+            <a id="revert-cancel" href="#" class="btn">Cancel</a>
+            <a id="revert-yes" href="#" class="btn btn-warning">Revert</a>
         </div>
     </div>
-     <div id="overlay-r" class="overlay">OVERLAY REVERT
-        <div id="save-file-dialog" class="dialog">
-            Revert file<br />
-            <div id="revert-file-message" class="small">&nbsp;</div>
-            <fieldset>
-                <input id="revert-yes" type="button" value="Revert" class="large red awesome" alt="Revert" />
-                <input id="revert-cancel" type="button" value="Cancel" class="large blue awesome" alt="Cancel" />
-            </fieldset>
+
+    <div id="modal-d" class="modal fade hide rascal">
+        <div class="modal-header">
+            <button class="close" data-dismiss="modal">×</button>
+            <h3>Delete a file or folder</h3>
+        </div>
+        <div class="modal-body">
+            <p id="delete-file-message">&nbsp;</p>
+        </div>
+        <div class="modal-footer">
+            <a id="delete-cancel" href="#" class="btn">Cancel</a>
+            <a id="delete-yes" href="#" class="btn btn-danger">Delete</a>
         </div>
     </div>
-   <div id="overlay-d" class="overlay">OVERLAY DELETE
-        <div id="delete-file-dialog" class="dialog">
-            Delete file or folder<br />
-            <div id="delete-file-message" class="small">&nbsp;</div>
-            <fieldset>
-                <input id="delete-yes" type="button" value="Delete" class="large red awesome" alt="Delete" />
-                <input id="delete-cancel" type="button" value="Cancel" class="large blue awesome" alt="Cancel" />
-            </fieldset>
-        </div>
-    </div>
+    <!-- /modal dialogues -->
 
     <script src="/editor/static/js/editor-resize.js"></script>
     <script src="/editor/static/js/editor-cm.js"></script>
@@ -167,8 +205,9 @@
                 dw = (w > (1260 + XW)) ? w - (1260 + XW) : 0;
                 dh = (h > (637 + XH)) ? h - (637 + XH) : 0;
                 console.log('resize ' + dw + ' x ' + dh);
-                $('.rascalcontent').width(1260 + dw);
-                $('#filetree').height(460 + dh);
+                // $('.rascalcontent').width(1260 + dw);
+                // $('#filetree').height(460 + dh);
+                $('#filetree').height(461 + dh);
                 $('.CodeMirror-scroll').height(475 + dh);
                 if (rascal.picture.showing) {
                     $('#frame-p')
@@ -192,5 +231,6 @@
             });
         });
     </script>
-</body>
+
+  </body>
 </html>
