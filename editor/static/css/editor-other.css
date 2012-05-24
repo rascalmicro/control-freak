@@ -1,5 +1,5 @@
 body {
-    line-height: 1.4em;
+    /* line-height: 1.4em; */
 }
 
 .centered {
@@ -11,6 +11,7 @@ body {
 .zebra {
     font-size: 0.8em;
     line-height: 2em;
+    width: 100%;
 }
 
 .log-display {

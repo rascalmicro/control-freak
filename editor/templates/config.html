@@ -1,8 +1,17 @@
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html lang="en">
 <head>
+    <meta charset="utf-8">
     <title>Config</title>
-    <!-- <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Droid+Sans|Molengo"> -->
-    <link rel="shortcut icon" href="/editor/static/images/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="static/images/favicon.ico">
+    
+    <link href="static/css/bootstrap-2.0.3.css" rel="stylesheet">
+    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <!-- <link href="../assets/css/bootstrap-responsive.css" rel="stylesheet"> -->
     
     <link rel="stylesheet" type="text/css" href="/editor/static/css/editor-all.css">
     <link rel="stylesheet" type="text/css" href="/editor/static/css/editor-other.css">
@@ -13,85 +22,83 @@
     </style>
 </head>
 <body>
-    <div id="topbar">
-        <div class="rascalcontent">
-            <a href="/editor/"><img id="rascallogo" src="/editor/static/images/rm-logo-words-only-light.png"></a>
-            <ul id="nav">
-                <li><a href="/editor/">editor</a> | </li>
-                <li><a href="/editor/log">log</a> | </li>
-                <li><a href="/editor/config">config</a> | </li>
-                <li><a href="/editor/monitor">monitor</a></li>
-            </ul>
-            <div class=metanav>
-                <a href="/editor/logout">log out</a>
+    <div class="navbar navbar-fixed-top">
+        <div class="navbar-inner">
+            <div class="container-fluid">
+                <a class="brand rascal" href="/editor/"><img id="rascallogo" src="/editor/static/images/rm-logo-words-only-light.png" /></a>
+                <div class="nav-collapse rascal">
+                    <ul class="nav_rascal">
+                        <li><a href="/editor/">editor</a> | </li>
+                        <li><a href="/editor/log">log</a> | </li>
+                        <li><a href="/editor/config">config</a> | </li>
+                        <li><a href="/editor/monitor">monitor</a></li>
+                    </ul>
+                    <ul class="nav_rascal">
+                        <li><a href="/editor/logout" class="logout">log out</a></li>
+                    </ul>
+                </div>
             </div>
         </div>
     </div>
-    <div class="rascalcontent">
-        <div class=page>
+    <div class="container-fluid">
+        <div class=page>&nbsp;
           {% for message in get_flashed_messages() %}
             <div class=flash>{{ message }}</div>
           {% endfor %}
         </div>
+        
         <p>Some useful configuration info:</p>
-        <pre>
+        
+        <pre style="background-color: #F5F5F5">
 {{ processes }}
         </pre>
         <hr />
-        <table width="100%">
-        <tr valign="top">
-        <td width="48%">
-        <p>A weapon of mass destruction:</p>
-        <form>
-            <input id="reset" type="button" value="Destroy all my work" class="large red awesome" alt="Destroy all my work">
-        </form>
-        <p>If you click the "Destroy all my work" button, all the changes you've made to your Rascal's web interface will be deleted.</p>
-        <p>(What this really does is to return the Git repository in /var/www to its last committed state.)</p></td>
-        <td width="4%">&nbsp;</td>
-        <td>
-        <p>Choose editor:</p>
-        <div class="Tabs segmentedControlBase" style="width: 450px;">
-            <input id="editor-cm" type="button" class="button segmentedControl selected" value="CodeMirror 2" />
-             <input id="editor-bs" type="button" class="button segmentedControl selected" value="Bootstrap" />
-           <input id="editor-a" type="button" class="button segmentedControl" value="Ace" />
-        </div>
-        <div class="TabPanels">
-            <div id="editor-cm-desc" class="tabPanel selected">
-                <p><a href="http://codemirror.net/" name="CodeMirror" title="CodeMirror" target="_editor">{} CodeMirror /* In-browser code editing made bearable */</a><br />
-                CodeMirror is a JavaScript library that can be used to create a relatively
-                pleasant editor interface for code-like content ― computer programs, HTML markup and similar.
-                If a mode has been written for the language you are editing, the code will be coloured and
-                the editor will optionally help you with indentation.<br />
-                <a href="static/codemirror2/index.html" name="CodeMirror2" title="CodeMirror2" target="_editor">documentation</a>
-                </p>
-            </div>
-             <div id="editor-bs-desc" class="tabPanel selected">
-                <p><a href="http://codemirror.net/" name="CodeMirror" title="CodeMirror" target="_editor">CodeMirror in Twitter Bootstrap</a><br />
-                CodeMirror is a JavaScript library that can be used to create a relatively
-                pleasant editor interface for code-like content ― computer programs, HTML markup and similar.
-                If a mode has been written for the language you are editing, the code will be coloured and
-                the editor will optionally help you with indentation.<br />
-                <a href="static/codemirror2/index.html" name="CodeMirror2" title="CodeMirror2" target="_editor">documentation</a>
-                </p>
-            </div>
-           <div id="editor-a-desc" class="tabPanel">
-                <p><a href="http://ace.ajax.org/" name="Ace" title="Ace" target="_editor">Ajax.org Cloud9 Editor</a><br />
-                Ace is a standalone code editor written in JavaScript.
-                The goal is to create a web based code editor that matches and extends the features, usability and
-                performance of existing native editors such as TextMate, Vim or Eclipse.
-                Ace is developed as the primary editor for Cloud9 IDE and the successor of the Mozilla Skywriter (Bespin) Project.<br />
-                <a href="https://github.com/ajaxorg/ace/wiki" name="Ace wiki" title="Ace wiki" target="_editor">wiki</a> |
-                <a href="https://github.com/ajaxorg/ace/wiki/Default-Keyboard-Shortcuts" name="Keyboard shortcuts" title="keyboard shortcuts" target="_editor">keyboard shortcuts</a> |
-                <a href="static/ace/build/kitchen-sink.html" name="kitchen sink demo" title="kitchen sink demo" target="_editor">kitchen sink demo</a>
-                </p>
-            </div>
-        </div>
-        </td></tr></table>
     </div>
+    
+    <div class="container-fluid">
+        <div class="row-fluid">    
+            <div class="span6">
+                <p>A weapon of mass destruction:</p>
+                <form>
+                    <input id="reset" type="button" value="Destroy all my work" class="btn btn-large btn-danger rascal" alt="Destroy all my work">
+                </form>
+                <p>If you click the "Destroy all my work" button, all the changes you've made to your Rascal's web interface will be deleted.</p>
+                <p>(What this really does is to return the Git repository in /var/www to its last committed state.)</p></td>
+            </div>
+            <div class="span6">
+                <p>Choose editor:</p>
+                <div class="Tabs segmentedControlBase" style="width: 300px;">
+                    <input id="editor-cm" type="button" class="button segmentedControl selected" value="CodeMirror 2" />
+                    <input id="editor-a" type="button" class="button segmentedControl" value="Ace" />
+                </div>
+                <div class="TabPanels">
+                    <div id="editor-cm-desc" class="tabPanel selected">
+                        <p><a href="http://codemirror.net/" name="CodeMirror" title="CodeMirror" target="_editor">{} CodeMirror /* In-browser code editing made bearable */</a><br />
+                        CodeMirror is a JavaScript library that can be used to create a relatively
+                        pleasant editor interface for code-like content ― computer programs, HTML markup and similar.
+                        If a mode has been written for the language you are editing, the code will be coloured and
+                        the editor will optionally help you with indentation.<br />
+                        <a href="static/codemirror2/index.html" name="CodeMirror2" title="CodeMirror2" target="_editor">documentation</a>
+                        </p>
+                    </div>
+                   <div id="editor-a-desc" class="tabPanel">
+                        <p><a href="http://ace.ajax.org/" name="Ace" title="Ace" target="_editor">Ajax.org Cloud9 Editor</a><br />
+                        Ace is a standalone code editor written in JavaScript.
+                        The goal is to create a web based code editor that matches and extends the features, usability and
+                        performance of existing native editors such as TextMate, Vim or Eclipse.
+                        Ace is developed as the primary editor for Cloud9 IDE and the successor of the Mozilla Skywriter (Bespin) Project.<br />
+                        <a href="https://github.com/ajaxorg/ace/wiki" name="Ace wiki" title="Ace wiki" target="_editor">wiki</a> |
+                        <a href="https://github.com/ajaxorg/ace/wiki/Default-Keyboard-Shortcuts" name="Keyboard shortcuts" title="keyboard shortcuts" target="_editor">keyboard shortcuts</a> |
+                        <a href="static/ace/build/kitchen-sink.html" name="kitchen sink demo" title="kitchen sink demo" target="_editor">kitchen sink demo</a>
+                        </p>
+                    </div>
+                </div>
+            </div>        
+        </div> <!-- /row-fluid -->
+    </div> <!-- /container-fluid -->
+    
     <div id="editor" style="display: none;">{{ editor }}</div>
     
-    <script src="/editor/static/js/editor-resize.js"></script>
-    <script src="/editor/static/js/editor-other.js"></script>
     <script type="text/javascript">
         $("#reset").click( function() {
             $.post("/editor/reset", "text");
@@ -123,12 +130,6 @@
 
         $(document).ready(function () {
             selectEditor($('#editor').text());
-            adjustGeometry();
-            $(window).resize(function () {
-                resizeDelay(function () {
-                    adjustGeometry();
-                }, 500);
-            });
         });
     </script>
 </body>

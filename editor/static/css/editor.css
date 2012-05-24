@@ -1,16 +1,47 @@
 /* This file is specific to the editor page */
 
 /* buttons and progress-bars */
-#progress-bars {
-    line-height: 1.4em;
+.buttons {
+    padding: 4px 0;
 }
 
-#save-progress {
+#save {
     width: 120px;
-    background-image: url("/editor/static/images/progressbg_red.gif");
-    background-position: -120px;
-    margin-top: 5px;
-    display: inline;
+}
+
+#reload {
+    float: right;
+    width: 160px;
+}
+
+.progress-bars {
+}
+
+.progress-save {
+    float: left;
+    margin-top: 5px; 
+    width: 120px;
+    padding-right: 5px;
+}
+
+.progress-reload {
+    float: right;
+    width: 160px;
+    margin-top: 5px; 
+}
+
+.progress.rascal {
+    height: 10px;
+    margin-bottom: 8px;
+}
+
+/* http://stackoverflow.com/questions/9622043/turn-off-bootstraps-css3-transitions-on-progress-bars */
+.progress.rascal .bar {
+    -webkit-transition: none;
+    -moz-transition: none;
+    -ms-transition: none;
+    -o-transition: none;
+    transition: none;
 }
 
 #save-message {
@@ -22,37 +53,39 @@
     color: red;
 }
 
-#reload {
-    float: right;
-    clear: none;
-    width: 160px;
-}
-
-#reload-progress {
-    float: right;
-    width: 120px;
-    background-image: url("/editor/static/images/progressbg_red.gif");
-    background-position: -120px;
-    margin-top: 5px;
-}
-
 /* sidebar */
-#side-bar {
-    float: left;
+.well.rascal {
+    padding: 3px;
+    margin-bottom: 5px;
+    border: 3px solid #424242;
+    -moz-box-shadow: 0 0 3px #3A3A3A;
+    -webkit-box-shadow: 0 0 3px #3A3A3A;
+    box-shadow: 0 0 3px #3A3A3A;
 }
 
-/* This puts filetree border in ft-background, saving 1px all round */
-#ft-background {
-    border: 2px solid #414243;
-    width: 352px;
+.row-fluid [class*="span"] {
+/* 
+  margin-left: 2.127659574%;
+  *margin-left: 2.0744680846382977%;
+ */
+  margin-left: 1.127659574%;
+  *margin-left: 1.0744680846382977%;
 }
 
-/* padding-right to limit width of selection highlight */
+.row-fluid .span9 {
+/* 
+  width: 74.468085099%;
+  *width: 74.4148936096383%;
+ */
+  width: 75.468085099%;
+  *width: 75.4148936096383%;
+}
+
 #filetree {
     padding: 0 10px 0 0;
-    border: 1px solid #414243;
-    /* height: 585px; */
-    height: 460px;
+    /* border: 1px solid #414243; */
+    border: 1px solid #0A001F;
+    height: 461px;
     overflow: auto;
 }
 
@@ -67,27 +100,20 @@ a[draggable=true] {
     cursor: move;
 }
 
-#new-file-folder-bar {
-    margin-top: 3px;
-    padding: 5px;
-    border: 3px solid #414243;
-    height: 32px;
-}
-
 #preferences {
     float: right;
 }
 
 /* editor */
 #location-bar {
-    margin-left: 363px;
-    margin-right: 3px;
-    padding: 3px;
-    border: 3px solid #414243;
+    padding-left: 8px;
+}
+
+#location-bar.changed {
+    color: #EF4A42;
 }
 
 #location-bar a {
-    /* color: #EF4A42; */
     color: #F8F8F8;
 }
 
@@ -97,55 +123,23 @@ a[draggable=true] {
 
 #textfield {
     position: relative;
-    margin-left: 360px;
-    padding: 3px;
+    /* margin-left: 360px; */
+    padding: 0px;
 }
 
 .frame {
     position: absolute;
     visibility: hidden;
-    top:  3px;
+    top: 3px;
     left: 3px;
-    background-color: #818283;
-    border: 3px solid #414243;
+    background-color: #828282;
+    border: 3px solid #424242; 
     -moz-box-shadow: 0 0 22px #111;
     -webkit-box-shadow: 0 0 22px #111;
     box-shadow: 0 0 22px #111;
     z-index: 1000;
 }
 
-/* overlays */
-.overlay {
-    visibility: hidden;
-    position: absolute;
-    left: 0;
-    top: 0;
-    width:100%;
-    height:100%;
-    text-align:center;
-    z-index: 1000;
-}
-
-.dialog {
-    width: 300px;
-    margin: 300px auto 0;
-    background-color: #414243;
-    border: 3px solid #616263;
-    padding:15px;
-}
-
-.dialog.wide {
-    width: 420px;
-}
-
-.small.left {
-    text-align: left;
-}
-
-input[type="checkbox"] {
-    width: 16px;
-}
-
-#template-name {
-    width: 250px;
+.modal.rascal {
+    color: #333;
 }
