@@ -408,8 +408,9 @@ def set_editor():
 def monitor():
     try:
         import subprocess
-        process_list = subprocess.Popen('ps', stdout=subprocess.PIPE).communicate()[0].split('\n')
+        process_list = subprocess.Popen(['ps', '-ww'], stdout=subprocess.PIPE).communicate()[0].split('\n')
         table = '</td></tr>\n<tr><td>'.join(process_list).replace(' ', '&nbsp;')
+        print table
         return render_template('monitor.html', processes=table)
     except TemplateNotFound:
         abort(404)
