@@ -376,7 +376,7 @@ def config():
     try:
         import subprocess
         process_table = subprocess.Popen('ifconfig', stdout=subprocess.PIPE)
-        return render_template('config.html', processes=process_table.communicate()[0], editor=editor)
+        return render_template('config.html', processes=(process_table.communicate()[0]).strip(), editor=editor)
     except TemplateNotFound:
         abort(404)
 
