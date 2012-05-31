@@ -6,6 +6,7 @@ from jinja2 import TemplateNotFound
 from werkzeug import secure_filename
 
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif', 'ico', 'html', 'css', 'js', 'py'])
+CONFIG_FILE = '/var/www/editor/static/editor.conf'
 
 editor = Flask(__name__)
 
@@ -87,6 +88,7 @@ def auth():
 @editor.route("/editor/reauth", methods=["GET", "POST"])
 @login_required
 def reauth():
+    print '## REAUTH ##'
     if request.method == "POST":
         confirm_login()
         flash(u"Reauthenticated.")
@@ -111,8 +113,6 @@ def start_edit():
     try:
         if os.path.exists(root + 'editor-a'):
             return render_template('editor-a.html', text_to_edit='Ace: No file selected')
-        elif os.path.exists(root + 'editor-bs'):
-            return render_template('editor-bs.html', text_to_edit='CodeMirror2 in Twitter Bootstrap')
         else:
             return render_template('editor-cm.html', text_to_edit='CodeMirror2: No file selected')
     except TemplateNotFound:
@@ -307,6 +307,56 @@ def reload():
         return 'Bad request', 400
     return 'OK', 200
 
+# Save prefs in editor.config
+@editor.route('/editor/save_prefs', methods=['POST'])
+@login_required
+def save_prefs():
+    import json, ConfigParser
+    try:
+        section = request.form['section']
+        prefs = json.loads(request.form['prefs'])
+        config = ConfigParser.SafeConfigParser()
+        config.optionxform = str    # Don't convert to lower case
+        config.read(CONFIG_FILE)
+        if not config.has_section(section):
+            config.add_section(section)
+        for k, v in prefs.iteritems():
+            config.set(section, k, str(v))
+        with open(CONFIG_FILE, 'wb') as configfile:
+            config.write(configfile)
+    except Exception, e:
+        print '## save_prefs ## Unexpected error: %s' % str(e)
+        return 'Bad request', 400
+    return 'OK', 200
+
+# Read prefs, returning data of the requested types (int, float, boolean or string)
+# If file or section or an option doesn't exist, return default  
+@editor.route('/editor/read_prefs', methods=['POST'])
+@login_required
+def read_prefs():
+    import json, ConfigParser
+    section = request.form['section']
+    types = json.loads(request.form['types'])
+    defaults = json.loads(request.form['defaults'])
+    config = ConfigParser.SafeConfigParser()
+    config.read(CONFIG_FILE)
+    d = {}
+    for k, v in types.iteritems():
+        try:
+            if v == 'int':
+                d[k] = config.getint(section, k)
+            elif v == 'float':
+                d[k] = config.getfloat(section, k)
+            elif v == 'boolean':
+                d[k] = config.getboolean(section, k)
+            else:
+                d[k] = config.get(section, k)
+        except (ConfigParser.NoSectionError, ConfigParser.NoOptionError):
+            d[k] = defaults[k]
+        except Exception, e:
+            print '## read_prefs ## Unexpected error: %s' % str(e)
+    return json.dumps(d)
+
 ## log page functions
 def tail(f, n, offset=None):
     """Reads a n lines from f with an offset of offset lines.  The return
@@ -369,8 +419,6 @@ def config():
     root = '/var/www/editor/.'
     if os.path.exists(root + 'editor-a'):
         editor = 'editor-a'
-    elif os.path.exists(root + 'editor-bs'):
-        editor = 'editor-bs'
     else:
         editor = 'editor-cm'
     try:

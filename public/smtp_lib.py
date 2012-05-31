@@ -56,7 +56,7 @@ def sendmail(sender, recipients, subject, body):
             result = (1, 'The server didn\'t accept the sender')
         except smtplib.SMTPAuthenticationError:
             result = (1, 'The server didn\'t accept the login/password')
-        except SMTPDataError:
+        except smtplib.SMTPDataError:
             result = (1, 'The server replied with an unexpected error code')
         except:
             result = (1, 'Unexpected error')
