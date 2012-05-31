@@ -612,24 +612,27 @@ $('#cancel-folder').click(function () {
     $('#modal-f').modal('hide')
 });
 
-function initPreferences () {
-    "use strict";
-    getPreferences();
-    // Save and Delete warnings in this file
-    bindEditPreferences();
-}
-
 $('#preferences').click(function () {
     "use strict";
-    $('#reload-bar').css('width', '0%');
-     // $('#overlay-p').css('visibility', 'visible');
-     // console.log('Preferences ' + JSON.stringify(preferences));
+    $('#modal-p').modal('show')
+    console.log('Preferences ' + JSON.stringify(preferences));
 });
 
-$('#cancel-prefs').click(function () {
+$('#prefs-save').click(function () {
     "use strict";
-     $('#overlay-p').css('visibility', 'hidden');
-     console.log('Preferences ' + JSON.stringify(preferences));
+    $('#modal-p').modal('hide')
+    savePreferences();
+});
+
+$('#prefs-cancel').click(function () {
+    "use strict";
+    $('#modal-p').modal('hide')
+    initPreferences();    
+});
+
+$('#prefs-defaults').click(function () {
+    "use strict";
+    defaultPreferences();    
 });
 
 $('#save-yes').click(function () {

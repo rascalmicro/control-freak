@@ -85,7 +85,7 @@
     padding: 0 10px 0 0;
     /* border: 1px solid #414243; */
     border: 1px solid #0A001F;
-    height: 461px;
+    height: 455px;
     overflow: auto;
 }
 
@@ -123,15 +123,16 @@ a[draggable=true] {
 
 #textfield {
     position: relative;
-    /* margin-left: 360px; */
     padding: 0px;
+    color: #000;
+    background-color: #FFF;
 }
 
 .frame {
     position: absolute;
     visibility: hidden;
-    top: 3px;
-    left: 3px;
+    top: 0;
+    left: 0;
     background-color: #828282;
     border: 3px solid #424242; 
     -moz-box-shadow: 0 0 22px #111;

@@ -18,9 +18,19 @@
     <link rel="stylesheet" type="text/css" href="/editor/static/css/jquery.filetree.css">
     
     <link rel="stylesheet" type="text/css" href="/editor/static/codemirror2/lib/codemirror.css">
-    <link rel="stylesheet" type="text/css" href="/editor/static/codemirror2/theme/night.css">
+    <link rel="stylesheet" type="text/css" href="/editor/static/codemirror2/theme/ambiance.css">
     <link rel="stylesheet" type="text/css" href="/editor/static/codemirror2/theme/blackboard.css">
-    
+    <link rel="stylesheet" type="text/css" href="/editor/static/codemirror2/theme/cobalt.css">
+    <link rel="stylesheet" type="text/css" href="/editor/static/codemirror2/theme/eclipse.css">
+    <link rel="stylesheet" type="text/css" href="/editor/static/codemirror2/theme/elegant.css">
+    <link rel="stylesheet" type="text/css" href="/editor/static/codemirror2/theme/erlang-dark.css">
+    <link rel="stylesheet" type="text/css" href="/editor/static/codemirror2/theme/lesser-dark.css">
+    <link rel="stylesheet" type="text/css" href="/editor/static/codemirror2/theme/monokai.css">
+    <link rel="stylesheet" type="text/css" href="/editor/static/codemirror2/theme/neat.css">
+    <link rel="stylesheet" type="text/css" href="/editor/static/codemirror2/theme/night.css">
+    <link rel="stylesheet" type="text/css" href="/editor/static/codemirror2/theme/rubyblue.css">
+    <link rel="stylesheet" type="text/css" href="/editor/static/codemirror2/theme/xq-dark.css">
+
     <script src="/editor/static/codemirror2/lib/codemirror.js"></script>
     <script src="/editor/static/codemirror2/mode/css/css.js"></script>
     <script src="/editor/static/codemirror2/mode/javascript/javascript.js"></script>
@@ -34,10 +44,39 @@
     <script src="static/js/bootstrap-2.0.3.js"></script>
     
     <style>
+        .CodeMirror {
+            font-size: 13px;
+            line-height: 1.2em;
+            border: 3px solid #424242;
+            -moz-box-shadow: 0 0 3px #3A3A3A;
+            -webkit-box-shadow: 0 0 3px #3A3A3A;
+            box-shadow: 0 0 3px #3A3A3A;
+        }
+        
         .CodeMirror-scroll {
             /* height: 600px; */
             height: 475px;
-            /* border: 3px solid #414243; */
+        }
+        
+        .form-horizontal .control-group.rascal {
+            margin-bottom: 9px;
+        }
+        
+        .help-inline.rascal {
+            font-size: 13px;
+        }
+        
+        .visibleTabs .cm-tab:after {
+            content: "\21e5";
+            display: -moz-inline-block;
+            display: -webkit-inline-block;
+            display: inline-block;
+            /* display:none; */
+            width: 0px;
+            position: relative;
+            overflow: visible;
+            left: -1.4em;
+            color: #aaa;
         }
     </style>
 </head>
@@ -98,9 +137,7 @@
                 <input id="path" type="hidden" name="path" value="{{ path }}">
                 <div id="location-bar" class="well sidebar-nav rascal night">&nbsp;</div>
                 <div id="textfield">
-                    <div class="well sidebar-nav rascal night">
-                        <textarea id="code" cols="100" rows="120" name="text">{{text_to_edit}}</textarea>
-                    </div>
+                    <textarea id="code" cols="100" rows="120" name="text">{{text_to_edit}}</textarea>
                     <div id="frame-p" class="frame"></div>
                 </div>
             </div>
@@ -180,6 +217,96 @@
             <a id="delete-yes" href="#" class="btn btn-danger">Delete</a>
         </div>
     </div>
+    
+    <div id="modal-p" class="modal fade hide rascal">
+        <div class="modal-header">
+            <button class="close" data-dismiss="modal">×</button>
+            <h3>CodeMirror Preferences</h3>
+        </div>
+        <div class="modal-body">
+            <form class="form-horizontal">
+                <fieldset>
+                    <div class="control-group rascal">
+                        <label class="control-label" for="theme">Theme</label>
+                        <div class="controls">
+                            <select id="theme" class="span2">
+                                <option selected="selected">default</option>
+                                <option>ambiance</option>
+                                <option>blackboard</option>
+                                <option>cobalt</option>
+                                <option>eclipse</option>
+                                <option>elegant</option>
+                                <option>erlang-dark</option>
+                                <option>lesser-dark</option>
+                                <option>monokai</option>
+                                <option>neat</option>
+                                <option>night</option>
+                                <option>rubyblue</option>
+                                <option>xq-dark</option>
+                            </select>
+                        </div> <!-- controls -->
+                    </div> <!-- control-group -->
+                    <div class="control-group rascal">
+                        <label class="control-label" for="fontSize">Font size</label>
+                        <div class="controls">
+                            <input id="fontSize" type="number" value="12" min="9" max="72" class="span1" />
+                            <span class="help-inline rascal">9-72 px</span>
+                        </div> <!-- controls -->
+                    </div> <!-- control-group -->
+                    <div class="control-group rascal">
+                        <label class="control-label" for="lineHeight">Line height</label>
+                        <div class="controls">
+                            <input id="lineHeight" type="number" value="1.2" min="1.0" max="6.0" step="0.1" class="span1" />
+                            <span class="help-inline rascal">1.0-6.0 em</span>
+                        </div> <!-- controls -->
+                    </div> <!-- control-group -->
+                    <div class="control-group rascal">
+                        <label class="control-label" for="tabSize">Tab size</label>
+                        <div class="controls">
+                            <input id="tabSize" type="number" value="4" min="1" max="64" class="span1" />
+                            <span class="help-inline rascal">width of a tab character</span>
+                        </div> <!-- controls -->
+                    </div> <!-- control-group -->
+                    <div class="control-group rascal">
+                        <div class="controls">
+                            <label class="checkbox">
+                                <input id="softTabs" type="checkbox" name="softTabs" />Soft tabs
+                            </label>
+                            <label class="checkbox">
+                                <input id="visibleTabs" type="checkbox" name="visibleTabs" />Visible tabs
+                            </label>
+                        </div> <!-- controls -->
+                    </div> <!-- control-group -->
+                    <div class="control-group rascal">
+                        <label class="control-label" for="indentUnit">Indent size</label>
+                        <div class="controls">
+                            <input id="indentUnit" type="number" value="2" min="0" max="64" class="span1" />
+                            <span class="help-inline rascal">additional spaces to indent a block</span>
+                        </div> <!-- controls -->
+                    </div> <!-- control-group -->
+                    <div class="control-group rascal">
+                        <label class="control-label" for="lineNumbers">Options</label>
+                        <div class="controls">
+                            <label class="checkbox">
+                                <input id="lineNumbers" type="checkbox" name="lineNumbers" />Show line numbers
+                            </label>
+                            <label class="checkbox">
+                                <input id="lineWrapping" type="checkbox" name="lineWrapping" />Wrap lines
+                            </label>
+                            <label class="checkbox">
+                                <input id="matchBrackets" type="checkbox" name="matchBrackets" />Match brackets
+                            </label>
+                        </div> <!-- controls -->
+                    </div> <!-- control-group -->
+                </fieldset>
+            </form>
+        </div> <!-- /modal-body -->
+        <div class="modal-footer">
+            <a id="prefs-defaults" href="#" class="btn btn-warning">Restore Defaults</a>
+            <a id="prefs-cancel" href="#" class="btn">Cancel</a>
+            <a id="prefs-save" href="#" class="btn btn-danger">Save</a>
+        </div>
+    </div>
     <!-- /modal dialogues -->
 
     <script src="/editor/static/js/editor-resize.js"></script>
@@ -207,7 +334,7 @@
                 console.log('resize ' + dw + ' x ' + dh);
                 // $('.rascalcontent').width(1260 + dw);
                 // $('#filetree').height(460 + dh);
-                $('#filetree').height(461 + dh);
+                $('#filetree').height(455 + dh);
                 $('.CodeMirror-scroll').height(475 + dh);
                 if (rascal.picture.showing) {
                     $('#frame-p')

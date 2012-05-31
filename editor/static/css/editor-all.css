@@ -3,7 +3,7 @@ body {
     padding-bottom: 0;
     font-family: "Molengo","URW Gothic L",sans-serif;
     font-size: 1em;
-    /* line-height: 1.4em; */
+    line-height: 1.2em;
     color: #F8F8F8;
     background-color: #666;
 }
@@ -69,7 +69,8 @@ p {
 }
 
 .night { 
-    background-color: #0A001F;
+   /*  background-color: #0A001F; */
+    background-color: #0C1021; /* blackboard */
 }
 
 @font-face {
