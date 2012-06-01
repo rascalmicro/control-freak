@@ -1,10 +1,75 @@
 // Support for ACE
 
+var prefs = {
+    defaults: {
+        theme: 'textmate',
+        fontSize: 12,
+        lineHeight: 1.4,
+        tabSize: 4,
+        softTabs: true,
+        visibleTabs: false,
+        lineWrapping: 0,
+        lineNumbers: false,
+        matchBrackets: false,
+        highlightSelectedWord: false
+    },
+    types: {
+        theme: 'string',
+        fontSize: 'int',
+        lineHeight: 'float',
+        tabSize: 'int',
+        softTabs: 'boolean',
+        visibleTabs: 'boolean',
+        lineWrapping: 'int',
+        lineNumbers: 'boolean',
+        matchBrackets: 'boolean',
+        highlightSelectedWord: 'boolean'
+    },
+    apply: {
+        theme: applyTheme,
+        fontSize: applyFontSize,
+        lineHeight: applyLineHeight,
+        tabSize: applyTabSize,
+        softTabs: applySoftTabs,
+        visibleTabs: applyVisibleTabs,
+        lineWrapping: applyLineWrapping,
+        lineNumbers: applyLineNumbers,
+        matchBrackets: applyMatchBrackets,
+        highlightSelectedWord: applyHighlightSelectedWord
+    }
+};
+
 function setPictureFrameSize (frp) {
     "use strict";
     frp.height($('#ace-editor').height())
         .width($('#ace-editor').width());
 }
+
+function initEditor() {
+    trackChanges(false);
+    editor = ace.edit("ace-editor");
+    editor.setTheme("ace/theme/textmate");
+    editorSetMode('txt');
+    editor.getSession().on('change', fileChanged);
+}
+
+// Manage preferences
+// if (!session.getUseWrapMode()) {
+//     wrapModeEl.value = "off";
+// } else {
+//     wrapModeEl.value = session.getWrapLimitRange().min || "free";
+// }
+// 
+// selectStyleEl.checked = editor.getSelectionStyle() == "line";
+// themeEl.value = editor.getTheme();
+// highlightActiveEl.checked = editor.getHighlightActiveLine();
+// showHiddenEl.checked = editor.getShowInvisibles();
+// showGutterEl.checked = editor.renderer.getShowGutter();
+// showPrintMarginEl.checked = editor.renderer.getShowPrintMargin();
+// highlightSelectedWordE.checked = editor.getHighlightSelectedWord();
+// showHScrollEl.checked = editor.renderer.getHScrollBarAlwaysVisible();
+// softTabEl.checked = session.getUseSoftTabs();
+// behavioursEl.checked = editor.getBehavioursEnabled();
 
 function editorSetMode(ext) {
     "use strict";
@@ -52,90 +117,229 @@ function editorGetText () {
     return editor.getSession().getValue();
 }
 
-function initEditor() {
-    trackChanges(false);
-    editor = ace.edit("ace-editor");
-    editor.setTheme("ace/theme/textmate");
-    // editor.setTheme("ace/theme/cobalt");
-    editorSetMode('txt');
-    editor.setShowPrintMargin(false);
-    editor.getSession().setUseWrapMode(true);
-    editor.getSession().setWrapLimitRange(null, null);
-//     editor.getSession().setWrapLimitRange(80, 80);
-    editor.getSession().on('change', fileChanged);
-}
 
 // Manage preferences
-// if (!session.getUseWrapMode()) {
-//     wrapModeEl.value = "off";
-// } else {
-//     wrapModeEl.value = session.getWrapLimitRange().min || "free";
-// }
-// 
-// selectStyleEl.checked = editor.getSelectionStyle() == "line";
-// themeEl.value = editor.getTheme();
-// highlightActiveEl.checked = editor.getHighlightActiveLine();
-// showHiddenEl.checked = editor.getShowInvisibles();
-// showGutterEl.checked = editor.renderer.getShowGutter();
-// showPrintMarginEl.checked = editor.renderer.getShowPrintMargin();
-// highlightSelectedWordE.checked = editor.getHighlightSelectedWord();
-// showHScrollEl.checked = editor.renderer.getHScrollBarAlwaysVisible();
-// softTabEl.checked = session.getUseSoftTabs();
-// behavioursEl.checked = editor.getBehavioursEnabled();
+function applyTheme () {
+    "use strict";
+    console.log('applyTheme ' + preferences.theme.toLowerCase());
+    editor.setTheme('ace/theme/' + preferences.theme.toLowerCase());
+}
+
+function applyFontSize() {
+    "use strict";
+    console.log('applyFontSize ' + preferences.fontSize);
+     $('#ace-editor').css('font-size', preferences.fontSize + 'px');
+    // editor.setFontSize(preferences.fontSize)
+}
+
+function applyLineHeight() {
+    "use strict";
+    console.log('applyLineHeight ' + preferences.lineHeight);
+     $('#ace-editor').css('line-height', preferences.lineHeight + 'em');
+}
+
+function applyTabSize() {
+    "use strict";
+    console.log('applyTabSize ' + preferences.tabSize);
+    editor.getSession().setTabSize(preferences.tabSize);
+}
+
+function applySoftTabs() {
+    "use strict";
+    console.log('applySoftTabs ' + preferences.softTabs);
+    editor.getSession().setUseSoftTabs(preferences.softTabs);
+}
+
+function applyVisibleTabs() {
+    "use strict";
+    console.log('applyVisibleTabs ' + preferences.visibleTabs);
+    editor.renderer.setShowInvisibles(preferences.visibleTabs);
+}
+
+function applyLineWrapping() {
+    "use strict";
+    var lw = preferences.lineWrapping;
+    var es = editor.getSession();
+    console.log('applyLineWrapping ' + lw);
+    if (lw === 2) {
+        es.setWrapLimitRange(80, 80);
+        es.setUseWrapMode(true);
+        editor.setShowPrintMargin(true);
+    } else if (lw === 1) {
+        es.setWrapLimitRange(null, null);
+        es.setUseWrapMode(true);
+        editor.setShowPrintMargin(false);
+    } else {
+        es.setUseWrapMode(false);
+        editor.setShowPrintMargin(false);
+    }
+}
+
+function applyLineNumbers() {
+    "use strict";
+    console.log('applyLineNumbers ' + preferences.lineNumbers);
+    editor.renderer.setShowGutter(preferences.lineNumbers);
+}
+
+function applyMatchBrackets() {
+    "use strict";
+    console.log('applyMatchBrackets ' + preferences.matchBrackets);
+    editor.setBehavioursEnabled(preferences.matchBrackets);
+}
+
+function applyHighlightSelectedWord() {
+    "use strict";
+    console.log('applyHighlightSelectedWord ' + preferences.highlightSelectedWord);
+    editor.setHighlightSelectedWord(preferences.highlightSelectedWord);
+}
+
+
+function setTheme() {
+    "use strict";
+    preferences.theme = $(this).val();
+    prefs.apply.theme();
+}
+
+function setFontSize() {
+    "use strict";
+    preferences.fontSize = $(this).val();
+    prefs.apply.fontSize();
+}
+
+function setLineHeight() {
+    "use strict";
+    preferences.lineHeight = $(this).val();
+    prefs.apply.lineHeight();
+}
+
+function setTabSize() {
+    "use strict";
+    preferences.tabSize = parseInt($(this).val());
+    prefs.apply.tabSize();
+}
+
+function setSoftTabs() {
+    "use strict";
+    preferences.softTabs = $(this).is(':checked');
+    prefs.apply.softTabs();
+}
+
+function setVisibleTabs() {
+    "use strict";
+    preferences.visibleTabs = $(this).is(':checked');
+    prefs.apply.visibleTabs();
+}
 
 function setLineWrapping() {
     "use strict";
-    var session = editor.getSession();
-    preferences.lineWrapping = $(this).is(':checked');
-    session.setUseWrapMode(preferences.lineWrapping);
+    preferences.lineWrapping = parseInt($(this).val());
+    // console.log('lineWrapping ' + preferences.lineWrapping);
+    prefs.apply.lineWrapping();
 }
 
 function setLineNumbers() {
     "use strict";
-    var renderer = editor.renderer;
     preferences.lineNumbers = $(this).is(':checked');
-    renderer.setShowGutter(preferences.lineNumbers);
+    prefs.apply.lineNumbers();
 }
 
-function setPrintMargin() {
+function setMatchBrackets() {
     "use strict";
-    var renderer = editor.renderer;
-    preferences.printMargin = $(this).is(':checked');
-    renderer.setShowPrintMargin(preferences.printMargin);
+    preferences.matchBrackets = $(this).is(':checked');
+    prefs.apply.matchBrackets();
 }
 
 function setHighlightSelectedWord() {
     "use strict";
     preferences.highlightSelectedWord = $(this).is(':checked');
-    editor.setHighlightSelectedWord(preferences.highlightSelectedWord);
+    prefs.apply.highlightSelectedWord();
 }
 
-// Will be moved to editor.js
-function getPreferences () {
-    var session = editor.getSession();
-    var renderer = editor.renderer;
-    preferences.lineWrapping = session.getUseWrapMode();
-    preferences.lineNumbers = renderer.getShowGutter();
-    preferences.printMargin = renderer.getShowPrintMargin();
-    preferences.highlightSelectedWord = editor.getHighlightSelectedWord();
-}
-  
 function bindEditPreferences () {
     "use strict";
-    $('#lineWrapping').click(setLineWrapping)
+    $('#theme').change(setTheme)
         .each (function () {
-            this.checked = preferences.lineWrapping;
+            $(this).val(preferences.theme);
+        });
+    $('#fontSize').change(setFontSize)
+        .each (function () {
+            this.value = preferences.fontSize;
+        });
+    $('#lineHeight').change(setLineHeight)
+        .each (function () {
+            this.value = preferences.lineHeight;
+        });
+    $('#tabSize').change(setTabSize)
+        .each (function () {
+            this.value = preferences.tabSize;
+        });
+    $('#softTabs').change(setSoftTabs)
+        .each (function () {
+            this.checked = preferences.softTabs;
+        });
+    $('#visibleTabs').change(setVisibleTabs)
+        .each (function () {
+            this.checked = preferences.visibleTabs;
+        });
+    $('#wrapOff').click(setLineWrapping)
+         .each (function () {
+            this.checked = (preferences.lineWrapping === 0)
+        });
+    $('#wrapOn').click(setLineWrapping)
+         .each (function () {
+            this.checked = (preferences.lineWrapping === 1)
+        });
+    $('#wrap80').click(setLineWrapping)
+         .each (function () {
+            this.checked = (preferences.lineWrapping === 2)
         });
     $('#lineNumbers').click(setLineNumbers)
         .each (function () {
             this.checked = preferences.lineNumbers;
         });
-    $('#printMargin').click(setPrintMargin)
+    $('#matchBrackets').click(setMatchBrackets)
         .each (function () {
-            this.checked = preferences.printMargin;
+            this.checked = preferences.matchBrackets;
         });
     $('#highlightSelectedWord').click(setHighlightSelectedWord)
         .each (function () {
             this.checked = preferences.highlightSelectedWord;
         });
 }
+
+function applyAll() {
+    var pa = prefs.apply, f;
+    for (f in pa) {
+        pa[f]();
+    }
+}
+
+function savePreferences() {
+    "use strict";
+    $.post('/editor/save_prefs', { section: 'Ace', prefs: JSON.stringify(preferences) }, function (response) {
+        console.log('save_prefs ' + response);
+    });
+}
+
+function defaultPreferences() {
+    var pd = prefs.defaults, p;
+    
+    for (p in pd) {
+        console.log('Restoring default ' + p + ': ' + pd[p]);
+        preferences[p] = pd[p];
+    }
+    applyAll();
+    bindEditPreferences();
+}
+
+function initPreferences() {
+    "use strict";
+    $.post('/editor/read_prefs', { section: 'Ace', types: JSON.stringify(prefs.types),
+            defaults: JSON.stringify(prefs.defaults)}, function (response) {
+        preferences = JSON.parse(response);
+        console.log('Init preferences ' + JSON.stringify(preferences));
+        applyAll();
+        bindEditPreferences();
+    });
+}
+

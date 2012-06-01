@@ -141,6 +141,16 @@ a[draggable=true] {
     z-index: 1000;
 }
 
+/* modal dialogues */
 .modal.rascal {
     color: #333;
 }
+
+.form-horizontal .control-group.rascal {
+    margin-bottom: 9px;
+}
+
+.help-inline.rascal {
+    font-size: 13px;
+}
+        

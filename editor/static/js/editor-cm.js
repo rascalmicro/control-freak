@@ -202,7 +202,7 @@ function applySoftTabs() {
 
 function applyVisibleTabs() {
     "use strict";
-    console.log('applyVisibleTabs ' + preferences.tabSize);
+    console.log('applyVisibleTabs ' + preferences.visibleTabs);
     if (preferences.visibleTabs) {
         $('.CodeMirror').addClass('visibleTabs');
     } else {
@@ -287,13 +287,13 @@ function setLineNumbers() {
 function setLineWrapping() {
     "use strict";
     preferences.lineWrapping = $(this).is(':checked');
-    prefs.apply.lineWrapping
+    prefs.apply.lineWrapping();
 }
 
 function setMatchBrackets() {
     "use strict";
     preferences.matchBrackets = $(this).is(':checked');
-    prefs.apply.matchBrackets;
+    prefs.apply.matchBrackets();
 }
 
 function bindEditPreferences () {
