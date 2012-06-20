@@ -3,13 +3,14 @@ body {
     margin: 0.5em;
 }
 
-.email-input {
+/* .email-input { */
+#sender, #recipients, #subject {
     border: 2px solid #E7E8E9;
     color: #FFFFFF;
     background-color: #111111;
     width: 25em;
     font-family:'Courier', sans-serif;
-    font-size: 1em !important;
+    font-size: 1em;
     margin-top: 10px;
     margin-bottom: 20px;
 }
