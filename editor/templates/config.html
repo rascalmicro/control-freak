@@ -1,26 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8">
     <title>Config</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="shortcut icon" href="static/images/favicon.ico">
-    
-    <link href="static/css/bootstrap-2.0.3.css" rel="stylesheet">
-    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
-    <!--[if lt IE 9]>
-    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-    <!-- <link href="../assets/css/bootstrap-responsive.css" rel="stylesheet"> -->
-    
-    <link rel="stylesheet" type="text/css" href="/editor/static/css/editor-all.css">
-    <link rel="stylesheet" type="text/css" href="/editor/static/css/editor-other.css">
-    <!-- <link rel="stylesheet" type="text/css" href="/editor/static/css/UISegmentedControl.css"> -->
-
-    <script src="/editor/static/js/jquery-1.7.2.js"></script>
-    <script src="static/js/bootstrap-2.0.3.js"></script>
+    {% include "include/editor-head.html" %}
+    <link rel="stylesheet" type="text/css" href="static/css/editor-other.css">
+    {% include "include/editor-scripts.html" %}
     <style>
         /* Styles for Tab states */
+        .TabPanels .heading {
+            display: none;
+        }
+        .TabPanels .heading.active {
+            display: block;
+        }
         .TabPanels .tabPanel {
             display: none;
         }
@@ -37,24 +29,8 @@
     </style>
 </head>
 <body>
-    <div class="navbar navbar-fixed-top">
-        <div class="navbar-inner">
-            <div class="container-fluid">
-                <a class="brand rascal" href="/editor/"><img id="rascallogo" src="/editor/static/images/rm-logo-words-only-light.png" /></a>
-                <div class="nav-collapse rascal">
-                    <ul class="nav_rascal">
-                        <li><a href="/editor/">editor</a> | </li>
-                        <li><a href="/editor/log">log</a> | </li>
-                        <li><a href="/editor/config">config</a> | </li>
-                        <li><a href="/editor/monitor">monitor</a></li>
-                    </ul>
-                    <ul class="nav_rascal">
-                        <li><a href="/editor/logout" class="logout">log out</a></li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </div>
+    {% include "include/editor-topbar.html" %}
+
     <div class="container-fluid">
         &nbsp;<br />
         <p>Some useful configuration info:</p>
@@ -70,26 +46,32 @@
             <div class="span6">
                 <p>A weapon of mass destruction:</p>
                 <form>
-                    <input id="reset" type="button" value="Destroy all my work" class="btn btn-large btn-danger rascal" alt="Destroy all my work">
+                    <input id="reset" type="button" value="Destroy all my work" class="btn btn-large btn-danger rascal" alt="Destroy all my work" />
                 </form>
                 <p>If you click the "Destroy all my work" button, all the changes you've made to your Rascal's web interface will be deleted.</p>
-                <p>(What this really does is to return the Git repository in /var/www to its last committed state.)</p></td>
-            </div>
+                <p>(What this really does is to return the Git repository in /var/www to its last committed state.)</p>
+            </div> <!-- /span6 -->
             <div class="span6">
                 <div style="display: block">
-                    <p>Choose editor:</p>
-    
-                    <div class="btn-group" data-toggle="buttons-radio">
-                        <button id="editor-cm" class="btn btn-large btn-primary rascal" style="width: 180px">CodeMirror 2</button>
-                        <button id="editor-a" class="btn btn-large btn-primary rascal" style="width: 120px">Ace</button>
-                    </div>
                     <div class="TabPanels">
+                        <div id="heading-0" class="heading active">
+                            <p>About the editor:</p>
+                        </div>
+                        <div id="heading-1" class="heading">
+                            <p>Choose editor:</p>
+                            <div class="btn-group" data-toggle="buttons-radio">
+                                <button id="editor-cm" class="btn btn-large btn-primary rascal" style="width: 180px">CodeMirror 2</button>
+                                <button id="editor-a" class="btn btn-large btn-primary rascal" style="width: 120px">Ace</button>
+                            </div>
+                        </div>  
+                    
                         <div id="editor-cm-desc" class="tabPanel active">
                             <p><a href="http://codemirror.net/" name="CodeMirror" title="CodeMirror" target="_editor">{} CodeMirror /* In-browser code editing made bearable */</a><br />
                             CodeMirror is a JavaScript library that can be used to create a relatively
                             pleasant editor interface for code-like content ― computer programs, HTML markup and similar.
                             If a mode has been written for the language you are editing, the code will be coloured and
                             the editor will optionally help you with indentation.<br />
+                            <a href="static/about/cm-keyboard.html" name="CodeMirror2" title="CodeMirror2" target="_editor">keyboard shortcuts</a> |
                             <a href="static/codemirror2/index.html" name="CodeMirror2" title="CodeMirror2" target="_editor">documentation</a> |
                             <a href="static/bootstrap/docs/index.html" name="bootstrap" title="Bootstrap" target="_editor">bootstrap docs</a>
                             </p>
@@ -108,10 +90,11 @@
                         </div>
                     </div>
                 </div>
-            </div>        
+            </div> <!-- /span6 -->
         </div> <!-- /row-fluid -->
     </div> <!-- /container-fluid -->
     
+    <div id="advanced" style="display: none;">{{ advanced }}</div>
     <div id="editor" style="display: none;">{{ editor }}</div>
     
     <script type="text/javascript">
@@ -119,15 +102,20 @@
             $.post("/editor/reset", "text");
         });
         
-        function selectEditor(editor) {
-            $('.tabPanel').removeClass('active');
-            $('#' + editor + ', #' + editor + '-desc').addClass('active');
+        function selectEditor(advanced, editor) {
+            $('.heading').removeClass('active');
+            if (advanced === '0') {
+                $('#heading-' + advanced + ', #' + editor + '-desc').addClass('active');
+            } else {
+                $('.tabPanel').removeClass('active');
+                $('#heading-' + advanced + ', #' + editor + ', #' + editor + '-desc').addClass('active');
+            }
         }
         
         function setEditor (editor) {
             $.post('/editor/set_editor', { editor: editor }, function (response) {
                 console.log('set_editor ' + editor + ': ' + response);
-                selectEditor(editor);
+                selectEditor('1', editor);
             });
         }
 
@@ -140,7 +128,7 @@
         });
 
         $(document).ready(function () {
-            selectEditor($('#editor').text());
+            selectEditor($('#advanced').text(), $('#editor').text());
         });
     </script>
 </body>

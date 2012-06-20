@@ -1,0 +1,158 @@
+// default theme
+@color-default: #171819;
+@background-default: #FFFFFF;
+// @highlight-default: #e8f2ff;
+@highlight-default: #EDEDED;
+
+.rm-well-default {
+    color: @color-default;
+    background-color: @background-default;
+    a {
+        color: @color-default;
+    }
+    ul.jqueryFileTree {
+        > li.directory > a:hover, a.selected, a.dragover {
+            background-color: @highlight-default;
+        }
+    }
+}
+
+.filetree-default {
+    border: 1px solid @background-default;
+}
+
+.activeline-default {
+    background-color: @highlight-default !important;
+}
+
+// blackboard theme
+@color-blackboard: #E7E8E9;
+@background-blackboard: #0C1021;
+@highlight-blackboard: lighten(@background-blackboard, 12%);
+
+.rm-well-blackboard {
+    color: @color-blackboard;
+    background-color: @background-blackboard;
+    a {
+        color: @color-blackboard;
+    }
+    ul.jqueryFileTree {
+        > li.directory > a:hover, a.selected, a.dragover {
+            background-color: @highlight-blackboard;
+        }
+    }
+}
+
+.filetree-blackboard {
+    border: 1px solid @background-blackboard;
+}
+
+.activeline-blackboard {
+    background-color: @highlight-blackboard !important;
+}
+
+// night theme
+@color-night: #F8F8F8;
+@background-night: #0A001F;
+@highlight-night: lighten(@background-night, 12%);
+
+.rm-well-night {
+    color: @color-night;
+    background-color: @background-night;
+    a {
+        color: @color-night;
+    }
+    ul.jqueryFileTree {
+        > li.directory > a:hover, a.selected, a.dragover {
+            background-color: @highlight-night;
+        }
+    }
+}
+
+.filetree-night {
+    border: 1px solid @background-night;
+}
+
+.activeline-night {
+    background-color: @highlight-night !important;
+}
+
+.cm-s-night span.cm-comment { color: lighten(#6900a1, 20%); }
+
+// Solarized core tones
+@base03: #002b36;
+@base02: #073642;
+@base01: #586e75;
+@base00: #657b83;
+@base0: #839496;
+@base1: #93a1a1;
+@base2: #eee8d5;
+@base3: #fdf6e3;
+
+// solarized-light theme
+
+// Base core values for light
+// base01 - optional emphasized content
+// base00 - body text/default code/primary content
+// base1 - comments/secondary content
+// base2 - background highlights
+// base3 - background
+
+@color-solarized-light: @base00;
+@background-solarized-light: @base3;
+@highlight-solarized-light: @base2;
+
+.rm-well-solarized-light {
+    color: @color-solarized-light;
+    background-color: @background-solarized-light;
+    a {
+        color: @color-solarized-light;
+    }
+    ul.jqueryFileTree {
+        > li.directory > a:hover, a.selected, a.dragover {
+            background-color: @highlight-solarized-light;
+        }
+    }
+}
+
+.filetree-solarized-light {
+    border: 1px solid @background-solarized-light;
+}
+
+.activeline-solarized-light {
+    background-color: @highlight-solarized-light !important;
+}
+
+// solarized-dark theme
+
+// Base core values for dark
+// base1 - optional emphasized content
+// base0 - body text/default code/primary content
+// base01 - comments/secondary content
+// base02 - background highlights
+// base03 - background
+
+@color-solarized-dark: @base0;
+@background-solarized-dark: @base03;
+@highlight-solarized-dark: @base02;
+
+.rm-well-solarized-dark {
+    color: @color-solarized-dark;
+    background-color: @background-solarized-dark;
+    a {
+        color: @color-solarized-dark;
+    }
+    ul.jqueryFileTree {
+        > li.directory > a:hover, a.selected, a.dragover {
+            background-color: @highlight-solarized-dark;
+        }
+    }
+}
+
+.filetree-solarized-dark {
+    border: 1px solid @background-solarized-dark;
+}
+
+.activeline-solarized-dark {
+    background-color: @highlight-solarized-dark !important;
+}

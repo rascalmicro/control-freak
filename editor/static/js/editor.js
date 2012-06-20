@@ -301,41 +301,41 @@ $('li.file').live('mouseenter mouseleave', function (event) {
 $('li.directory.expanded').live('mouseenter mouseleave', function (event) {
     "use strict";
     var fpath;
-    if ($(this).children('ul').children().size() === 0) {
-        if (event.type === 'mouseenter') {
-            fpath = $(this).children('a').attr('rel');
-            if ($.inArray(fpath, EXCEPTIONS) === -1) {
-                $(this).children('a').addClass('selected');
-                $(this).children('img').addClass('selected');
-                $(this).children('img').click(function () {
-                    var jqel, path;
-                    if (!deleteFileBusy) {
-                        deleteFileBusy = true;
-                        jqel = $(this).parent();
-                        path = fpath.split(ROOT).pop();
-                        queryDelete.init(FOLDER, path, function (status) {
-                            if (status === 1) {
-                                console.log('DELETE ' + path);
-                                $.post('/editor/delete_folder', { filename: path }, function (response) {
-                                    console.log('DELETE_FOLDER ' + response);
-                                    jqel.hide('slow');
-                                    saveMsg('Deleted folder');
-                                }).error(function (jqXHR, textStatus, errorThrown) {
-                                    console.log('DELETE_FOLDER: ' + textStatus + ': ' + errorThrown);
-                                    saveMsg('Delete folder failed');
-                                });
-                            } else {
-                                console.log('DELETE cancel');
-                            }
-                            deleteFileBusy = false;
-                        });
-                    }
-                });
-            }
-        } else {
-            $(this).children('a').removeClass('selected');
-            $(this).children('img').removeClass('selected');
+    if (event.type === 'mouseenter') {
+        if ($(this).children('ul').children().size() === 0) {
+                fpath = $(this).children('a').attr('rel');
+                if ($.inArray(fpath, EXCEPTIONS) === -1) {
+                    $(this).children('a').addClass('selected');
+                    $(this).children('img').addClass('selected');
+                    $(this).children('img').click(function () {
+                        var jqel, path;
+                        if (!deleteFileBusy) {
+                            deleteFileBusy = true;
+                            jqel = $(this).parent();
+                            path = fpath.split(ROOT).pop();
+                            queryDelete.init(FOLDER, path, function (status) {
+                                if (status === 1) {
+                                    console.log('DELETE ' + path);
+                                    $.post('/editor/delete_folder', { filename: path }, function (response) {
+                                        console.log('DELETE_FOLDER ' + response);
+                                        jqel.hide('slow');
+                                        saveMsg('Deleted folder');
+                                    }).error(function (jqXHR, textStatus, errorThrown) {
+                                        console.log('DELETE_FOLDER: ' + textStatus + ': ' + errorThrown);
+                                        saveMsg('Delete folder failed');
+                                    });
+                                } else {
+                                    console.log('DELETE cancel');
+                                }
+                                deleteFileBusy = false;
+                            });
+                        }
+                    });
+                }
         }
+    } else {
+        $(this).children('a').removeClass('selected');
+        $(this).children('img').removeClass('selected');
     }
 });
 
@@ -345,25 +345,33 @@ $('li.directory.collapsed a.selected').live('mouseenter mouseleave', function (e
     $(this).parent().children('img').removeClass('selected');
 });
 
-// Move a file or folder (initiated by DnD)
+// Move a file or folder (initiated by DnD), rename a file (initiated from dialog)
+//  moveItem /var/www/public/templates/foo.html /var/www/public/static/
+//  moveItem /var/www/public/static/empty/ /var/www/public/templates/
+//  moveItem /var/www/public/templates/foo.html /var/www/public/templates/bar.html
 function moveItem(src, dst) {
     "use strict";
     console.log('moveItem ' + src + ' ' + dst);
     $.post('/editor/move_item', { src: src, dst: dst }, function (response) {
         var srcDirs = (src.match(/.*\//)[0]).split('/'),
-            dstDirs = dst.split('/'),
-            jqDst = $('li.directory > a[rel="' + dst + '"]');
+            dstDirs = (dst.match(/.*\//)[0]).split('/'),
+            dstDir = dstDirs.join('/'),
+            jqDst = $('li.directory > a[rel="' + dstDir + '"]'),
+            bDstIsFile = (dst.split('/').pop() !== '');
         // If src is a directory, reduce by one
         if (srcDirs.join('/') === src) {
             srcDirs.pop();
         }
         // Optimise redisplay of fileTree
-        if (dst === ROOT) {
+        if (dstDir === ROOT) {
             console.log('move to top');
             displayTree(src);
         } else if (srcDirs.length === dstDirs.length) {
             console.log('optimise equal paths');
             $('li > a[rel="' + src + '"]').hide('slow');
+            if (bDstIsFile) {
+                jqDst.click();
+            }
             jqDst.click();
         } else if (srcDirs.length < dstDirs.length) {
             console.log('optimise deeper');
@@ -380,7 +388,11 @@ function moveItem(src, dst) {
             jqDst.click();
         }
         if (src.split(ROOT).pop() === $('#path').val()) {
-            displayLocation((dst + src.split('/').pop()).split(ROOT).pop());
+            if (bDstIsFile) {
+                displayLocation(dst.split(ROOT).pop());
+            } else {
+                displayLocation((dst + src.split('/').pop()).split(ROOT).pop());
+            }
             if (bFileChanged) {
                 highlightChanged();
             }
@@ -535,6 +547,9 @@ function uploadItems(files, dst) {
 // dialog handling
 $('#new-template').click(function () {
     "use strict";
+    $('#template-message').text('The name you type should end in .html')
+        .removeClass('warning');
+    $('#template-name').val('');
     $('#modal-t').modal('show')
 });
 
@@ -543,7 +558,7 @@ $('#modal-t').on('shown', function () {
     $('#template-name').focus();
 })
 
-$('#create-template').click(function () {
+$('#template-create').click(function () {
     "use strict";
     var templateName = $('#template-name').val().trim();
     if (templateName !== '') {
@@ -555,10 +570,10 @@ $('#create-template').click(function () {
             console.log('new_template: ' + textStatus + ': ' + errorThrown);
             if (errorThrown === 'CONFLICT') {
                 $('#template-message').text('Template exists - please use a different name')
-                    .css('color', 'red');
+                    .addClass('warning');
             } else {    // 'Bad Request'
                 $('#template-message').text('Template could not be created')
-                    .css('color', 'red');
+                    .addClass('warning');
             }
             $('#template-name').focus();
         });
@@ -567,14 +582,16 @@ $('#create-template').click(function () {
     }
 });
 
-$('#cancel-template').click(function () {
+$('#template-cancel').click(function () {
     "use strict";
     $('#modal-t').modal('hide')
-    // $('#overlay-t').css('visibility', 'hidden');
 });
 
 $('#new-folder').click(function () {
     "use strict";
+    $('#folder-message').text('You will be able to drag it to another folder')
+        .removeClass('warning');
+    $('#folder-name').val('');
     $('#modal-f').modal('show')
 });
 
@@ -583,7 +600,7 @@ $('#modal-f').on('shown', function () {
     $('#folder-name').focus();
 })
 
-$('#create-folder').click(function () {
+$('#folder-create').click(function () {
     "use strict";
     var folderName = $('#folder-name').val().trim();
     if (folderName !== '') {
@@ -595,10 +612,10 @@ $('#create-folder').click(function () {
             console.log('new_folder: ' + textStatus + ': ' + errorThrown);
             if (errorThrown === 'CONFLICT') {
                 $('#folder-message').text('Folder exists - please use a different name')
-                    .css('color', 'red');
+                    .addClass('warning');
             } else {    // 'Bad Request'
                 $('#folder-message').text('Folder could not be created (mkdir returned an error)')
-                    .css('color', 'red');
+                    .addClass('warning');
             }
             $('#folder-name').focus();
         });
@@ -607,9 +624,62 @@ $('#create-folder').click(function () {
     }
 });
 
-$('#cancel-folder').click(function () {
+$('#folder-cancel').click(function () {
     "use strict";
     $('#modal-f').modal('hide')
+});
+
+$('#rename-file').click(function () {
+    "use strict";
+    var fpath = $('#path').val();
+    var filename;
+    if (fpath === '') {
+        saveMsg('Select a file to rename');
+    } else if ($.inArray(ROOT + fpath, EXCEPTIONS) !== -1) {
+        saveMsg('This file cannot be renamed');
+    } else {
+        filename = fpath.split('/').pop();
+        $('#rename-message').text('Enter a new name for "' + filename + '"')
+            .removeClass('warning');
+        $('#rename-name').val(filename);
+        $('#modal-n').modal('show');
+    }
+});
+
+$('#modal-n').on('shown', function () {
+    "use strict";
+    $('#rename-name').focus();
+})
+
+$('#rename-yes').click(function () {
+    "use strict";
+    console.log($('#path').val());
+    var fpath = $('#path').val(),
+        oldName = fpath.split('/').pop(),
+        srcDirs = (oldName === fpath) ? '' : fpath.match(/.*\//)[0],
+        newName = $('#rename-name').val().trim();
+
+    console.log('oldName ' + oldName);
+    console.log('srcDirs ' + srcDirs);
+    console.log('newName ' + newName);
+
+    if (newName === '') {
+        $('#rename-message').text('Please enter a new name for this file')
+            .addClass('warning');
+        $('#rename-name').focus();
+    } else if (newName === oldName) {
+        $('#rename-message').text('Please enter a different name for this file')
+            .addClass('warning');
+        $('#rename-name').focus();
+    } else {
+        $('#modal-n').modal('hide')
+        moveItem(ROOT + fpath, ROOT + srcDirs + newName);
+    }
+});
+
+$('#rename-cancel').click(function () {
+    "use strict";
+    $('#modal-n').modal('hide')
 });
 
 $('#preferences').click(function () {

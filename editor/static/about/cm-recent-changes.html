@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Editor - Recent Changes</title>
+    <link rel="shortcut icon" href="/editor/static/ico/favicon.ico">
+    <link rel="stylesheet" type="text/css" href="/editor/static/css/bootstrap-2.0.4.css">
+    <style>
+      body {
+        padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
+      }
+    </style>
+    <script src="/editor/static/js/jquery-1.7.2.js"></script>
+</head>
+<body>
+    <div class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container-fluid">
+          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
+          <a class="brand rascal" href="#"><img id="rascallogo" src="/editor/static/images/rm-logo-words-only-light.png" /></a>
+          <!-- <a class="brand" href="#">Recent changes to the Rascal Editor</a> -->
+          <div class="nav-collapse">
+            <ul class="nav">
+              <li><a href="/editor/static/about/cm-keyboard.html">Keyboard Shortcuts</a></li>
+              <li><a href="/editor/static/about/cm-tokens.html">Tokens</a></li>
+              <li><a href="/editor/static/about/cm-solarized.html">Solarized Themes</a></li>
+              <li class="active"><a href="/editor/static/about/cm-recent-changes.html">Recent Changes</a></li>
+            </ul>
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>
+
+    <div class="container-fluid">
+        <h2>Recent Changes to the Editor</h2>
+        <dl>
+            <dt>Resizes automatically to fit browser window</dt>
+            <dt>Scrollable file tree</dt>
+            <dt>Create new template</dt>
+                <dd>Error if template exists</dd>
+            <dt>Create new folder</dt>
+                <dd>Create new folder in the static folder, error if folder exists</dd>
+            <dt>Drag and drop files or folders in the file tree</dt>
+                <dd>Except templates folder, static folder or server.py</dd>
+            <dt>Drag and drop files from desktop onto file tree</dt>
+                <dd>Files can be images, HTML, CSS, JavaScript or Python</dd>
+            <dt>Image preview</dt>
+                <dd>Images can only be displayed when in the static folder or in a subfolder of the static folder</dd>
+            <dt>Save current file with Save button, Cmd-S (Mac) or Ctrl-S</dt>
+            <dt>Warning if about to overwrite unsaved changes</dt>
+                <dd>Changed file indicated by highlighting the file name</dd>
+            <dt>Revert current file to previously saved version</dt>
+                <dd>Click the current file name in the file tree</dd>
+            <dt>Delete any file or empty folder with warning</dt>
+                <dd>Except templates folder, static folder or server.py</dd>
+            <dt>Save editor preferences</dt>
+                <dd>Can set theme, font size, line height, tab width etc</dd>
+            <dt>Two new themes, solarized-light and solarized-dark</dt>
+                <dd>Syntax colours not yet finalised</dd>
+            <dt>Preference to highlight active line</dt>
+                <dd>Currently only supported for default, blackboard, night and solarized themes</dd>
+            <dt>Themed file tree, icon pane and location bar</dt>
+                <dd>Currently only supported for default, blackboard, night and solarized themes</dd>
+            <dt>Rename file</dt>
+                <dd>If a file with the new name already exists, it is overwritten</dd>
+             <dt>Search and Replace (experimental)</dt>
+                <dd>Type Cmd-F/Ctrl-F to search or Cmd-Alt-F/Shift-Ctrl-F to search and replace</dd>
+       </dl>
+        <h3>Known Issues</h3>
+        <ol>
+            <li>Doesn't apply Wrap lines or Match brackets preference - fixed</li>
+            <li>Logs incorrect value when applying Visible tabs - fixed</li>
+            <li>Restoring default preferences breaks highlight active line - fixed</li>
+            <li>When line numbers are enabled in solarized themes, gutter theme is not adjusted - fixed</li>
+            <li>Cursor barely visible in solarized-dark - fixed</li>
+            <li>After attempting to create a template or folder that already exists, the error message persists even when the dialogue is cancelled - fixed</li>
+            <li>Button text rendered in serif font in some versions of Linux - fixed</li>
+            <li>Changing to a supported theme after using an unsupported theme doesn't update non-editor panes (except when changing to blackboard). Workaround is first to select blackboard then another supported theme, or reload editor</li>
+            <li>Dragging a file from the desktop into an open empty folder leaves the folder able to be deleted unless you move the cursor off it (normally only empty folders can be deleted). Deleting folder also deletes file(s) just dragged into it.</li>
+            <li>When dragging and dropping files in the file tree, folders sometimes remain highlighted until you move the mouse over them. This has been the case since drag and drop was introduced.</li> 
+        </ol>
+        <p><small>Last update 17 June 2012</small></p>
+    </div> <!-- /container -->
+    <script language="javascript" type="text/javascript">
+    </script>
+</body>
+</html>

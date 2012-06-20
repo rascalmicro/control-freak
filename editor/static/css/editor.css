@@ -84,7 +84,7 @@
 #filetree {
     padding: 0 10px 0 0;
     /* border: 1px solid #414243; */
-    border: 1px solid #0A001F;
+    /* border: 1px solid #0A001F; */
     height: 455px;
     overflow: auto;
 }
@@ -113,10 +113,6 @@ a[draggable=true] {
     color: #EF4A42;
 }
 
-#location-bar a {
-    color: #F8F8F8;
-}
-
 #location-bar a.changed {
     color: #EF4A42;
 }
@@ -141,6 +137,20 @@ a[draggable=true] {
     z-index: 1000;
 }
 
+/* modal dialogues */
 .modal.rascal {
     color: #333;
 }
+
+.modal.rascal p.warning {
+    color: red;
+}
+
+.form-horizontal .control-group.rascal {
+    margin-bottom: 9px;
+}
+
+.help-inline.rascal {
+    font-size: 13px;
+}
+        

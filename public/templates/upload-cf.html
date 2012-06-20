@@ -1,14 +1,11 @@
 <!DOCTYPE html>
-<!-- 12 May 2012 dsmall rascal-1.03.js -->
-<html>
+<!-- 18 Jun 2012 dsmall bootstrap jquery rascal-1.03.js -->
+<html lang="en">
 <head>
-    <meta charset="utf-8">
     <title>File Upload - Choose File</title>
-    <link rel="stylesheet" type="text/css" href="/static/css/demo.css">
+    {% include "include/rascal-head.html" %}
     <link rel="stylesheet" type="text/css" href="/static/css/rascal-demo.css">
-    <link rel="shortcut icon" href="/static/images/favicon.ico">
-    <script src="/static/js/jquery-1.7.2.js"></script>
-    <script src="/static/js/rascal-1.03.js"></script>
+    <script src="static/js/rascal-1.03.js"></script>
     <style>
         /* Hide real file input button behind fake button */
         #fileinput {
@@ -31,27 +28,31 @@
             border-radius: 5px;
             width: 400px;
             padding: 5px 10px 20px;
+            margin: 10px 0;
         }
     </style>    
 </head>
 <body>
-    <div class="rascalcontent">
-        <h1>Upload using Choose File</h1>
-        <p>Choose and upload image files</p>
-        
-        <span id="fileinput">
-            <input id="fakefile" type="button" value="Choose File" class="large red awesome" />
-            <input id="file" type="file" name="file" accept="image/*" multiple="multiple" />
-        </span>
-        <p id="progress" /> 
-        <div id="status"></div>
-        
-        <h3>Files in the uploads directory:</h3>
-        <div id="filelist" class="infobox"></div>
-        <input id="clear" type="button" value="Clear Files" class="medium blue awesome" />
+    {% include "include/rascal-topbar.html" %}
+    <div class="container">
+        <div class="well rascal">
+            <h1>Upload using Choose File</h1>
+            <p>Choose and upload image files</p>
+            
+            <span id="fileinput">
+                <input id="fakefile" type="button" value="Choose File" class="btn btn-large btn-danger rascal" />
+                <input id="file" type="file" name="file" accept="image/*" multiple="multiple" />
+            </span>
+            <p id="progress" /> 
+            <div id="status"></div>
+            
+            <h3>Files in the uploads directory:</h3>
+            <div id="filelist" class="infobox"></div>
+            <input id="clear" type="button" value="Clear Files" class="btn btn-large btn-primary" />
+        </div>
     </div>
     
-    <script src="/static/js/rascal-demo.js"></script>
+    <script src="static/js/rascal-demo.js"></script>
     
     <script type="text/javascript">
                 

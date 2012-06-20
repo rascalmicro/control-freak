@@ -1,33 +1,36 @@
 <!DOCTYPE html>
-<!-- 24 Feb 2012, 12 May 2012 dsmall -->
-<!-- Requires: jquery, rascal-1.03, album.css, album.js, static/pictures folder, server.py support -->
-<html>
+<!-- 24 Feb 2012, 12 May 2012, 18 Jun 2012 dsmall -->
+<!-- Requires: bootstrap, jquery, rascal-1.03, album.css, album.js, static/pictures folder, server.py support -->
+<html lang="en">
 <head>
-    <meta charset="utf-8">
     <title>Rascal Album</title>
-    <link rel="stylesheet" type="text/css" href="/static/css/demo.css">
+    {% include "include/rascal-head.html" %}
+    <link rel="stylesheet" type="text/css" href="/static/css/rascal-demo.css">
     <link rel="stylesheet" type="text/css" href="/static/css/album.css">
-    <link rel="shortcut icon" href="/static/images/favicon.ico">
-    <script src="/static/js/jquery-1.7.2.js"></script>
-    <script src="/static/js/rascal-1.03.js"></script>
+    <script src="static/js/rascal-1.03.js"></script>
 </head>
 <body>
-    <div id="rascalcontent" class="rascalcontent">
-        <h1>Rascal Album</h1>
-        <span id="intro">You can drag more pictures onto the picture frame</span>
-        <div id="frame">
-            <div id="slideshow"></div>
+    {% include "include/rascal-topbar.html" %}
+    <div class="container">
+        <div class="well rascal">
+            <div class="album">
+                <h1>Rascal Album</h1>
+                <span id="intro">You can drag more pictures onto the picture frame</span>
+                <div id="frame">
+                    <div id="slideshow"></div>
+                </div>
+                <div id="buttons" align="center">
+                    <a id="previous" class="btn btn-large btn-info rascal left" href="#"><i class="icon-chevron-left icon-white"></i> Previous</a>
+                    <a id="auto" class="btn btn-large btn-primary rascal" href="#">Slideshow <i id="auto-icon" class="icon-play icon-white"></i></a>
+                    <a id="next" class="btn btn-large btn-info rascal right" href="#">Next <i class="icon-chevron-right icon-white"></i></a>
+                </div>
+                <p id="progress" /> 
+                <div id="status"></div>
+            </div> <!-- /.album -->
         </div>
-        <div id="buttons" align="center">
-            <input id="previous" type="button" value="&lt; Previous" class="large blue awesome left" />
-            <input id="auto" type="button" value="Slideshow" class="large blue awesome" />
-            <input id="next" type="button" value="Next &gt;" class="large blue awesome right" />
-        </div>
-        <p id="progress" /> 
-        <div id="status"></div>
-    </div>
+    </div> <!-- /.container -->
     
-    <script src="/static/js/album.js"></script>
+    <script src="static/js/album.js"></script>
     
     <script type="text/javascript">
         /* Initialise Rascal library */

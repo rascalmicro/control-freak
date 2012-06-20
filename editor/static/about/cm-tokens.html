@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Editor - Tokens</title>
+    <link rel="shortcut icon" href="/editor/static/ico/favicon.ico">
+    <link rel="stylesheet" type="text/css" href="/editor/static/css/bootstrap-2.0.4.css">
+    <link rel="stylesheet" type="text/css" href="/editor/static/codemirror2/lib/codemirror.css">
+    <link rel="stylesheet" type="text/css" href="/editor/static/codemirror2/theme/blackboard.css">
+    <link rel="stylesheet" type="text/css" href="/editor/static/codemirror2/theme/night.css">
+    <link rel="stylesheet/less" type="text/css" href="/editor/static/css/solarized-light-cm.less">
+    <link rel="stylesheet/less" type="text/css" href="/editor/static/css/solarized-dark-cm.less">
+    <link rel="stylesheet/less" type="text/css" href="/editor/static/css/themes-cm.less">
+    <style>
+        body {
+            padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
+        }
+        .large {
+            font-size: 20px;
+        }
+    </style>
+    <script src="/editor/static/js/less-1.3.0.js" type="text/javascript"></script>
+    <script src="/editor/static/js/jquery-1.7.2.js"></script>
+</head>
+<body>
+    <div class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container-fluid">
+          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
+          <a class="brand rascal" href="#"><img id="rascallogo" src="/editor/static/images/rm-logo-words-only-light.png" /></a>
+          <!-- <a class="brand" href="#">Recent changes to the Rascal Editor</a> -->
+          <div class="nav-collapse">
+            <ul class="nav">
+                <li><a href="/editor/static/about/cm-keyboard.html">Keyboard Shortcuts</a></li>
+              <li class="active"><a href="/editor/static/about/cm-tokens.html">Tokens</a></li>
+              <li><a href="/editor/static/about/cm-solarized.html">Solarized Themes</a></li>
+              <li><a href="/editor/static/about/cm-recent-changes.html">Recent Changes</a></li>
+            </ul>
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>
+
+    <div class="container-fluid">
+        <h2>CodeMirror Tokens</h2>
+        
+        <p>Choose theme:</p>
+        <div class="btn-group" data-toggle="buttons-radio">
+            <button id="th-none" class="btn active">None</button>
+            <button id="th-default" class="btn">Default</button>
+            <button id="th-night" class="btn">Night</button>
+            <button id="th-blackboard" class="btn">Blackboard</button>
+            <button id="th-solarized-light" class="btn">Solarized-Light</button>
+            <button id="th-solarized-dark" class="btn">Solarized-Dark</button>
+       </div>
+        <p>&nbsp;</p>
+        <table class="table table-bordered table-condensed">
+        <thead>
+            <tr>
+                <th width="16%">Token</th>
+                <th width="21%">HTML</th>
+                <th width="21%">CSS</th>
+                <th width="21%">JavaScript</th>
+                <th width="21%">Python</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><span class="cm-meta large">meta</span></td>
+                <td>declaration</td>
+                <td></td>
+                <td></td>
+                <td>decorator</td>
+            </tr>
+            <tr class="">
+                <td><span class="cm-comment large">comment</span></td>
+                <td>yes</td>
+                <td>yes</td>
+                <td>yes</td>
+                <td>yes</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td><span class="cm-tag large">tag</span></td>
+                <td>element (e.g. &lt;body&gt;)</td>
+                <td>selector (element or class)</td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td><span class="cm-keyword large">keyword</span></td>
+                <td></td>
+                <td>!important rule</td>
+                <td>statement (e.g. function)</td>
+                <td>keyword (e.g. import, def)</td>
+            </tr>
+            <tr>
+                <td><span class="cm-string-2 large">string-2</span></td>
+                <td></td>
+                <td>selector (id)</td>
+                <td>regexp</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td><span class="cm-attribute large">attribute</span></td>
+                <td>attribute (e.g. class, href)</td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td><span class="cm-variable large">variable</span></td>
+                <td></td>
+                <td>property (e.g. background-color)</td>
+                <td>global variable</td>
+                <td>variable (all levels)</td>
+            </tr>
+            <tr>
+                <td><span class="cm-def large">def</span></td>
+                <td></td>
+                <td></td>
+                <td>declaration of function argument or local variable (e.g. function(arg), var v)</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td><span class="cm-variable-2 large">variable-2</span></td>
+                <td></td>
+                <td></td>
+                <td>reference to function argument or local variable (e.g. v = arg)</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td><span class="cm-variable-3 large">variable-3</span></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td><span class="cm-property large">property</span></td>
+                <td></td>
+                <td></td>
+                <td>property or method of an object (e.g. obj.length)</td>
+                <td></td>
+            </tr>
+             <tr>
+                <td><span class="cm-number large">number</span></td>
+                <td></td>
+                <td>value assigned to a property (e.g. 20px auto 10px)</td>
+                <td>number (e.g. 123, 4.5, 0xff)</td>
+                <td>number (e.g. 123, 4.5, 0xff)</td>
+            </tr>
+             <tr>
+                <td><span class="cm-string large">string</span></td>
+                <td>value assigned to an attribute (e.g. class="navbar")</td>
+                <td>quoted string (e.g. input[type="button"])</td>
+                <td>quoted string (e.g. msg = 'hello world';)</td>
+                <td>quoted string (e.g. print "hello world")</td>
+            </tr>
+            <tr>
+                <td><span class="cm-atom large">atom</span></td>
+                <td>entity (e.g. &amp;nbsp;)</td>
+                <td>color value starting with a hash (e.g. #111, #cb4b16)</td>
+                <td>literal (e.g. true, false, undefined, null)</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td><span class="cm-builtin large">builtin</span></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>built-in type (e.g. True, str(), set() )</td>
+            </tr>
+            <tr>
+                <td><span class="cm-operator large">operator</span></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>operator (e.g. +, ==, and)</td>
+            </tr>
+            <tr>
+                <td><span class="cm-error large">error</span></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+        </tbody>
+        </table>
+        <p><small>Last update 17 June 2012</small></p>
+    </div> <!-- /container -->
+    <script language="javascript" type="text/javascript">
+        function setTheme(theme) {
+            $('.btn-group button').removeClass('active');
+            $('#th-' + theme).addClass('active');
+            $('body').removeClass().addClass('cm-s-' + theme);
+        }
+        
+        function setEditor (editor) {
+            $.post('/editor/set_editor', { editor: editor }, function (response) {
+                console.log('set_editor ' + editor + ': ' + response);
+                selectEditor('1', editor);
+            });
+        }
+
+        $('#th-none').click(function () {
+            setTheme('');
+        });
+        
+         $('#th-default').click(function () {
+            setTheme('default');
+        });
+
+        $('#th-night').click(function () {
+            setTheme('night');
+        });
+
+        $('#th-blackboard').click(function () {
+            setTheme('blackboard');
+        });
+        
+        $('#th-solarized-light').click(function () {
+            setTheme('solarized-light');
+        });
+        
+        $('#th-solarized-dark').click(function () {
+            setTheme('solarized-dark');
+        });
+    </script>
+</body>
+</html>
