@@ -64,22 +64,10 @@ p {
 
 /* General */
 .btn.rascal {
-    font-family: 'Lucida Grande';
+    font-family: "Lucida Grande","Lucida Sans",sans-serif;
     font-size: 16px;
 }
-
-.night { 
-   /*  background-color: #0A001F; */
-    background-color: #0C1021; /* blackboard */
-}
-
-@font-face {
-  font-family: 'DroidSans';
-  font-style: normal;
-  font-weight: normal;
-  src: url('/editor/static/fonts/DroidSans.ttf');
-}
-
+             
 @font-face {
   font-family: 'Molengo';
   font-style: normal;
@@ -88,8 +76,8 @@ p {
 }
 
 @font-face {
-  font-family: 'VT323';
+  font-family: 'URW Gothic L';
   font-style: normal;
   font-weight: normal;
-  src: url('/editor/static/fonts/VT323.ttf');
+  src: url('/editor/static/fonts/urw-gothic-l-book.ttf');
 }

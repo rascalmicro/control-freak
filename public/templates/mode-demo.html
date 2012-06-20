@@ -1,0 +1,67 @@
+<!DOCTYPE html> <!-- cm-meta -->
+<!-- cm-comment -->
+<html> <!-- cm-tag -->
+<head>
+    <meta charset="utf-8"> <!-- charset is cm-attribute, "utf-8" is cm-string -->
+    <title>Mode Demo</title>
+    <link rel="shortcut icon" href="static/ico/favicon.ico">
+    <style>
+        /* cm-comment */
+        /* css body selector is cm-keyword */
+        body {
+            /* css property is cm-attribute, "Molengo" is cm-string */
+            font-family: "Molengo","URW Gothic L",sans-serif;
+            /* sans-serif and 1em are cm-number */
+            font-size: 1em;
+            line-height: 1.4em;
+            margin: 0.5em;
+            /* color values are cm-atom */
+            color: #E7E8E9;
+            /* the !important rule is cm-keyword */
+            background: #616263 !important;
+        }
+        /* css id selector is cm-string-2 */
+        #rascalcontent {
+            width: 940px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+    </style>
+</head>
+<body>
+    <div id="rascalcontent">
+        <h1>CodeMirror Mode Demo</h1>
+        View this in the editor. The comments identify the tokens generated when parsing HTML,
+        CSS and JavaScript. These tokens are used to colour the syntax.
+        <!-- the entity &nbsp; is cm-atom -->
+        <p>&nbsp;</p>
+    </div>
+    <script language="javascript" type="text/javascript">
+        // cm-comment
+        // In JavaScript, var and function are cm-keyword
+        // global variables and function names are cm-variable
+        var myGlobal, dirPath;
+        // declarations of arguments and local variables are cm-def
+        function myFunction (myArg, thePath) {
+           var myVal;
+            // references to local args and variables are cm-variable-2
+            myVal = 123;    // Assignment of cm-number
+            // the literal undefined is cm-atom
+            if (myArg !== undefined) {
+                // assign cm-variable-2 to cm-variable
+                myGlobal = myArg + myVal;
+            }
+            // Here we are calling method .log() of global console
+            // the method is cm-property. We are passing cm-string
+            console.log('This is a string');
+            // This statement assigns the directory part of thePath to dirPath
+            //  the global dirPath is cm-variable
+            //  the reference to local arg thePath is cm-variable-2
+            //  the .match and .split methods are cm-property
+            //  0 is cm_number, '/' is cm-string
+            //  the regular expression is cm-string-2
+            dirPath = (thePath.match(/.*\//)[0]).split('/');
+        }
+    </script>
+</body>
+</html>

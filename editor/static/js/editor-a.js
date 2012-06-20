@@ -95,6 +95,10 @@ function editorSetMode(ext) {
         mode = ace.require("ace/mode/xml").Mode;
         console.log('Mode xml');
         break;
+    case 'less':
+        mode = ace.require("ace/mode/less").Mode;
+        console.log('Mode less');
+        break;
     default:
         mode = ace.require("ace/mode/text").Mode;
         console.log('Mode txt');

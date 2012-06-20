@@ -84,7 +84,7 @@
 #filetree {
     padding: 0 10px 0 0;
     /* border: 1px solid #414243; */
-    border: 1px solid #0A001F;
+    /* border: 1px solid #0A001F; */
     height: 455px;
     overflow: auto;
 }
@@ -111,10 +111,6 @@ a[draggable=true] {
 
 #location-bar.changed {
     color: #EF4A42;
-}
-
-#location-bar a {
-    color: #F8F8F8;
 }
 
 #location-bar a.changed {
@@ -144,6 +140,10 @@ a[draggable=true] {
 /* modal dialogues */
 .modal.rascal {
     color: #333;
+}
+
+.modal.rascal p.warning {
+    color: red;
 }
 
 .form-horizontal .control-group.rascal {

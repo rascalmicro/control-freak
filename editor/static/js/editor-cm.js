@@ -10,6 +10,7 @@ var prefs = {
         visibleTabs: false,
         indentUnit: 4,
         lineNumbers: false,
+        highlightActive: true,
         lineWrapping: false,
         matchBrackets: false,
     },
@@ -22,6 +23,7 @@ var prefs = {
         visibleTabs: 'boolean',
         indentUnit: 'int',
         lineNumbers: 'boolean',
+        highlightActive: 'boolean',
         lineWrapping: 'boolean',
         matchBrackets: 'boolean'
     },
@@ -34,6 +36,7 @@ var prefs = {
         visibleTabs: applyVisibleTabs,
         indentUnit: applyIndentUnit,
         lineNumbers: applyLineNumbers,
+        highlightActive: applyHighlightActive,
         lineWrapping: applyLineWrapping,
         matchBrackets: applyMatchBrackets
     }
@@ -43,6 +46,22 @@ function setPictureFrameSize (frp) {
     "use strict";
     frp.height($('.CodeMirror-scroll').height())
         .width($('.CodeMirror-scroll').width());
+}
+
+// Support for highlighting active line
+var hlActive = false;
+var hlLine = null;
+var hlLineStyle = "activeline-default";
+
+function activeline () {
+    if (hlActive) {
+        if (hlLine !== null) {
+            editor.setLineClass(hlLine, null, null);
+        } else {
+            console.log('WARNING activeline: hlLine is null');
+        }
+        hlLine = editor.setLineClass(editor.getCursor().line, null, hlLineStyle);
+    }
 }
 
 // Initialise editor with soft tabs
@@ -71,6 +90,7 @@ function initEditor() {
         extraKeys: {
             "Tab": softTabs
         },
+        onCursorActivity: activeline,
 //        electricChars: false,
         onChange: fileChanged
     });
@@ -129,6 +149,9 @@ function editorSetMode(ext) {
     case 'xml':
         mode = 'htmlmixed';
         break;
+    case 'less':
+        mode = 'less';
+        break;
     default:
         mode = 'text';
     }
@@ -141,6 +164,10 @@ function editorSetText(s, ext) {
     if (ext === undefined) {
         ext = 'txt';
     }
+    // Fix to ensure activeLine is updated when loading a new file
+    editor.setValue(' ');
+    editor.setCursor(0, 1);
+    // End fix
     editor.setValue(s);
     editorSetMode(ext);
 }
@@ -150,12 +177,44 @@ function editorGetText() {
     return editor.getValue();
 }
 
+var THEMES = ['default', 'night', 'solarized-light', 'solarized-dark']
 
 // Manage preferences
 function applyTheme () {
     "use strict";
+    var oldTheme = editor.getOption('theme');
+    var newTheme;
     console.log('applyTheme ' + preferences.theme);
     editor.setOption('theme', preferences.theme);
+    
+    // Set theme for other panes
+    if ($.inArray(preferences.theme, THEMES) >= 0) {
+        newTheme = preferences.theme;
+    } else {
+        newTheme = 'blackboard';
+    }
+    $('#ft-background')
+        .removeClass('rm-well-' + oldTheme)
+        .addClass('rm-well-' + newTheme);
+    $('#filetree')
+        .removeClass('filetree-' + oldTheme)
+        .addClass('filetree-' + newTheme);
+    $('#new-file-folder-bar')
+        .removeClass('rm-well-' + oldTheme)
+        .addClass('rm-well-' + newTheme);
+    $('#location-bar')
+        .removeClass('rm-well-' + oldTheme)
+        .addClass('rm-well-' + newTheme);
+
+    // Set active line highlight color
+    hlLineStyle = 'activeline-' + newTheme;
+    console.log('+ hlLineStyle ' + hlLineStyle);
+    if (preferences.highlightActive) {
+        if (hlLine !== null) {
+            activeline();
+        }
+    }
+
 }
 
 function applyFontSize() {
@@ -222,6 +281,26 @@ function applyLineNumbers() {
     editor.setOption('lineNumbers', preferences.lineNumbers);
 }
 
+function applyHighlightActive() {
+    "use strict";
+    console.log('applyHighlightActive ' + preferences.highlightActive);
+    if (preferences.highlightActive != hlActive) {
+        hlActive = preferences.highlightActive;
+        if (hlActive) {
+            console.log('+ turning on hlActive');
+            hlLine = editor.setLineClass(editor.getCursor().line, null, hlLineStyle);
+        } else {
+            console.log('+ turning off hlActive');
+            // Clear current highlight
+            if (hlLine !== null) {
+                editor.setLineClass(hlLine, null, null);
+            } else {
+                console.log('+ WARNING hlLine is null');
+            }
+        }
+    }
+}
+
 function applyLineWrapping() {
     "use strict";
     console.log('applyLineWrapping ' + preferences.lineWrapping);
@@ -284,6 +363,12 @@ function setLineNumbers() {
     prefs.apply.lineNumbers();
 }
 
+function setHighlightActive() {
+    "use strict";
+    preferences.highlightActive = $(this).is(':checked');
+    prefs.apply.highlightActive();
+}
+
 function setLineWrapping() {
     "use strict";
     preferences.lineWrapping = $(this).is(':checked');
@@ -329,6 +414,10 @@ function bindEditPreferences () {
     $('#lineNumbers').click(setLineNumbers)
         .each (function () {
             this.checked = preferences.lineNumbers;
+        });
+    $('#highlightActive').click(setHighlightActive)
+        .each (function () {
+            this.checked = preferences.highlightActive;
         });
     $('#lineWrapping').click(setLineWrapping)
         .each (function () {

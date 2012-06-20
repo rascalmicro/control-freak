@@ -1,21 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8">
     <title>Editor</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="shortcut icon" href="static/images/favicon.ico">
+    {% include "include/editor-head.html" %}
 
-    <link href="static/css/bootstrap-2.0.3.css" rel="stylesheet">
-    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
-    <!--[if lt IE 9]>
-    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-    <!-- <link href="../assets/css/bootstrap-responsive.css" rel="stylesheet"> -->
-        
-    <link rel="stylesheet" type="text/css" href="/editor/static/css/editor-all.css">
     <link rel="stylesheet" type="text/css" href="/editor/static/css/editor.css">
     <link rel="stylesheet" type="text/css" href="/editor/static/css/jquery.filetree.css">
+    <link rel="stylesheet/less" type="text/css" href="/editor/static/css/themes-cm.less">
 
     <script src="/editor/static/ace/build/src/ace-noconflict.js" type="text/javascript" charset="utf-8"></script>
     <script src="/editor/static/ace/build/src/theme-textmate-noconflict.js" type="text/javascript" charset="utf-8"></script>
@@ -29,11 +20,11 @@
     <script src="/editor/static/ace/build/src/mode-python-noconflict.js" type="text/javascript" charset="utf-8"></script>
     <script src="/editor/static/ace/build/src/mode-text-noconflict.js" type="text/javascript" charset="utf-8"></script>
     <script src="/editor/static/ace/build/src/mode-xml-noconflict.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/editor/static/ace/build/src/mode-less-noconflict.js" type="text/javascript" charset="utf-8"></script>
     
-    <script src="/editor/static/js/jquery-1.7.2.js"></script>
+    {% include "include/editor-scripts.html" %}
     <script src="/editor/static/js/jquery.filetree.js"></script>
     <script src="/editor/static/js/rascal-1.03.js"></script>
-    <script src="static/js/bootstrap-2.0.3.js"></script>
     
     <style>
         #ace-editor {
@@ -52,24 +43,8 @@
     </style>
 </head>
 <body>
-    <div class="navbar navbar-fixed-top">
-        <div class="navbar-inner">
-            <div class="container-fluid">
-                <a class="brand rascal" href="/editor/"><img id="rascallogo" src="/editor/static/images/rm-logo-words-only-light.png" /></a>
-                <div class="nav-collapse rascal">
-                    <ul class="nav_rascal">
-                        <li><a href="/editor/">editor</a> | </li>
-                        <li><a href="/editor/log">log</a> | </li>
-                        <li><a href="/editor/config">config</a> | </li>
-                        <li><a href="/editor/monitor">monitor</a></li>
-                    </ul>
-                    <ul class="nav_rascal">
-                        <li><a href="/editor/logout" class="logout">log out</a></li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </div>
+    {% include "include/editor-topbar.html" %}
+
     <div class="container-fluid">
         <div class="buttons">
             <input id="reload" type="button" value="Reload pytronics" class="btn btn-large btn-danger rascal" alt="Reload pytronics">
@@ -93,18 +68,19 @@
     <div class="container-fluid">
         <div class="row-fluid">    
             <div class="span3">
-                  <div class="well sidebar-nav rascal night">
+                  <div id="ft-background" class="well rascal rm-well-default">
                         <div id="filetree">&nbsp;</div>
                   </div><!--/.well -->
-                   <div class="well sidebar-nav rascal night">
+                   <div id="new-file-folder-bar" class="well rascal rm-well-default">
                         <img id="new-template" src="/editor/static/images/oxygen-new-file-32x32.png" />
                         <img id="new-folder" src="/editor/static/images/oxygen-new-folder-32x32.png" />
+                        <img id="rename-file" src="/editor/static/images/oxygen-rename-file-32x32.png" />
                         <img id="preferences" src="/editor/static/images/oxygen-actions-32x32.png" />
                   </div><!--/.well -->
             </div>
             <div class="span9">
                 <input id="path" type="hidden" name="path" value="{{ path }}">
-                <div id="location-bar" class="well sidebar-nav rascal night">&nbsp;</div>
+                <div id="location-bar" class="well rascal rm-well-default">&nbsp;</div>
                 <div id="textfield">
                     <div id="ace-editor">{{text_to_edit}}</div>
                     <div id="frame-p" class="frame"></div>
@@ -120,12 +96,12 @@
             <h3>Create a new template</h3>
         </div>
         <div class="modal-body">
-            <p id="template-message">The name you type should end in .html</p>
+            <p id="template-message">&nbsp;</p>
             <input id="template-name" type="text" name="template-name" />
         </div>
         <div class="modal-footer">
-            <a id="cancel-template" href="#" class="btn">Cancel</a>
-            <a id="create-template" href="#" class="btn btn-danger">Create template</a>
+            <a id="template-cancel" href="#" class="btn">Cancel</a>
+            <a id="template-create" href="#" class="btn btn-danger">Create template</a>
         </div>
     </div>
 
@@ -135,12 +111,27 @@
             <h3>Create a new folder in "static"</h3>
         </div>
         <div class="modal-body">
-            <p id="folder-message">You will be able to drag it to another folder</p>
+            <p id="folder-message">&nbsp;</p>
             <input id="folder-name" type="text" name="folder-name" />
         </div>
         <div class="modal-footer">
-            <a id="cancel-folder" href="#" class="btn">Cancel</a>
-            <a id="create-folder" href="#" class="btn btn-danger">Create folder</a>
+            <a id="folder-cancel" href="#" class="btn">Cancel</a>
+            <a id="folder-create" href="#" class="btn btn-danger">Create folder</a>
+        </div>
+    </div>
+
+    <div id="modal-n" class="modal fade hide rascal">
+        <div class="modal-header">
+            <button class="close" data-dismiss="modal">×</button>
+            <h3>Rename file</h3>
+        </div>
+        <div class="modal-body">
+            <p id="rename-message">&nbsp;</p>
+            <input id="rename-name" type="text" name="rename-name" />
+        </div>
+        <div class="modal-footer">
+            <a id="rename-cancel" href="#" class="btn">Cancel</a>
+            <a id="rename-yes" href="#" class="btn btn-danger">Rename</a>
         </div>
     </div>
 
@@ -238,14 +229,6 @@
                         </div> <!-- controls -->
                     </div> <!-- control-group -->
                     <div class="control-group rascal">
-<!-- 
-                        <label class="control-label" for="indentUnit">Indent size</label>
-                        <div class="controls">
-                            <input id="indentUnit" type="number" value="2" min="0" max="64" class="span1" />
-                            <span class="help-inline rascal">additional spaces to indent a block</span>
-                        </div> <!~~ controls ~~>
-                    </div> <!~~ control-group ~~>
- -->
                      <div class="control-group rascal">
                         <label class="control-label" for="wrapOff">Wrap lines</label>
                         <div class="controls">
@@ -253,10 +236,10 @@
                                 <input id="wrapOff" type="radio" name="wrapLines" value="0" checked="checked" />Off
                             </label>
                             <label class="radio inline">
-                                <input id="wrapOn" type="radio" name="wrapLines" value="1" />On
+                                <input id="wrapOn" type="radio" name="wrapLines" value="1" />At window width
                             </label>
                             <label class="radio inline">
-                                <input id="wrap80" type="radio" name="wrapLines" value="2">At 80 characters
+                                <input id="wrap80" type="radio" name="wrapLines" value="2">At page width
                             </label>
                         </div> <!-- controls -->
                     </div> <!-- control-group -->
