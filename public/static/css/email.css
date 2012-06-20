@@ -9,7 +9,7 @@ body {
     background-color: #111111;
     width: 25em;
     font-family:'Courier', sans-serif;
-    font-size: 1em;
+    font-size: 1em !important;
     margin-top: 10px;
     margin-bottom: 20px;
 }
