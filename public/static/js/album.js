@@ -84,7 +84,8 @@ function stopShow() {
     "use strict";
     // Also sets int_timer to undefined
     int_timer = clearInterval(int_timer);
-    $('#auto').removeClass('red').addClass('blue');
+    $('#auto').removeClass('btn-danger').addClass('btn-primary');
+    $('#auto-icon').removeClass('icon-stop').addClass('icon-play');
     console.log('Slide show stop');
 }
 
@@ -100,9 +101,6 @@ $('#next').click(function () {
 
 $('#previous').click(function () {
     "use strict";
-//     rascal.directory.directory = 'static/pictures';
-//     rascal.directory.clearDirectory(loadPictures);
-//     return;
     if (!slideChanging) {
         if (int_timer) {
             stopShow();
@@ -115,7 +113,8 @@ $('#auto').click(function () {
     "use strict";
     if (int_timer === undefined) {
         int_timer = setInterval(nextSlidePlease, 5000);
-        $('#auto').removeClass('blue').addClass('red');
+        $('#auto').removeClass('btn-primary').addClass('btn-danger');
+        $('#auto-icon').removeClass('icon-play').addClass('icon-stop');
         console.log('Slide show start ' + int_timer);
     } else {
         stopShow();

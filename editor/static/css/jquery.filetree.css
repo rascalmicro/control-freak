@@ -16,13 +16,15 @@ ul.jqueryFileTree > li {
 	white-space: nowrap;
 }
 
+/* 
 ul.jqueryFileTree > li.directory > a:hover {
     background-color: #414243;
 }
+ */
 
 /* No padding-right to stop selection r margin creeping in */
 ul.jqueryFileTree a {
-    color: #E7E8E9;
+    /* color: #E7E8E9; */
     font-family: "Molengo","URW Gothic L",sans-serif;
     font-size: 1em;
 	text-decoration: none;
@@ -31,13 +33,17 @@ ul.jqueryFileTree a {
 	padding: 0px 0px 0px 2px;
 }
 
+/* 
 ul.jqueryFileTree a.selected {
     background-color: #414243;
 }
+ */
 
+/* 
 ul.jqueryFileTree a.dragover {
     background-color: #414243;
 }
+ */
 
 ul.jqueryFileTree a.changed {
     color: #EF4A42;
@@ -48,7 +54,7 @@ ul.jqueryFileTree img {
     /* visibility: hidden; */
     float: right;
     margin-right: 3px;
-    margin-top: 4px;
+    margin-top: 2px;
     width: 14px;
     opacity: 0.0;
 }

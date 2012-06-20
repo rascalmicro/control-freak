@@ -1,42 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8">
     <title>Monitor</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="shortcut icon" href="static/images/favicon.ico">
-    
-    <link href="static/css/bootstrap-2.0.3.css" rel="stylesheet">
-    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
-    <!--[if lt IE 9]>
-    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-    <!-- <link href="../assets/css/bootstrap-responsive.css" rel="stylesheet"> -->
-    
-    <link rel="stylesheet" type="text/css" href="/editor/static/css/editor-all.css">
+    {% include "include/editor-head.html" %}
     <link rel="stylesheet" type="text/css" href="/editor/static/css/editor-other.css">
-
-    <script src="/editor/static/js/jquery-1.7.2.js"></script>
+    {% include "include/editor-scripts.html" %}
 </head>
 <body>
-    <div class="navbar navbar-fixed-top">
-        <div class="navbar-inner">
-            <div class="container-fluid">
-                <a class="brand rascal" href="/editor/"><img id="rascallogo" src="/editor/static/images/rm-logo-words-only-light.png" /></a>
-                <div class="nav-collapse rascal">
-                    <ul class="nav_rascal">
-                        <li><a href="/editor/">editor</a> | </li>
-                        <li><a href="/editor/log">log</a> | </li>
-                        <li><a href="/editor/config">config</a> | </li>
-                        <li><a href="/editor/monitor">monitor</a></li>
-                    </ul>
-                    <ul class="nav_rascal">
-                        <li><a href="/editor/logout" class="logout">log out</a></li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </div>
+    {% include "include/editor-topbar.html" %}
     <div class="container-fluid">
         <div class="log-display">
             <table class="zebra">

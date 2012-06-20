@@ -108,13 +108,15 @@ def logout():
 @editor.route('/editor/')
 @login_required
 def start_edit():
-    import os
-    root = '/var/www/editor/.'
+    import ConfigParser
+    config = ConfigParser.SafeConfigParser()
+    config.read(CONFIG_FILE)
     try:
-        if os.path.exists(root + 'editor-a'):
-            return render_template('editor-a.html', text_to_edit='Ace: No file selected')
-        else:
-            return render_template('editor-cm.html', text_to_edit='CodeMirror2: No file selected')
+        editor = config.get('Advanced', 'editor')
+    except:
+        editor = 'editor-cm'
+    try:
+        return render_template(editor + '.html', text_to_edit='No file selected')
     except TemplateNotFound:
         abort(404)
 
@@ -155,7 +157,7 @@ def move_item():
     import subprocess
     src = request.form['src']
     dst = request.form['dst']
-    print "Moving item " + src + " to " + dst
+    print "## move_item ## " + src + " to " + dst
     res = subprocess.call(['mv', src, dst])
     if res <> 0:
         return 'Bad request', 400
@@ -415,16 +417,26 @@ def mark():
 @editor.route('/editor/config')
 @login_required
 def config():
-    import os
-    root = '/var/www/editor/.'
-    if os.path.exists(root + 'editor-a'):
-        editor = 'editor-a'
-    else:
+    import ConfigParser
+    config = ConfigParser.SafeConfigParser()
+    config.read(CONFIG_FILE)
+    try:
+        editor = config.get('Advanced', 'editor')
+        advanced = '1'
+    except ConfigParser.NoSectionError:
         editor = 'editor-cm'
+        advanced = '0'
+    except ConfigParser.NoOptionError:
+        editor = 'editor-cm'
+        advanced = '1'
+    except Exception, e:
+        print '## config ## Unexpected error: %s' % str(e)
+        editor = 'editor-cm'
+        advanced = '0'
     try:
         import subprocess
         process_table = subprocess.Popen('ifconfig', stdout=subprocess.PIPE)
-        return render_template('config.html', processes=(process_table.communicate()[0]).strip(), editor=editor)
+        return render_template('config.html', processes=(process_table.communicate()[0]).strip(), advanced=advanced, editor=editor)
     except TemplateNotFound:
         abort(404)
 
@@ -439,15 +451,21 @@ def reset():
 @editor.route('/editor/set_editor', methods=['POST'])
 @login_required
 def set_editor():
-    import glob, os
-    root = '/var/www/editor/.'
-    files = glob.glob(root + 'editor-*')
-    for f in files:
-        print 'Removing ' + f
-        os.remove(f)
+    import ConfigParser
+    section = 'Advanced'
     editor = request.form['editor']
-    f = file (root + editor, "w")
-    f.close()
+    try:
+        config = ConfigParser.SafeConfigParser()
+        config.optionxform = str    # Don't convert to lower case
+        config.read(CONFIG_FILE)
+        if not config.has_section(section):
+            config.add_section(section)
+        config.set(section, 'editor', editor)
+        with open(CONFIG_FILE, 'wb') as configfile:
+            config.write(configfile)
+    except Exception, e:
+        print '## set_editor ## Unexpected error: %s' % str(e)
+        return 'Bad request', 400
     return 'OK', 200
 
 ## monitor page functions
@@ -466,4 +484,3 @@ def monitor():
 
 if __name__ == "__main__":
     editor.run(host='127.0.0.1:5001', debug=True)
-

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Editor - Keyboard Shortcuts</title>
+    <link rel="shortcut icon" href="/editor/static/ico/favicon.ico">
+    <link rel="stylesheet" type="text/css" href="/editor/static/css/bootstrap-2.0.4.css">
+    <style>
+      body {
+        padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
+      }
+    </style>
+    <script src="/editor/static/js/jquery-1.7.2.js"></script>
+</head>
+<body>
+    <div class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container-fluid">
+          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
+          <a class="brand rascal" href="#"><img id="rascallogo" src="/editor/static/images/rm-logo-words-only-light.png" /></a>
+          <!-- <a class="brand" href="#">Recent changes to the Rascal Editor</a> -->
+          <div class="nav-collapse">
+            <ul class="nav">
+              <li class="active"><a href="/editor/static/about/cm-keyboard.html">Keyboard Shortcuts</a></li>
+              <li><a href="/editor/static/about/cm-tokens.html">Tokens</a></li>
+              <li><a href="/editor/static/about/cm-solarized.html">Solarized Themes</a></li>
+              <li><a href="/editor/static/about/cm-recent-changes.html">Recent Changes</a></li>
+            </ul>
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>
+    <div class="container-fluid">
+        <h2>CodeMirror - Keyboard Shortcuts</h2>
+        <table class="table table-striped table-bordered table-condensed">
+        <thead>
+            <tr>
+                <th width="15%">PC</th>
+                <th width="15%">Mac</th>
+                <th width="15%">Action</th>
+                <th width="55%">Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- sample line of text -->
+            <tr><td colspan="4"><strong>Editing Commands</strong></td><td></td></tr>
+            <tr><td>Any</td><td>Any</td><td></td><td>Insert any character not in this list at the cursor position</td></tr>
+            <tr><td>Tab</td><td>Tab</td><td>defaultTab</td><td>If no selection, insert hard or soft tab, otherwise indent selection</td></tr>
+            <tr><td>Shift-Tab</td><td>Shift-Tab</td><td>indentAuto</td><td>Revert to default indent for this line</td></tr>
+            <tr><td>Enter</td><td>Enter</td><td>newlineAndIndent</td><td>Insert new line and indent cursor to default position</td></tr>
+            <tr><td>Backspace</td><td>Backspace</td><td>delCharLeft</td><td>If no selection, delete the character before the cursor, otherwise delete selection</td></tr>
+            <tr><td>Delete</td><td>Delete<br/>Fn-Backspace</td><td>delCharRight</td><td>If no selection, delete the character after the cursor, otherwise delete selection</td></tr>
+            <tr><td>Ctrl-Backspace</td><td>Alt-Backspace</td><td>delWordLeft</td><td>If no selection, delete the word before the cursor, otherwise delete selection</td></tr>
+            <tr><td>Ctrl-Delete</td><td>Ctrl-Alt-Backspace<br/>Fn-Alt-Backspace<br/>Alt-Delete</td><td>delWordRight</td><td>If no selection, delete the word after the cursor, otherwise delete selection</td></tr>
+            <tr><td>Ctrl-D</td><td>Cmd-D</td><td>deleteLine</td><td></td></tr>
+
+            <tr><td>Ctrl-Z</td><td>Cmd-Z</td><td>undo</td><td></td></tr>
+            <tr><td>Shift-Ctrl-Z<br/>Ctrl-Y</td><td>Shift-Cmd-Z<br/>Cmd-Y</td><td>redo</td><td></td></tr>
+
+            <tr><td colspan="4"><strong>Movement Commands</strong></td><td></td></tr>
+            <tr><td>Ctrl-A</td><td>Cmd-A</td><td>selectAll</td><td></td></tr>
+            
+            <tr><td></td><td></td><td></td><td></td></tr>
+            <tr><td>Ctrl-Home<br/>Alt-Up</td><td>Cmd-Up</td><td>goDocStart</td><td></td></tr>
+            <tr><td>Ctrl-End<br/>Ctrl-Down</td><td>Cmd-Down<br/>Cmd-End</td><td>goDocEnd</td><td></td></tr>
+            <tr><td>Ctrl-Left</td><td>Alt-Left</td><td>goWordLeft</td><td></td></tr>
+            <tr><td>Ctrl-Right</td><td>Alt-Right</td><td>goWordRight</td><td></td></tr>
+            <tr><td>Alt-Left</td><td>Cmd-Left</td><td>goLineStart</td><td></td></tr>
+            <tr><td>Alt-Right</td><td>Cmd-Right</td><td>goLineEnd</td><td></td></tr>
+
+            <tr><td></td><td></td><td></td><td></td></tr>
+            <tr><td>Ctrl-S</td><td>Cmd-S</td><td>save</td><td></td></tr>
+            
+            <tr><td></td><td></td><td></td><td></td></tr>
+            <tr><td>Ctrl-F</td><td>Cmd-F</td><td>find</td><td></td></tr>
+            <tr><td>Ctrl-G</td><td>Cmd-G</td><td>findNext</td><td></td></tr>
+            <tr><td>Shift-Ctrl-G</td><td>Shift-Cmd-G</td><td>findPrev</td><td></td></tr>
+            <tr><td>Shift-Ctrl-F</td><td>Cmd-Alt-F</td><td>replace</td><td></td></tr>
+            <tr><td>Shift-Ctrl-R</td><td>Shift-Cmd-Alt-F</td><td>replaceAll</td><td></td></tr>
+            <tr><td></td><td></td><td></td><td></td></tr>
+            <tr><td>Ctrl-[</td><td>Cmd-[</td><td>indentLess</td><td></td></tr>
+            <tr><td>Ctrl-]</td><td>Cmd-]</td><td>indentMore</td><td></td></tr>
+            <tr><td></td><td></td><td></td><td></td></tr>
+            <tr><td>Left</td><td>Left</td><td>goCharLeft</td><td></td></tr>
+            <tr><td>Right</td><td>Right</td><td>goCharRight</td><td></td></tr>
+            <tr><td>Up</td><td>Up</td><td>goLineUp</td><td></td></tr>
+            <tr><td>Down</td><td>Down</td><td>goLineDown</td><td></td></tr>
+            <tr><td>End</td><td>End<br/>Fn-Right</td><td>goLineEnd</td><td></td></tr>
+            <tr><td>Home</td><td>Home<br/>Fn-Left</td><td>goLineStartSmart</td><td></td></tr>
+            <tr><td>PageUp</td><td>PageUp<br/>Fn-Up</td><td>goPageUp</td><td></td></tr>
+            <tr><td>PageDown</td><td>PageDown<br/>Fn-Down</td><td>goPageDown</td><td></td></tr>
+            <tr><td>Insert</td><td>Insert</td><td>toggleOverwrite</td><td></td></tr>
+       </tbody>
+        </table>
+        <p><small>Last update 15 June 2012</small></p>
+    </div> <!-- /container -->
+    <script language="javascript" type="text/javascript">
+    </script>
+</body>
+</html>

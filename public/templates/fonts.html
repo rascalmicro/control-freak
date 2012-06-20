@@ -1,70 +1,90 @@
 <!DOCTYPE html>
-<!-- 12 May 2012 dsmall -->
-<html>
+<!-- 12 May 2012, 19 June 2012 dsmall -->
+<html lang="en">
 <head>
-    <meta charset="utf-8">
     <title>Rascal Font Book</title>
-    <link rel="stylesheet" type="text/css" href="/static/css/demo.css">
-    <link rel="shortcut icon" href="/static/images/favicon.ico">
+    {% include "include/rascal-head.html" %}
     <style>
-        #molengo { font-family: "Molengo",sans-serif; }
-        #urw { font-family: "URW Gothic L",sans-serif; }
-        #ds { font-family: "DroidSans",sans-serif; }
-        #dsb { font-family: "DroidSans-Bold",sans-serif; }
-        #vt323 { font-family: "VT323",sans-serif; }
-        p { font-size: 18pt; }
+        .molengo { font-family: "Molengo",sans-serif; }
+        .urw { font-family: "URW Gothic L",sans-serif; }
+        .ds { font-family: "DroidSans",sans-serif; }
+        .dsb { font-family: "DroidSans-Bold",sans-serif; }
+        .vt323 { font-family: "VT323",sans-serif; }
+        p.sample { font-size: 18pt; }
     </style>
 </head>
 <body>
-    <div class="rascalcontent">
-        <div id="molengo">
-            <h1>Grumpy wizards make toxic brew for the evil Queen and Jack.</h1>
-            This is Molengo.
-            <p>ABCDEFGHIJKLM<br />
-                NOPQRSTUVWXYZ<br />
-                abcdefghijklm<br />
-                nopqrstuvwxyz<br />
-                0123456789</p>
-        </div>
-        <hr>
-        <div id="urw">
-            <h1>Grumpy wizards make toxic brew for the evil Queen and Jack.</h1>
-            This is URW Gothic Book.
-            <p>ABCDEFGHIJKLM<br />
-                NOPQRSTUVWXYZ<br />
-                abcdefghijklm<br />
-                nopqrstuvwxyz<br />
-                0123456789</p>
-        </div>
-        <hr>
-        <div id="ds">
-            <h1>Grumpy wizards make toxic brew for the evil Queen and Jack.</h1>
-            This is Droid Sans.
-            <p>ABCDEFGHIJKLM<br />
-                NOPQRSTUVWXYZ<br />
-                abcdefghijklm<br />
-                nopqrstuvwxyz<br />
-                0123456789</p>
-        </div>
-        <hr>
-        <div id="dsb">
-            <h1>Grumpy wizards make toxic brew for the evil Queen and Jack.</h1>
-            This is Droid Sans Bold.
-            <p>ABCDEFGHIJKLM<br />
-                NOPQRSTUVWXYZ<br />
-                abcdefghijklm<br />
-                nopqrstuvwxyz<br />
-                0123456789</p>
-        </div>
-        <hr>
-        <div id="vt323">
-            <h1>Grumpy wizards make toxic brew for the evil Queen and Jack.</h1>
-            This is VT323.
-            <p>ABCDEFGHIJKLM<br />
-                NOPQRSTUVWXYZ<br />
-                abcdefghijklm<br />
-                nopqrstuvwxyz<br />
-                0123456789</p>
+    {% include "include/rascal-topbar.html" %}
+    <div class="container">
+        <div class="well rascal">
+            <h1>Rascal Font Book</h1>
+            <p>This page illustrates the Molengo, URW Gothic, DroidSans and VT323 fonts installed on the Rascal.
+                For example, you could use VT323 in your project as follows:</p>
+            <pre>
+&lt;html&gt;
+    &lt;head&gt;
+        &lt;link href="static/css/boilerplate.css" rel="stylesheet"&gt;
+        &lt;style&gt;
+            body { padding: 10px; background-color: #333; }
+            .vt323 { font-family: "vt323",sans-serif; font-size: 20px; color: lime; }
+        &lt;/style&gt;
+    &lt;/head&gt;
+    &lt;body&gt;
+        &lt;div class="vt323"&gt;Simulation of DEC VT320 Text Terminal&lt;/div&gt;
+    &lt;/body&gt;
+&lt;/html&gt;</pre>
+            <iframe src="vt323.html" width="100%" height="60" frameborder="0"></iframe>
+            <hr>
+            <div class="molengo">
+                <h2>Grumpy wizards make toxic brew for the evil Queen and Jack.</h2>
+                This is Molengo.
+                <p class="molengo sample">ABCDEFGHIJKLM<br />
+                    NOPQRSTUVWXYZ<br />
+                    abcdefghijklm<br />
+                    nopqrstuvwxyz<br />
+                    0123456789</p>
+            </div>
+            <hr>
+            <div class="urw">
+                <h2>Grumpy wizards make toxic brew for the evil Queen and Jack.</h2>
+                This is URW Gothic Book.
+                <p class="urw sample">ABCDEFGHIJKLM<br />
+                    NOPQRSTUVWXYZ<br />
+                    abcdefghijklm<br />
+                    nopqrstuvwxyz<br />
+                    0123456789</p>
+            </div>
+            <hr>
+            <div class="ds">
+                <h2>Grumpy wizards make toxic brew for the evil Queen and Jack.</h2>
+                This is Droid Sans.
+                <p class="ds sample">ABCDEFGHIJKLM<br />
+                    NOPQRSTUVWXYZ<br />
+                    abcdefghijklm<br />
+                    nopqrstuvwxyz<br />
+                    0123456789</p>
+            </div>
+            <hr>
+            <div class="dsb">
+                <h2>Grumpy wizards make toxic brew for the evil Queen and Jack.</h2>
+                This is Droid Sans Bold.
+                <p class="dsb sample">ABCDEFGHIJKLM<br />
+                    NOPQRSTUVWXYZ<br />
+                    abcdefghijklm<br />
+                    nopqrstuvwxyz<br />
+                    0123456789</p>
+            </div>
+            <hr>
+            <div class="vt323">
+                <h2>Grumpy wizards make toxic brew for the evil Queen and Jack.</h2>
+                This is VT323.
+                <p class="vt323 sample">ABCDEFGHIJKLM<br />
+                    NOPQRSTUVWXYZ<br />
+                    abcdefghijklm<br />
+                    nopqrstuvwxyz<br />
+                    0123456789</p>
+            </div>
+            <hr>
         </div>
     </div>
     <script language="javascript" type="text/javascript">

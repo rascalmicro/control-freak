@@ -1,48 +1,53 @@
 <!DOCTYPE html>
-<!-- 12 May 2012 dsmall -->
-<html>
+<!-- 19 June 2012 dsmall -->
+<html lang="en">
 <head>
-    <meta charset="utf-8">
     <title>Browser Test</title>
-    <link rel="stylesheet" type="text/css" href="/static/css/demo.css">
-    <link rel="shortcut icon" href="/static/images/favicon.ico">
-    <script src="/static/js/jquery-1.7.2.js"></script>
-    <script src="/static/js/modernizr-2.5.3.js"></script>
+    {% include "include/rascal-head.html" %}
+    <script src="static/js/modernizr-2.5.3.js"></script>
     <style>
-        body {
-            margin: 0.5em;
+        span.pass {
+            color: LawnGreen;
         }
-        .rascalcontent {
-            width: 640px;
+        span.fail {
+            color: OrangeRed;
         }
     </style>
 </head>
 <body>
-    <div class="rascalcontent">
-        <h1>Browser Test</h1>
-        <p>Features supported in this browser are indicated by "true" in the Status column.
-        Features required for drag and drop in the editor and for the Upload and Album demos
-        are indicated by "true" in the Required column:</p>
-        <div id='what'></div>
+    {% include "include/rascal-topbar.html" %}
+    <div class="container">
+        <div class="well rascal">
+            <h1>Browser Test</h1>
+            <p>Features supported in this browser are indicated by "true" in the Status column.
+                Features required for drag and drop in the editor and for the Upload and Album demos
+                are indicated by "true" in the Required column:</p>
+            <div id='what'></div>
+        </div>
     </div>
+    
     <script type="text/javascript">
         var s;
         
         function testfeature(name, result, required) {
-            var status = (result != undefined);
-            s += '<tr><td>' + name + '</td><td>' + status + '</td><td>' + required + '</td></tr>';
+            var status = (result !== undefined);
+            var myClass = required ? ((status === required) ? 'pass' : 'fail') : '';
+            s += '<tr><td>' + name + '</td><td>' + status + '</td><td><span class="' + myClass + '">' + required + '</span></td></tr>';
         }
         
         function test() {
             var xhr = new XMLHttpRequest();
-            s = '<table border="1" cellspacing="0" cellpadding="5">';
-            s += '<tr><td>Feature</td><td>Status</td><td>Required</td></tr>';
+            // s = '<table border="1" cellspacing="0" cellpadding="5">';
+            s = '<table class="table table-bordered">';
+            s += '<thead><tr><th>Feature</th><th>Status</th><th>Required</th></tr></thead>';
+            s += '<tbody>';
             testfeature('Drag and Drop', Modernizr.draganddrop, true);
             testfeature('FileList', window.FileList, true);
             testfeature('File', window.File, true);
             testfeature('XMLHttpRequest.upload', xhr.upload, true);
             testfeature('FileReader', window.FileReader, false);
             testfeature('Blob', window.Blob, false);
+            s += '</tbody>';
             s += '</table>';
             document.getElementById('what').innerHTML = s;
         }

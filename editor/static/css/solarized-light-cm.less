@@ -1,0 +1,68 @@
+// Solarized core tones
+@base03: #002b36;
+@base02: #073642;
+@base01: #586e75;
+@base00: #657b83;
+@base0: #839496;
+@base1: #93a1a1;
+@base2: #eee8d5;
+@base3: #fdf6e3;
+
+// Accent colours
+@yellow: #b58900;
+@orange: #cb4b16;
+@red: #dc322f;
+@magenta: #d33682;
+@violet: #6c71c4;
+@blue: #268bd2;
+@cyan: #2aa198;
+@green: #859900;
+
+// Base core values for light
+// base01 - optional emphasized content
+// base00 - body text/default code/primary content
+// base1 - comments/secondary content
+// base2 - background highlights
+// base3 - background
+
+.cm-s-solarized-light {
+    background: @base3;
+    color: @base00;
+    font-family: Monaco, Menlo, Consolas, monospace;
+}
+
+.cm-s-solarized-light .CodeMirror-selected { background: darker(@base2, 12%) !important; }
+.cm-s-solarized-light .CodeMirror-gutter { background: @base2; border-right: 0; }
+.cm-s-solarized-light .CodeMirror-gutter-text { color: @base1; }
+.cm-s-solarized-light .CodeMirror-cursor { border-left: 1px solid @base01 !important; }
+
+.cm-s-solarized-light span.cm-meta {color: @green;}
+.cm-s-solarized-light span.cm-comment {color: @base1; font-style:italic;}
+
+.cm-s-solarized-light span.cm-tag {color: @blue; font-weight: bold;}
+.cm-s-solarized-light span.cm-keyword {color: @blue; font-weight: bold;}
+.cm-s-solarized-light span.cm-string-2 {color: @red; font-weight: bold;}
+
+.cm-s-solarized-light span.cm-attribute {color: @yellow;}
+.cm-s-solarized-light span.cm-variable {color: @yellow;}
+.cm-s-solarized-light span.cm-def {color: @cyan;}
+.cm-s-solarized-light span.cm-variable-2 {color: @cyan;}
+.cm-s-solarized-light span.cm-variable-3 {color: @base00;}
+
+.cm-s-solarized-light span.cm-property {color: @violet;}
+.cm-s-solarized-light span.cm-number {color: @violet;}
+.cm-s-solarized-light span.cm-string {color: @orange;}
+.cm-s-solarized-light span.cm-atom {color: @magenta;}
+
+.cm-s-solarized-light span.cm-builtin {color: @green;}
+.cm-s-solarized-light span.cm-operator {color: @green;}
+
+.cm-s-solarized-light span.cm-error {background-color: @base1; color: @red;}
+
+// Not used in html css js or py
+.cm-s-solarized-light span.cm-qualifier {color: @yellow;}
+.cm-s-solarized-light span.cm-bracket {color: @yellow;}
+.cm-s-solarized-light span.cm-header {color: @yellow;}
+.cm-s-solarized-light span.cm-quote {color: @yellow;}
+.cm-s-solarized-light span.cm-hr {color: @yellow;}
+.cm-s-solarized-light span.cm-link {color: @green;}
