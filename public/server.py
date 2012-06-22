@@ -11,20 +11,20 @@ ALLOWED_DIRECTORIES = set(['static/uploads/', 'static/pictures/'])
 # public.config['MAX_CONTENT_LENGTH'] = 4 * 1024 * 1024
 
 def toggle_pin(pin):
-    from pytronics import read_pin, set_pin_high, set_pin_low
-    if read_pin(pin) == '1':
-        set_pin_low(pin)
+    from pytronics import digitalRead, digitalWrite, digitalWrite
+    if digitalRead(pin) == '1':
+        digitalWrite(pin, 'LOW')
     else:
-        set_pin_high(pin)
+        digitalWrite(pin, 'HIGH')
 
 @public.route('/pin/<pin>/<state>')
 def update_pin(pin, state):
-    from pytronics import set_pin_high, set_pin_low
+    from pytronics import digitalWrite, digitalWrite
     if state.lower() == 'on':
-        set_pin_high(pin)
+        digitalWrite(pin, 'HIGH')
         return 'Set pin %s high' % pin
     elif state.lower() == 'off':                       
-        set_pin_low(pin)
+        digitalWrite(pin, 'LOW')
         return 'Set pin %s low' % pin
     return "Something's wrong with your syntax. You should send something like: /pin/2/on"
 
@@ -50,10 +50,10 @@ def update_relay(num):
     target = float(thermostat.get_target_temp('/var/www/public/static/basic.ics', 'America/New_York'))
     print("Measured temperature: %f degrees. Target is %f degrees." % (actual, target))
     if actual < target:
-        pytronics.set_pin_high(2)
+        pytronics.digitalWrite(2, 'HIGH')
         print("Heat on")
     else:
-        pytronics.set_pin_low(2)
+        pytronics.digitalWrite(2, 'LOW')
         print("Heat off")
 
 @public.route('/<template_name>.html')
@@ -63,7 +63,7 @@ def template(template_name):
 @public.route('/relay.html')
 def index():
     import pytronics
-    pin = pytronics.read_pin(2)
+    pin = pytronics.digitalRead(2)
     (chan0, chan1, chan2, chan3) = pytronics.summarize_analog_data()
     return render_template('/relay.html', chan0=chan0, chan1=chan1, chan2=chan2, chan3=chan3, pin=pin)
 
@@ -71,10 +71,10 @@ def index():
 def toggle():
     import pytronics
     if(request.form['target_state'] == '1'):
-        pytronics.set_pin_high(2)
+        pytronics.digitalWrite(2, 'HIGH')
         result = 'Pins set high'
     elif(request.form['target_state'] == '0'):
-        pytronics.set_pin_low(2)
+        pytronics.digitalWrite(2, 'LOW')
         result = 'Pins set low'
     else:
         result = 'Target_state is screwed up'
@@ -92,7 +92,7 @@ def temperature():
 
 @public.route('/analog', methods=['POST'])
 def analog():
-    from pytronics import read_analog
+    from pytronics import analogRead
     import json, time
     try:
         ad_ref = float(request.form['adref'])
@@ -100,7 +100,7 @@ def analog():
         ad_ref = 3.3
     data = {
         "time" : float(time.time()),
-        "A0" : float(read_analog('A0')) * ad_ref / 1024.0
+        "A0" : float(analogRead('A0')) * ad_ref / 1024.0
     }
     return json.dumps(data)
 
@@ -113,7 +113,7 @@ def send_to_lcd():
 @public.route('/clear-lcd', methods=['POST'])
 def clear_lcd():
     import pytronics
-    pytronics.send_serial(chr(0xFE) + chr(0x01), 9600)
+    pytronics.serialWrite(chr(0xFE) + chr(0x01), 9600)
     return render_template('/lcd.html')
 
 @public.route('/set-color', methods=['POST'])
@@ -144,23 +144,21 @@ def parse_sms():
 @public.route('/sprinkler', methods=['POST'])
 def sprinkler():
     import pytronics
-    message = request.form['Body']
-    print message
-    #command = request.form['command']
-    #if(command == "ON"):
-    #    pytronics.set_pin_high(2)
-    #else:
-    #    pytronics.set_pin_low(2)
+    command = request.form['command']
+    if(command == "ON"):
+        pytronics.digitalWrite(2, 'HIGH')
+    else:
+        pytronics.digitalWrite(2, 'LOW')
     return ('Sprinkler toggled')
 
 
 # @rbtimer(5)
 def toggle_led(num):
     import pytronics
-    if pytronics.read_pin('LED') == '1':
-        pytronics.set_pin_low('LED')
+    if pytronics.digitalRead('LED') == '1':
+        pytronics.digitalWrite('LED', 'LOW')
     else:
-        pytronics.set_pin_high('LED')
+        pytronics.digitalWrite('LED', 'HIGH')
 
         
 # @cron(0, -1, -1, -1, -1)
@@ -287,11 +285,11 @@ def clear_directory():
 @public.route('/flash_led', methods=['POST'])
 def flash_led():
     import pytronics
-    if pytronics.read_pin('LED') == '1':
-        pytronics.set_pin_low('LED')
+    if pytronics.digitalRead('LED') == '1':
+        pytronics.digitalWrite('LED', 'LOW')
         message = "LED off"
     else:
-        pytronics.set_pin_high('LED')
+        pytronics.digitalWrite('LED', 'HIGH')
         message = "LED on"
     return (message)
 
