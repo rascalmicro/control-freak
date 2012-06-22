@@ -1,5 +1,5 @@
 from flask import abort, Blueprint, flash, Flask, redirect, render_template, request, url_for
-from flaskext.login import (LoginManager, current_user, login_required,
+from flask.ext.login import (LoginManager, current_user, login_required,
                             login_user, logout_user, UserMixin, AnonymousUser,
                             confirm_login, fresh_login_required)
 from jinja2 import TemplateNotFound
