@@ -15,7 +15,7 @@
     </div>
     <script language="javascript" type="text/javascript">
     $("#sprinkler-on").click( function() {
-        $.post("/sprinkler", { Body: "squiggle" });
+        $.post("/sprinkler", { command: "ON" });
     });
     $("#sprinkler-off").click( function() {
         $.post("/sprinkler", { command: "OFF" });
