@@ -1,27 +1,39 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="utf-8">
     <title>LCD demo</title>
-    <link rel="stylesheet" type="text/css" href="/static/css/demo.css">
-    <link rel="shortcut icon" href="/static/images/favicon.ico">
-    <script src="/static/js/jquery-1.7.2.js"></script>
+    {% include "include/rascal-head.html" %}
+    <style>
+        #serial-text {
+            border: 10px solid #333;
+            margin: 10px 0;
+            font-family: 'VT323', 'Courier', sans-serif;
+            font-size: 60px;
+            line-height: 0.9em;
+            color: #A4211A;
+            background-color: #111111;
+            width: 430px;
+        }
+    </style>
 </head>
 <body>
-    <div class="rascalcontent">
-        <h1><a href="/lcd.html">LCD demo</a></h1>
-        <p>Enter some text to send to the LCD display</p><br />
-        <textarea rows="2" cols="16" id="serial-text"></textarea><br />
-        <input id="send-to-lcd" type="button" value="Send to LCD" class="large blue awesome" alt="Send to LCD">
-        <input id="clear-lcd" type="button" value="Clear LCD" class="large red awesome" alt="Clear LCD">
+    {% include "include/rascal-topbar.html" %}
+    <div class="container">
+        <div class="well rascal">
+            <h1>LCD demo</h1>
+            <p>Enter some text to send to the LCD display</p>
+            <textarea cols="16" rows="2" id="serial-text">Science!</textarea><br/>
+            <input id="send-to-lcd" type="button" value="Send to LCD" class="btn btn-large btn-primary rascal" alt="Send to LCD">
+            <input id="clear-lcd" type="button" value="Clear LCD" class="btn btn-large btn-danger rascal" alt="Clear LCD">
+        </div>
     </div>
     <script language="javascript" type="text/javascript">
-    $("#send-to-lcd").click( function() {
-        $.post("/send-to-lcd", { serial_text: $("#serial-text").val() });
-    });
-    $("#clear-lcd").click( function() {
-        $.post("/clear-lcd");
-    });
+        $("#send-to-lcd").click( function() {
+            $.post("/send-to-lcd", { serial_text: $("#serial-text").val() });
+        });
+        $("#clear-lcd").click( function() {
+            $.post("/clear-lcd");
+        });
     </script>
 </body>
 </html>

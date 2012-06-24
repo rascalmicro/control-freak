@@ -1,8 +1,3 @@
-/*Adjust demo.css*/
-body {
-    margin: 0.5em;
-}
-
 /* .email-input { */
 #sender, #recipients, #subject {
     border: 2px solid #E7E8E9;

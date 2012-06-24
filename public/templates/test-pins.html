@@ -3,64 +3,275 @@
 <head>
     <title>Test pins</title>
     {% include "include/rascal-head.html" %}
+    <style>
+        td {
+            padding: 2px 6px;
+        }
+        img.led {
+            opacity: 0.2;
+            padding-bottom: 4px;
+        }
+        img.led.active {
+            opacity: 1;
+        }
+    </style>
 </head>
 <body>
     {% include "include/rascal-topbar.html" %}
     <div class="container">
         <div class="well rascal">
-            <h1>Test some pins.</h1>
-            <ul>
-                <li>LED: <input id="LED" type="button" value="ON" class="btn btn-danger rascal" alt="ON">
-                    <input id="LED" type="button" value="OFF" class="btn btn-danger rascal" alt="OFF"></li>
-                
-                <li>PIN 0: <input id="0" type="button" value="ON" class="btn btn-danger rascal" alt="ON">
-                    <input id="0" type="button" value="OFF" class="btn btn-danger rascal" alt="OFF"></li>
-                
-                <li>PIN 1: <input id="1" type="button" value="ON" class="btn btn-danger rascal" alt="ON">
-                    <input id="1" type="button" value="OFF" class="btn btn-danger rascal" alt="OFF"></li>
-                
-                <li>PIN 2: <input id="2" type="button" value="ON" class="btn btn-danger rascal" alt="ON">
-                    <input id="2" type="button" value="OFF" class="btn btn-danger rascal" alt="OFF"></li>
-                
-                <li>PIN 3: <input id="3" type="button" value="ON" class="btn btn-danger rascal" alt="ON">
-                    <input id="3" type="button" value="OFF" class="btn btn-danger rascal" alt="OFF"></li>
-                
-                <li>PIN 4: <input id="4" type="button" value="ON" class="btn btn-danger rascal" alt="ON">
-                    <input id="4" type="button" value="OFF" class="btn btn-danger rascal" alt="OFF"></li>
-                
-                <li>PIN 5: <input id="5" type="button" value="ON" class="btn btn-danger rascal" alt="ON">
-                    <input id="5" type="button" value="OFF" class="btn btn-danger rascal" alt="OFF"></li>
-                
-                <li>PIN 6: <input id="6" type="button" value="ON" class="btn btn-danger rascal" alt="ON">
-                    <input id="6" type="button" value="OFF" class="btn btn-danger rascal" alt="OFF"></li>
-                
-                <li>PIN 7: <input id="7" type="button" value="ON" class="btn btn-danger rascal" alt="ON">
-                    <input id="7" type="button" value="OFF" class="btn btn-danger rascal" alt="OFF"></li>
-                
-                <li>PIN 8: <input id="8" type="button" value="ON" class="btn btn-danger rascal" alt="ON">
-                    <input id="8" type="button" value="OFF" class="btn btn-danger rascal" alt="OFF"></li>
-                
-                <li>PIN 9: <input id="9" type="button" value="ON" class="btn btn-danger rascal" alt="ON">
-                    <input id="9" type="button" value="OFF" class="btn btn-danger rascal" alt="OFF"></li>
-                
-                <li>PIN 10: <input id="10" type="button" value="ON" class="btn btn-danger rascal" alt="ON">
-                    <input id="10" type="button" value="OFF" class="btn btn-danger rascal" alt="OFF"></li>
-                
-                <li>PIN 11: <input id="11" type="button" value="ON" class="btn btn-danger rascal" alt="ON">
-                    <input id="11" type="button" value="OFF" class="btn btn-danger rascal" alt="OFF"></li>
-                
-                <li>PIN 12: <input id="12" type="button" value="ON" class="btn btn-danger rascal" alt="ON">
-                    <input id="12" type="button" value="OFF" class="btn btn-danger rascal" alt="OFF"></li>
-                
-                <li>PIN 13: <input id="13" type="button" value="ON" class="btn btn-danger rascal" alt="ON">
-                    <input id="13" type="button" value="OFF" class="btn btn-danger rascal" alt="OFF"></li>
-            </ul>
+            <h1>Test some pins</h1>
+            <p>A Panjandrum for turning the pins on and off</p>
+            <div class="row">
+                <div class="span3">
+                    <div class="well"  style="background-color: #333;">
+                    <table>
+                        <tr>
+                            <td>LED</td>
+                            <td>
+                                <img id="LED" src="static/images/led.gif" width="12" class="led" />
+                            </td>
+                            <td>
+                                <div class="btn-group" data-toggle="buttons-radio">
+                                    <button id="LED" value="off" class="btn btn-danger active">Off</button>
+                                    <button id="LED" value="on" class="btn btn-danger">On</button>
+                                </div>                  
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Pin 0</td>
+                            <td>
+                                <img id="0" src="static/images/led.gif" width="12" class="led" />
+                            </td>
+                            <td>
+                                <div class="btn-group" data-toggle="buttons-radio">
+                                    <button id="0" value="off" class="btn btn-danger active">Off</button>
+                                    <button id="0" value="on" class="btn btn-danger">On</button>
+                                </div>                  
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Pin 1</td>
+                            <td>
+                                <img id="1" src="static/images/led.gif" width="12" class="led" />
+                            </td>
+                            <td>
+                                <div class="btn-group" data-toggle="buttons-radio">
+                                    <button id="1" value="off" class="btn btn-danger active">Off</button>
+                                    <button id="1" value="on" class="btn btn-danger">On</button>
+                                </div>                  
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Pin 2</td>
+                            <td>
+                                <img id="2" src="static/images/led.gif" width="12" class="led" />
+                            </td>
+                            <td>
+                                <div class="btn-group" data-toggle="buttons-radio">
+                                    <button id="2" value="off" class="btn btn-danger active">Off</button>
+                                    <button id="2" value="on" class="btn btn-danger">On</button>
+                                </div>                  
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Pin 3</td>
+                            <td>
+                                <img id="3" src="static/images/led.gif" width="12" class="led" />
+                            </td>
+                            <td>
+                                <div class="btn-group" data-toggle="buttons-radio">
+                                    <button id="3" value="off" class="btn btn-danger active">Off</button>
+                                    <button id="3" value="on" class="btn btn-danger">On</button>
+                                </div>                  
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Pin 4</td>
+                            <td>
+                                <img id="4" src="static/images/led.gif" width="12" class="led" />
+                            </td>
+                            <td>
+                                <div class="btn-group" data-toggle="buttons-radio">
+                                    <button id="4" value="off" class="btn btn-danger active">Off</button>
+                                    <button id="4" value="on" class="btn btn-danger">On</button>
+                                </div>                  
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Pin 5</td>
+                            <td>
+                                <img id="5" src="static/images/led.gif" width="12" class="led" />
+                            </td>
+                            <td>
+                                <div class="btn-group" data-toggle="buttons-radio">
+                                    <button id="5" value="off" class="btn btn-danger active">Off</button>
+                                    <button id="5" value="on" class="btn btn-danger">On</button>
+                                </div>                  
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Pin 6</td>
+                            <td>
+                                <img id="6" src="static/images/led.gif" width="12" class="led" />
+                            </td>
+                            <td>
+                                <div class="btn-group" data-toggle="buttons-radio">
+                                    <button id="6" value="off" class="btn btn-danger active">Off</button>
+                                    <button id="6" value="on" class="btn btn-danger">On</button>
+                                </div>                  
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Pin 7</td>
+                            <td>
+                                <img id="7" src="static/images/led.gif" width="12" class="led" />
+                            </td>
+                            <td>
+                                <div class="btn-group" data-toggle="buttons-radio">
+                                    <button id="7" value="off" class="btn btn-danger active">Off</button>
+                                    <button id="7" value="on" class="btn btn-danger">On</button>
+                                </div>                  
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Pin 8</td>
+                            <td>
+                                <img id="8" src="static/images/led.gif" width="12" class="led" />
+                            </td>
+                            <td>
+                                <div class="btn-group" data-toggle="buttons-radio">
+                                    <button id="8" value="off" class="btn btn-danger active">Off</button>
+                                    <button id="8" value="on" class="btn btn-danger">On</button>
+                                </div>                  
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Pin 9</td>
+                            <td>
+                                <img id="9" src="static/images/led.gif" width="12" class="led" />
+                            </td>
+                            <td>
+                                <div class="btn-group" data-toggle="buttons-radio">
+                                    <button id="9" value="off" class="btn btn-danger active">Off</button>
+                                    <button id="9" value="on" class="btn btn-danger">On</button>
+                                </div>                  
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Pin 10</td>
+                            <td>
+                                <img id="10" src="static/images/led.gif" width="12" class="led" />
+                            </td>
+                            <td>
+                                <div class="btn-group" data-toggle="buttons-radio">
+                                    <button id="10" value="off" class="btn btn-danger active">Off</button>
+                                    <button id="10" value="on" class="btn btn-danger">On</button>
+                                </div>                  
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Pin 11</td>
+                            <td>
+                                <img id="11" src="static/images/led.gif" width="12" class="led" />
+                            </td>
+                            <td>
+                                <div class="btn-group" data-toggle="buttons-radio">
+                                    <button id="11" value="off" class="btn btn-danger active">Off</button>
+                                    <button id="11" value="on" class="btn btn-danger">On</button>
+                                </div>                  
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Pin 12</td>
+                            <td>
+                                <img id="12" src="static/images/led.gif" width="12" class="led" />
+                            </td>
+                            <td>
+                                <div class="btn-group" data-toggle="buttons-radio">
+                                    <button id="12" value="off" class="btn btn-danger active">Off</button>
+                                    <button id="12" value="on" class="btn btn-danger">On</button>
+                                </div>                  
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Pin 13</td>
+                            <td>
+                                <img id="13" src="static/images/led.gif" width="12" class="led" />
+                            </td>
+                            <td>
+                                <div class="btn-group" data-toggle="buttons-radio">
+                                    <button id="13" value="off" class="btn btn-danger active">Off</button>
+                                    <button id="13" value="on" class="btn btn-danger">On</button>
+                                </div>                  
+                            </td>
+                        </tr>
+                    </table>
+                    </div>
+                </div>
+                <div class="span7">
+                    <div class="well">
+                        <img src="static/images/pinout.png" height="479" />
+                    </div>
+                </div>
+            </div>
+            <div id="cmd">&nbsp;</div>
+           <div id="status">&nbsp;</div>
         </div>
     </div>
     <script language="javascript" type="text/javascript">
-    $(":button").click( function() {
-        $.get("/pin/" + $(this).attr("id") + "/" + $(this).attr("value")); // creates URL like /pin/2/ON
-    });
+        $(":button").click( function() {
+             // create URL like /pin/2/ON
+            var cmd = "/pin/" + $(this).attr("id") + "/" + $(this).attr("value");
+            $('#cmd').text('Sent command: ' + cmd)
+                .css('visibility', 'visible')
+                .hide()
+                .fadeTo(10, 1)
+                .delay(2000)
+                .fadeTo(1000, 0);
+            $.get(cmd, function (data, textStatus) {
+                $('#status').text('Got response: ' + data)
+                    .css('visibility', 'visible')
+                    .hide()
+                    .delay(500)
+                    .fadeTo(10, 1)
+                    .delay(1500)
+                    .fadeTo(1000, 0);
+
+            }).error(function (jqXHR, textStatus, errorThrown) {
+                $('#status').text(errorThrown)
+                    .css('visibility', 'visible')
+                    .hide()
+                    .delay(500)
+                    .fadeTo(10, 1)
+            });
+        });
+        
+        function read_pins(set_buttons) {
+            $.post('/read-pins', function (response) {
+                var pins = JSON.parse(response), p, b;
+                // console.log(response);
+                for (p in pins) {
+                    if (pins[p] === "1") {
+                        // console.log('pin ' + p + ' ON');
+                        $('.led[id="' + p + '"]').addClass('active');
+                        if (set_buttons) {
+                            $('.btn[id="' + p + '"][value="off"]').removeClass('active');
+                            $('.btn[id="' + p + '"][value="on"]').addClass('active');
+                        }
+                    } else {
+                        // console.log('pin ' + p + ' OFF');
+                        $('.led[id="' + p + '"]').removeClass('active');
+                    }
+                }
+            });
+        }
+        
+        $(document).ready(function () {
+            read_pins (true);
+            setInterval(read_pins, 1000);
+        });
+
     </script>
 </body>
 </html>
