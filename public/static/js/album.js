@@ -42,6 +42,11 @@ function loadPictures() {
         } else {
             $('#buttons').css('visibility', 'visible');
         }
+    }).error(function (jqXHR, textStatus, errorThrown) {
+        if (errorThrown === 'Not Found') {
+            $('#intro').css('visibility', 'hidden');
+            $('#slideshow').append('<p id="dropmsg">Please create pictures folder<br/>in the static directory</p>');
+        }
     });
 }
 
