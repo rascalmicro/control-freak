@@ -4,6 +4,9 @@
     <title>Test pins</title>
     {% include "include/rascal-head.html" %}
     <style>
+        th {
+            font-size: 0.8em;
+        }
         td {
             padding: 2px 6px;
         }
@@ -23,13 +26,27 @@
             <h1>Test some pins</h1>
             <p>A Panjandrum for turning the pins on and off</p>
             <div class="row">
-                <div class="span3">
+                <div class="span4">
                     <div class="well"  style="background-color: #333;">
                     <table>
+                        <tr>
+                            <th>
+                            </th>
+                            <th>
+                            </th>
+                            <th>Direction</th>
+                            <th>Status</th>
+                        </tr>
                         <tr>
                             <td>LED</td>
                             <td>
                                 <img id="LED" src="static/images/led.gif" width="12" class="led" />
+                            </td>
+                            <td>
+                                <div class="btn-group" data-toggle="buttons-radio">
+                                    <button id="LED" value="in" class="btn btn-primary" disabled="disabled">In</button>
+                                    <button id="LED" value="out" class="btn btn-primary active" disabled="disabled">Out</button>
+                                </div>                  
                             </td>
                             <td>
                                 <div class="btn-group" data-toggle="buttons-radio">
@@ -45,6 +62,12 @@
                             </td>
                             <td>
                                 <div class="btn-group" data-toggle="buttons-radio">
+                                    <button id="0" value="in" class="btn btn-primary">In</button>
+                                    <button id="0" value="out" class="btn btn-primary active">Out</button>
+                                </div>                  
+                            </td>
+                            <td>
+                                <div class="btn-group" data-toggle="buttons-radio">
                                     <button id="0" value="off" class="btn btn-danger active">Off</button>
                                     <button id="0" value="on" class="btn btn-danger">On</button>
                                 </div>                  
@@ -54,6 +77,12 @@
                             <td>Pin 1</td>
                             <td>
                                 <img id="1" src="static/images/led.gif" width="12" class="led" />
+                            </td>
+                            <td>
+                                <div class="btn-group" data-toggle="buttons-radio">
+                                    <button id="1" value="in" class="btn btn-primary">In</button>
+                                    <button id="1" value="out" class="btn btn-primary active">Out</button>
+                                </div>                  
                             </td>
                             <td>
                                 <div class="btn-group" data-toggle="buttons-radio">
@@ -69,6 +98,12 @@
                             </td>
                             <td>
                                 <div class="btn-group" data-toggle="buttons-radio">
+                                    <button id="2" value="in" class="btn btn-primary">In</button>
+                                    <button id="2" value="out" class="btn btn-primary active">Out</button>
+                                </div>                  
+                            </td>
+                            <td>
+                                <div class="btn-group" data-toggle="buttons-radio">
                                     <button id="2" value="off" class="btn btn-danger active">Off</button>
                                     <button id="2" value="on" class="btn btn-danger">On</button>
                                 </div>                  
@@ -78,6 +113,12 @@
                             <td>Pin 3</td>
                             <td>
                                 <img id="3" src="static/images/led.gif" width="12" class="led" />
+                            </td>
+                            <td>
+                                <div class="btn-group" data-toggle="buttons-radio">
+                                    <button id="3" value="in" class="btn btn-primary">In</button>
+                                    <button id="3" value="out" class="btn btn-primary active">Out</button>
+                                </div>                  
                             </td>
                             <td>
                                 <div class="btn-group" data-toggle="buttons-radio">
@@ -93,6 +134,12 @@
                             </td>
                             <td>
                                 <div class="btn-group" data-toggle="buttons-radio">
+                                    <button id="4" value="in" class="btn btn-primary">In</button>
+                                    <button id="4" value="out" class="btn btn-primary active">Out</button>
+                                </div>                  
+                            </td>
+                            <td>
+                                <div class="btn-group" data-toggle="buttons-radio">
                                     <button id="4" value="off" class="btn btn-danger active">Off</button>
                                     <button id="4" value="on" class="btn btn-danger">On</button>
                                 </div>                  
@@ -102,6 +149,12 @@
                             <td>Pin 5</td>
                             <td>
                                 <img id="5" src="static/images/led.gif" width="12" class="led" />
+                            </td>
+                            <td>
+                                <div class="btn-group" data-toggle="buttons-radio">
+                                    <button id="5" value="in" class="btn btn-primary">In</button>
+                                    <button id="5" value="out" class="btn btn-primary active">Out</button>
+                                </div>                  
                             </td>
                             <td>
                                 <div class="btn-group" data-toggle="buttons-radio">
@@ -117,6 +170,12 @@
                             </td>
                             <td>
                                 <div class="btn-group" data-toggle="buttons-radio">
+                                    <button id="6" value="in" class="btn btn-primary">In</button>
+                                    <button id="6" value="out" class="btn btn-primary active">Out</button>
+                                </div>                  
+                            </td>
+                            <td>
+                                <div class="btn-group" data-toggle="buttons-radio">
                                     <button id="6" value="off" class="btn btn-danger active">Off</button>
                                     <button id="6" value="on" class="btn btn-danger">On</button>
                                 </div>                  
@@ -126,6 +185,12 @@
                             <td>Pin 7</td>
                             <td>
                                 <img id="7" src="static/images/led.gif" width="12" class="led" />
+                            </td>
+                            <td>
+                                <div class="btn-group" data-toggle="buttons-radio">
+                                    <button id="7" value="in" class="btn btn-primary">In</button>
+                                    <button id="7" value="out" class="btn btn-primary active">Out</button>
+                                </div>                  
                             </td>
                             <td>
                                 <div class="btn-group" data-toggle="buttons-radio">
@@ -141,6 +206,12 @@
                             </td>
                             <td>
                                 <div class="btn-group" data-toggle="buttons-radio">
+                                    <button id="8" value="in" class="btn btn-primary">In</button>
+                                    <button id="8" value="out" class="btn btn-primary active">Out</button>
+                                </div>                  
+                            </td>
+                            <td>
+                                <div class="btn-group" data-toggle="buttons-radio">
                                     <button id="8" value="off" class="btn btn-danger active">Off</button>
                                     <button id="8" value="on" class="btn btn-danger">On</button>
                                 </div>                  
@@ -150,6 +221,12 @@
                             <td>Pin 9</td>
                             <td>
                                 <img id="9" src="static/images/led.gif" width="12" class="led" />
+                            </td>
+                            <td>
+                                <div class="btn-group" data-toggle="buttons-radio">
+                                    <button id="9" value="in" class="btn btn-primary">In</button>
+                                    <button id="9" value="out" class="btn btn-primary active">Out</button>
+                                </div>                  
                             </td>
                             <td>
                                 <div class="btn-group" data-toggle="buttons-radio">
@@ -165,6 +242,12 @@
                             </td>
                             <td>
                                 <div class="btn-group" data-toggle="buttons-radio">
+                                    <button id="10" value="in" class="btn btn-primary">In</button>
+                                    <button id="10" value="out" class="btn btn-primary active">Out</button>
+                                </div>                  
+                            </td>
+                            <td>
+                                <div class="btn-group" data-toggle="buttons-radio">
                                     <button id="10" value="off" class="btn btn-danger active">Off</button>
                                     <button id="10" value="on" class="btn btn-danger">On</button>
                                 </div>                  
@@ -174,6 +257,12 @@
                             <td>Pin 11</td>
                             <td>
                                 <img id="11" src="static/images/led.gif" width="12" class="led" />
+                            </td>
+                            <td>
+                                <div class="btn-group" data-toggle="buttons-radio">
+                                    <button id="11" value="in" class="btn btn-primary">In</button>
+                                    <button id="11" value="out" class="btn btn-primary active">Out</button>
+                                </div>                  
                             </td>
                             <td>
                                 <div class="btn-group" data-toggle="buttons-radio">
@@ -189,6 +278,12 @@
                             </td>
                             <td>
                                 <div class="btn-group" data-toggle="buttons-radio">
+                                    <button id="12" value="in" class="btn btn-primary">In</button>
+                                    <button id="12" value="out" class="btn btn-primary active">Out</button>
+                                </div>                  
+                            </td>
+                            <td>
+                                <div class="btn-group" data-toggle="buttons-radio">
                                     <button id="12" value="off" class="btn btn-danger active">Off</button>
                                     <button id="12" value="on" class="btn btn-danger">On</button>
                                 </div>                  
@@ -201,6 +296,12 @@
                             </td>
                             <td>
                                 <div class="btn-group" data-toggle="buttons-radio">
+                                    <button id="13" value="in" class="btn btn-primary">In</button>
+                                    <button id="13" value="out" class="btn btn-primary active">Out</button>
+                                </div>                  
+                            </td>
+                            <td>
+                                <div class="btn-group" data-toggle="buttons-radio">
                                     <button id="13" value="off" class="btn btn-danger active">Off</button>
                                     <button id="13" value="on" class="btn btn-danger">On</button>
                                 </div>                  
@@ -209,7 +310,7 @@
                     </table>
                     </div>
                 </div>
-                <div class="span7">
+                <div class="span6">
                     <div class="well">
                         <img src="static/images/pinout.png" height="479" />
                     </div>
@@ -220,17 +321,22 @@
         </div>
     </div>
     <script language="javascript" type="text/javascript">
+
         $(":button").click( function() {
              // create URL like /pin/2/ON
             var cmd = "/pin/" + $(this).attr("id") + "/" + $(this).attr("value");
-            $('#cmd').text('Sent command: ' + cmd)
+            $('#cmd')
+                .stop(true)
+                .text('Sent command: ' + cmd)
                 .css('visibility', 'visible')
                 .hide()
                 .fadeTo(10, 1)
                 .delay(2000)
                 .fadeTo(1000, 0);
             $.get(cmd, function (data, textStatus) {
-                $('#status').text('Got response: ' + data)
+                $('#status')
+                    .stop(true)
+                    .text('Rascal replied: ' + data)
                     .css('visibility', 'visible')
                     .hide()
                     .delay(500)
@@ -239,7 +345,9 @@
                     .fadeTo(1000, 0);
 
             }).error(function (jqXHR, textStatus, errorThrown) {
-                $('#status').text(errorThrown)
+                $('#status')
+                    .stop(true)
+                    .text('Rascal replied: ' + errorThrown)
                     .css('visibility', 'visible')
                     .hide()
                     .delay(500)
@@ -247,28 +355,67 @@
             });
         });
         
-        function read_pins(set_buttons) {
+        function read_pins() {
+            
             $.post('/read-pins', function (response) {
-                var pins = JSON.parse(response), p, b;
-                // console.log(response);
+                var pins = JSON.parse(response);
+                var p, pin, btnIn, btnOut, btnOn, btnOff;
+                
+                console.log(response);
                 for (p in pins) {
-                    if (pins[p] === "1") {
-                        // console.log('pin ' + p + ' ON');
+                    pin = pins[p];
+                    
+                    // Set the LED
+                    if (pin[1] === '1') {
                         $('.led[id="' + p + '"]').addClass('active');
-                        if (set_buttons) {
-                            $('.btn[id="' + p + '"][value="off"]').removeClass('active');
-                            $('.btn[id="' + p + '"][value="on"]').addClass('active');
+                    } else {
+                        $('.led[id="' + p + '"]').removeClass('active');
+                    }
+                    
+                    // Update the buttons
+                    btnIn = $('.btn[id="' + p + '"][value="in"]');
+                    btnOut = $('.btn[id="' + p + '"][value="out"]');
+                    btnOn = $('.btn[id="' + p + '"][value="on"]');
+                    btnOff = $('.btn[id="' + p + '"][value="off"]');
+                    
+                    if (pin[0] === "out") {
+                        if (btnIn.hasClass('active')) {
+                            btnIn.removeClass('active');
+                            btnOut.addClass('active');
+                        }
+                        if (btnOff.attr('disabled') === 'disabled') {
+                            btnOff.removeAttr('disabled');
+                            btnOn.removeAttr('disabled');
+                        }
+                    } else {
+                        if (btnOut.hasClass('active')) {
+                            btnOut.removeClass('active');
+                            btnIn.addClass('active');
+                        }
+                        if (btnOff.attr('disabled') !== 'disabled') {
+                            btnOff.attr('disabled', 'disabled');
+                            btnOn.attr('disabled', 'disabled');
+                        }
+                    }                        
+                    if (pin[1] === "1") {
+                        // console.log('pin ' + p + ' ON');
+                        if (btnOff.hasClass('active')) {
+                            btnOff.removeClass('active');
+                            btnOn.addClass('active');
                         }
                     } else {
                         // console.log('pin ' + p + ' OFF');
-                        $('.led[id="' + p + '"]').removeClass('active');
+                        if (btnOn.hasClass('active')) {
+                            btnOn.removeClass('active');
+                            btnOff.addClass('active');
+                        }
                     }
                 }
             });
         }
         
         $(document).ready(function () {
-            read_pins (true);
+            read_pins ();
             setInterval(read_pins, 1000);
         });
 

@@ -8,20 +8,8 @@ public.config['PROPAGATE_EXCEPTIONS'] = True
 # config for upload
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
 ALLOWED_DIRECTORIES = set(['static/uploads/', 'static/pictures/'])
-LIVE_PINS = ['2', '3', '4', '5', '8', '9', '10', '11', '12', '13']
+LIVE_PINS = ['LED', '2', '3', '4', '5', '8', '9', '10', '11', '12', '13']
 # public.config['MAX_CONTENT_LENGTH'] = 4 * 1024 * 1024
-
-@public.route('/read-pins', methods=['POST'])
-def read_pins():
-    from pytronics import digitalRead
-    import json
-    pins = { 'LED': digitalRead('LED') }
-    for pin in LIVE_PINS:
-        try:
-            pins[pin] = digitalRead(pin)
-        except Exception, e:
-            print '## read_pins ## ' + e
-    return json.dumps(pins)
 
 def toggle_pin(pin):
     from pytronics import digitalRead, digitalWrite
@@ -32,14 +20,29 @@ def toggle_pin(pin):
 
 @public.route('/pin/<pin>/<state>')
 def update_pin(pin, state):
-    from pytronics import digitalWrite
-    if state.lower() == 'on':
-        digitalWrite(pin, 'HIGH')
-        return 'Set pin %s high' % pin
-    elif state.lower() == 'off':                       
-        digitalWrite(pin, 'LOW')
-        return 'Set pin %s low' % pin
-    return "Something's wrong with your syntax. You should send something like: /pin/2/on"
+    from myPytronics import digitalWrite, pinMode
+    try:
+        if state.lower() == 'on':
+            digitalWrite(pin, 'HIGH')
+            return 'Set pin %s high' % pin
+        elif state.lower() == 'off':                       
+            digitalWrite(pin, 'LOW')
+            return 'Set pin %s low' % pin
+        elif state.lower() == 'in':
+            pinMode(pin,'INPUT')
+            return 'Set pin %s input' % pin
+        elif state.lower() == 'out':
+            pinMode(pin,'OUTPUT')
+            return 'Set pin %s output' % pin
+        return "Something's wrong with your syntax. You should send something like: /pin/2/on"
+    except:
+        return 'Forbidden', 403
+
+@public.route('/read-pins', methods=['POST'])
+def read_pins():
+    from myPytronics import readPins
+    import json
+    return json.dumps(readPins(LIVE_PINS))
 
 @public.route('/set-speed', methods=['POST'])
 def set_speed():
