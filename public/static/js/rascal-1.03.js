@@ -275,6 +275,10 @@ var rascal = {
             $.post("/list-directory", { directory: rascal.directory.directory }, function (response) {
                 var results = Array.prototype.slice.call($.parseJSON(response));
                 $('#' + rascal.directory.listID).html(results.join('<br />'));
+            }).error(function (jqXHR, textStatus, errorThrown) {
+                if (errorThrown === 'NOT FOUND') {
+                    $('#' + rascal.directory.listID).html('Folder "' + rascal.directory.directory + '" not found');
+                }
             });
         },
         // Clear directory then list it

@@ -176,11 +176,7 @@ def toggle_led(num):
     else:
         pytronics.digitalWrite('LED', 'HIGH')
 
-# @cron(0, -1, -1, -1, -1)
-# @cron(0, 0, -1, -1, -1)
-# @cron(0, 6, -1, -1, -1)
-# @cron(0, 12, -1, -1, -1)
-# @cron(0, 18, -1, -1, -1)
+# @cron(0, -6, -1, -1, -1)
 def ntp_daemon(num):
     import subprocess
     cmd = 'ntpdate uk.pool.ntp.org'
@@ -267,8 +263,11 @@ def list_directory():
     try:
         dirlist = os.listdir(os.path.join(root, dir))
         return json.JSONEncoder().encode(dirlist)
-    except:
-        return 'Bad request', 400
+    except OSError:
+        return 'Not Found', 404
+    except Exception, e:
+        print '## list_directory ## {}'.format(e)
+    return 'Bad request', 400
 
 @public.route('/clear-directory', methods=['POST'])
 def clear_directory():
@@ -278,15 +277,21 @@ def clear_directory():
     if dir not in ALLOWED_DIRECTORIES:
         return 'Forbidden', 403
     folder = os.path.join(root, dir)
-    for the_file in os.listdir(folder):
-        file_path = os.path.join(folder, the_file)
-        try:
-            if os.path.isfile(file_path):
-                os.unlink(file_path)
-        except Exception, e:
-            print '## clear_directory ## ' + e
-            return 'Bad request', 400
-    return 'OK', 200
+    try:
+        for the_file in os.listdir(folder):
+            file_path = os.path.join(folder, the_file)
+            try:
+                if os.path.isfile(file_path):
+                    os.unlink(file_path)
+            except Exception, e:
+                print '## clear_directory ## {}'.format(e)
+                return 'Bad request', 400
+        return 'OK', 200
+    except OSError:
+        return 'Not Found', 404
+    except Exception, e:
+        print '## clear_directory ## {}'.format(e)
+    return 'Bad request', 400
 ##### End of upload procedures #####
 
 # Called from hello.html

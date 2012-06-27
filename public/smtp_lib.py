@@ -74,7 +74,7 @@ def sender():
     # Delete the next line, uncomment the following line and fill in your Rascal name and email address
     sender = ''
     # sender='rascalNN <username@gmail.com>'
-    return (sender)
+    return sender
 
 def help():
     help = ''
