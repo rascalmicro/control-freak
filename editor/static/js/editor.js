@@ -752,21 +752,42 @@ $('#delete-cancel').click(function () {
 });
 
 // Reload pytronics
-$('#reload').click(function () {
+// Assumes there is a folder static/log/ and
+// a symlink static/log/public.log to /var/log/uwsgi/public.log
+function doReload() {
     "use strict";
     $('#reload-bar').css('width', '0%');
     $.post('/editor/reload', function (response) {
+        trackChanges(false);
+        clearLocation();
+        hidePicture();
+        editorSetText('Pytronics is reloading. Please wait...');
+        // Wait 15 sec
         $('#reload-progress')
             .addClass('progress-striped')
             .addClass('active');
-        $('#reload-bar').animate({ 'width': '100%' }, 10000, function () {
+        $('#reload-bar').animate({ 'width': '100%' }, 15000, function () {
             $('#reload-progress')
                 .removeClass('active')
                 .removeClass('progress-striped');
             saveMsg('Reloaded pytronics');
+            loadFile(ROOT + 'static/log/public.log');
         });
     }).error(function (jqXHR, textStatus, errorThrown) {
         console.log('reload: ' + textStatus + ': ' + errorThrown);
         saveMsg('Reload pytronics failed');
     });
+}
+
+$('#reload').click(function () {
+    "use strict";
+    if (!bFileChanged) {
+        doReload();
+    } else {
+        querySave.init(SAVE, function (status) {
+            if (status === 1) {
+                doReload();
+            }
+        });
+    }
 });

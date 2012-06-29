@@ -14,18 +14,20 @@
         <div class="well rascal">
             <h1>Send an Email</h1>
             <p>Enter the sender and recipient email addresses, the subject and a message in the box:</p>
-            <div style="margin: 0; line-height: 0.8em">
-                Sender:<br />
-                <input type="text" class="email-input" id="sender" value="{{ sender }}"/><br />
-                Recipients:<br />
-                <input type="text" class="email-input" id="recipients" /><br />
-                Subject:<br />
-                <input type="text" class="email-input" id="subject" /><br />
+            <div class="msgbox">
+                <div class="address-input">
+                    Sender:<br />
+                    <input type="text" class="email-input" id="sender" value="{{ sender }}"/><br />
+                    Recipients:<br />
+                    <input type="text" class="email-input" id="recipients" /><br />
+                    Subject:<br />
+                    <input type="text" class="email-input" id="subject" /><br />
+                </div>
+                <textarea rows="6" cols="40" class="email-body" id="email-body"></textarea><br />
+                
+                <input id="send-email" type="button" value="Send Email" class="btn btn-large btn-danger rascal" />
+                <input id="clear-form" type="button" value="Clear Form" class="btn btn-large btn-info rascal" />
             </div>
-            <textarea rows="6" cols="40" class="email-body" id="email-body"></textarea><br />
-            
-            <input id="send-email" type="button" value="Send Email" class="btn btn-large btn-danger rascal" />
-            <input id="clear-form" type="button" value="Clear Form" class="btn btn-large btn-info rascal" />
             <div id="result">{{ help }}</div>
         </div>
     </div>
@@ -62,6 +64,7 @@
                     }
                 });
         });
+        
         $("#clear-form").click(function () {
             "use strict";
             $('#sender').val('');

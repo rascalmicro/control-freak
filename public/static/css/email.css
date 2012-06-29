@@ -1,9 +1,11 @@
-/*Adjust demo.css*/
-body {
-    margin: 0.5em;
+.msgbox {
+    padding: 10px 0 15px;
 }
 
-/* .email-input { */
+.address-input {
+     line-height: 0.8em;
+}
+
 #sender, #recipients, #subject {
     border: 2px solid #E7E8E9;
     color: #FFFFFF;
@@ -12,7 +14,7 @@ body {
     font-family:'Courier', sans-serif;
     font-size: 1em;
     margin-top: 10px;
-    margin-bottom: 20px;
+    margin-bottom: 15px;
 }
 
 .email-body {
@@ -23,5 +25,5 @@ body {
     font-family: 'Courier', sans-serif;
     font-size: 1.25em;
     margin-top: 10px;
-    margin-bottom: 10px;
+    margin-bottom: 15px;
 }

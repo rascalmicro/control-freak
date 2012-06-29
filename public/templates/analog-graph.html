@@ -1,57 +1,88 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="utf-8">
     <title>Analog graph demo</title>
-    <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Droid+Sans|Molengo">
-    <link rel="stylesheet" type="text/css" href="/static/css/demo.css">
-    <link rel="shortcut icon" href="/static/images/favicon.ico">
-    <script src="/static/js/jquery-1.7.2.js"></script>
-    <script language="javascript" type="text/javascript" src="/static/js/jquery.jqplot-1.0.0b2.js"></script>
-    <link rel="stylesheet" type="text/css" href="/static/css/jquery.jqplot-1.0.0b2.css" />
+    {% include "include/rascal-head.html" %}
+    <style>
+        #chart1 {
+            margin-top: 20px;
+            margin-left: -40px;
+            height: 400px;
+            width: 800px;
+        }
+        
+        .jqplot-title, .jqplot-axis {
+            color: #ddd;
+        }
+    </style>
 </head>
 <body>
-    <div class="rascalcontent">
-        <h1>Analog graph demo</h1>
-        <div id="chart1" style="height:400px;width:900px;"></div>
+    {% include "include/rascal-topbar.html" %}
+    <div class="container">
+        <div class="well rascal">
+            <h1>Analog graph demo</h1>
+            <div id="chart1"></div>
+        </div>
     </div>
+    
     <script language="javascript" type="text/javascript">
+        
+        var chartOptions = {
+            legend: {
+                show: true,
+                location: "nw" },
+            title: "Channel 0",
+            series: [
+                {label: "Channel 0", lineWidth:3, showMarker:false}
+            ],
+            axes: {
+                xaxis: {
+                    label: "Time [seconds ago]",
+                    min: 0,
+                    max: 120,
+                    pad: 0,
+                    numberTicks: 9
+                },
+                yaxis: {
+                    label: "Sensor voltage [V]",
+                    min: 0,
+                    max: 2.5,
+                    numberTicks: 6 },
+            },
+            seriesColors: [ "#cd2820" ]
+        };
+        
+        var
+            a0 = new Array(),
+            firstTime = true,
+            plot1;
+        
+        setInterval(function() {
+            $.post("analog",  { adref: 3.3 }, function(response) {
+                var
+                    data = $.parseJSON(response),
+                    i;
+                
+                // Limit to a0[0..max] i.e. max + 1 elements
+                if(a0.length > chartOptions.axes.xaxis.max) {
+                    a0.pop();
+                }
+                // Add new value at beginning
+                a0.unshift([0, data.A0]);
+                 // Adjust old X values
+                for (i = 1; i < a0.length; i++) {
+                    a0[i][0] = i;
+                }
 
-    chartOptions = {
-        legend: {
-            show: true,
-            location: "nw" },
-        title: "Channel 0",
-        series: [
-            {label: "Channel 0", lineWidth:3, showMarker:false}
-        ],
-        axes: {
-            xaxis: {
-                label: "Time [seconds ago]",
-                min: 0,
-                max: 120,
-                pad: 0 },
-            yaxis: {
-                label: "Sensor voltage [V]",
-                min: 0,
-                max: 2.5,
-                numberTicks: 6 },
-        },
-        seriesColors: [ "#cd2820" ]
-    };
-
-    a0 = new Array();
-
-    setInterval(function() {
-        $.post("analog",  { adref: 2.5 }, function(response) {
-            data = $.parseJSON(response);
-            if(a0.length > chartOptions.axes.xaxis.max) {
-                a0.pop();
-            }
-            a0.unshift(data.A0);
-            $.jqplot("chart1", [a0], chartOptions).replot();
-        });
-    }, 200);
+                if (firstTime) {
+                    plot1 = $.jqplot("chart1", [ a0 ], chartOptions);
+                    firstTime = false;
+                } else {
+                    plot1.series[0].data = a0;
+                    plot1.replot();
+                }
+            });
+        }, 1000);
     </script>
 </body>
 </html>

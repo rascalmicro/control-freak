@@ -1,4 +1,4 @@
-/* 24 Feb 2012 dsmall for rascal-1.02 */
+/* 27 Jun 2012 dsmall for rascal-1.03 (trap error when no folder */
 
 // Uncomment next line for JSLint
 // var $, rascal, console, clearInterval, setInterval;
@@ -41,6 +41,11 @@ function loadPictures() {
             $('#buttons').css('visibility', 'hidden');
         } else {
             $('#buttons').css('visibility', 'visible');
+        }
+    }).error(function (jqXHR, textStatus, errorThrown) {
+        if (errorThrown === 'NOT FOUND') {
+            $('#intro').css('visibility', 'hidden');
+            $('#slideshow').append('<p id="dropmsg">Please create pictures folder<br/>in the static directory</p>');
         }
     });
 }

@@ -2,7 +2,7 @@
 # sender, recipients, subject and body are strings
 # Separate multiple recipients with space, comma or semicolon
 # Return tuple (status, msg) where status 0 for success, 1 for error
-# dsmall 8 Apr 2012
+# dsmall 8 Apr 2012, 24 Jun 2012
 def sendmail(sender, recipients, subject, body):
     import smtplib
     import time
@@ -69,3 +69,21 @@ def sendmail(sender, recipients, subject, body):
 
 def sendmail_log(resdict):
     print '## sendmail ## Can\'t send to', resdict
+
+def sender():
+    # Delete the next line, uncomment the following line and fill in your Rascal name and email address
+    sender = ''
+    # sender='rascalNN <username@gmail.com>'
+    return sender
+
+def help():
+    help = ''
+    ##### Delete this section to remove the help message  #####
+    help = 'Before using this page, please edit smtp_lib.py and \
+    enter details of the SMTP server you will be using to send email. To get rid of this message and \
+    automatically fill in the Sender email address, edit procedures help and sender in smtp_lib.py. \
+    After making these changes, remember to click the Reload pytronics button to ensure \
+    that the server is running the latest version of the code.'
+    ##### Delete up to here #####
+    return help
+

@@ -8,10 +8,11 @@ public.config['PROPAGATE_EXCEPTIONS'] = True
 # config for upload
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
 ALLOWED_DIRECTORIES = set(['static/uploads/', 'static/pictures/'])
+LIVE_PINS = ['LED', '2', '3', '4', '5', '8', '9', '10', '11', '12', '13']
 # public.config['MAX_CONTENT_LENGTH'] = 4 * 1024 * 1024
 
 def toggle_pin(pin):
-    from pytronics import digitalRead, digitalWrite, digitalWrite
+    from pytronics import digitalRead, digitalWrite
     if digitalRead(pin) == '1':
         digitalWrite(pin, 'LOW')
     else:
@@ -19,14 +20,29 @@ def toggle_pin(pin):
 
 @public.route('/pin/<pin>/<state>')
 def update_pin(pin, state):
-    from pytronics import digitalWrite, digitalWrite
-    if state.lower() == 'on':
-        digitalWrite(pin, 'HIGH')
-        return 'Set pin %s high' % pin
-    elif state.lower() == 'off':                       
-        digitalWrite(pin, 'LOW')
-        return 'Set pin %s low' % pin
-    return "Something's wrong with your syntax. You should send something like: /pin/2/on"
+    from pytronics import digitalWrite, pinMode
+    try:
+        if state.lower() == 'on':
+            digitalWrite(pin, 'HIGH')
+            return 'Set pin %s high' % pin
+        elif state.lower() == 'off':                       
+            digitalWrite(pin, 'LOW')
+            return 'Set pin %s low' % pin
+        elif state.lower() == 'in':
+            pinMode(pin,'INPUT')
+            return 'Set pin %s input' % pin
+        elif state.lower() == 'out':
+            pinMode(pin,'OUTPUT')
+            return 'Set pin %s output' % pin
+        return "Something's wrong with your syntax. You should send something like: /pin/2/on"
+    except:
+        return 'Forbidden', 403
+
+@public.route('/read-pins', methods=['POST'])
+def read_pins():
+    from pytronics import readPins
+    import json
+    return json.dumps(readPins(LIVE_PINS))
 
 @public.route('/set-speed', methods=['POST'])
 def set_speed():
@@ -107,7 +123,7 @@ def analog():
 @public.route('/send-to-lcd', methods=['POST'])
 def send_to_lcd():
     import pytronics
-    pytronics.send_serial(request.form['serial_text'], 9600)
+    pytronics.serialWrite(request.form['serial_text'], 9600)
     return render_template('/lcd.html')
 
 @public.route('/clear-lcd', methods=['POST'])
@@ -160,12 +176,7 @@ def toggle_led(num):
     else:
         pytronics.digitalWrite('LED', 'HIGH')
 
-        
-# @cron(0, -1, -1, -1, -1)
-# @cron(0, 0, -1, -1, -1)
-# @cron(0, 6, -1, -1, -1)
-# @cron(0, 12, -1, -1, -1)
-# @cron(0, 18, -1, -1, -1)
+# @cron(0, -6, -1, -1, -1)
 def ntp_daemon(num):
     import subprocess
     cmd = 'ntpdate uk.pool.ntp.org'
@@ -177,18 +188,11 @@ def ntp_daemon(num):
         print '## NTPD ## Failed.'
 
 ##### The following procedures support sending email via SMTP #####
-# They are used by email.html
+# They are used by email.html. Configure smtp settings in smtp_lib.py
 @public.route('/email.html')
 def email_form():
-    ##### Delete this section to get rid of the help message  #####
-    return render_template('email.html', help='Before using this page, please edit smtp_lib.py and \
-    enter details of the SMTP server you will be using to send email. To get rid of this message and \
-    automatically fill in the Sender email address, edit procedure email_form() in server.py. \
-    After editing either of these files, remember to click the Reload pytronics button to ensure \
-    that the server is running the latest version of the code.')
-    ##### Delete up to here #####
-    # After deletion, uncomment the next line and fill in your Rascal name and email address
-    # return render_template('email.html', sender='rascalNN <username@gmail.com>')
+    import smtp_lib
+    return render_template('email.html', sender=smtp_lib.sender(), help=smtp_lib.help())
 
 @public.route('/send-email', methods=['POST'])
 def send_email():
@@ -259,8 +263,11 @@ def list_directory():
     try:
         dirlist = os.listdir(os.path.join(root, dir))
         return json.JSONEncoder().encode(dirlist)
-    except:
-        return 'Bad request', 400
+    except OSError:
+        return 'Not Found', 404
+    except Exception, e:
+        print '## list_directory ## {}'.format(e)
+    return 'Bad request', 400
 
 @public.route('/clear-directory', methods=['POST'])
 def clear_directory():
@@ -270,15 +277,21 @@ def clear_directory():
     if dir not in ALLOWED_DIRECTORIES:
         return 'Forbidden', 403
     folder = os.path.join(root, dir)
-    for the_file in os.listdir(folder):
-        file_path = os.path.join(folder, the_file)
-        try:
-            if os.path.isfile(file_path):
-                os.unlink(file_path)
-        except Exception, e:
-            print '## clear_directory ## ' + e
-            return 'Bad request', 400
-    return 'OK', 200
+    try:
+        for the_file in os.listdir(folder):
+            file_path = os.path.join(folder, the_file)
+            try:
+                if os.path.isfile(file_path):
+                    os.unlink(file_path)
+            except Exception, e:
+                print '## clear_directory ## {}'.format(e)
+                return 'Bad request', 400
+        return 'OK', 200
+    except OSError:
+        return 'Not Found', 404
+    except Exception, e:
+        print '## clear_directory ## {}'.format(e)
+    return 'Bad request', 400
 ##### End of upload procedures #####
 
 # Called from hello.html

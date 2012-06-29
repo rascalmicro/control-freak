@@ -1,5 +1,6 @@
 body {
-    padding-top: 50px;
+    /* padding-top: 50px; */    /* no gap */
+    padding-top: 58px;          /* gap below top bar */
     padding-bottom: 0;
     font-family: "Molengo","URW Gothic L",sans-serif;
     font-size: 1em;

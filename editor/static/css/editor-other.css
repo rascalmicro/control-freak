@@ -72,6 +72,10 @@ tr.over td {
     margin-bottom: 20px;
 }
 
+.log-mark {
+    color: #95C3DB; /* light blue for log page */
+}
+
 #reset {
     width: 220px;
 }

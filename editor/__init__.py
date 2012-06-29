@@ -178,21 +178,18 @@ def read_contents():
     return f.read()
 
 BOILERPLATE = """<!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <meta charset="utf-8">
     <title></title>
-    <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Droid+Sans|Molengo">
-    <link rel="stylesheet" type="text/css" href="/static/css/demo.css">
-    <link rel="shortcut icon" href="/static/images/favicon.ico">
-    <script src="/static/js/jquery-1.7.2.js"></script>
-    <script language="javascript" type="text/javascript" src="/static/js/jquery.jqplot-1.0.0b2.js"></script>
-    <link rel="stylesheet" type="text/css" href="/static/css/jquery.jqplot-1.0.0b2.css" />
+    {% include "include/rascal-head.html" %}
 </head>
 <body>
-    <div class="rascalcontent">
-        <h1>This is your new page.</h1>
-        You can add some text here, or use template variables: {{magic}}
+    {% include "include/rascal-topbar.html" %}
+    <div class="container">
+        <div class="well rascal">
+            <h1>This is your new page.</h1>
+            You can add some text here, or use template variables: {{magic}}
+        </div>
     </div>
     <script language="javascript" type="text/javascript">
     // You could add some Javascript between these script tags, if you want.
@@ -304,9 +301,13 @@ def xupload_file():
 @login_required
 def reload():
     import subprocess
-    res = subprocess.call(['touch', '/etc/uwsgi/public.ini'])
+    res = subprocess.call(['logrotate', '-f', '/var/www/rotate_public.conf'])
     if res <> 0:
         return 'Bad request', 400
+    else:
+        res = subprocess.call(['touch', '/etc/uwsgi/public.ini'])
+        if res <> 0:
+            return 'Bad request', 400
     return 'OK', 200
 
 # Save prefs in editor.config
