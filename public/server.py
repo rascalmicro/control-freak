@@ -20,7 +20,7 @@ def toggle_pin(pin):
 
 @public.route('/pin/<pin>/<state>')
 def update_pin(pin, state):
-    from myPytronics import digitalWrite, pinMode
+    from pytronics import digitalWrite, pinMode
     try:
         if state.lower() == 'on':
             digitalWrite(pin, 'HIGH')
@@ -40,7 +40,7 @@ def update_pin(pin, state):
 
 @public.route('/read-pins', methods=['POST'])
 def read_pins():
-    from myPytronics import readPins
+    from pytronics import readPins
     import json
     return json.dumps(readPins(LIVE_PINS))
 
