@@ -152,6 +152,9 @@ function editorSetMode(ext) {
     case 'less':
         mode = 'less';
         break;
+    case 'log':
+        mode = 'log';
+        break;
     default:
         mode = 'text';
     }
