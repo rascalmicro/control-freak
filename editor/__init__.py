@@ -126,20 +126,17 @@ def dirlist(d): # This function heavily based on Martin Skou's connector script 
     print '## dirlist ## ' + d
     noneditable = ["pyc", "pyo"]
     r=['<ul class="jqueryFileTree" style="display: none;">']
+    s=[]
     try:
-        sd = sorted(os.listdir(d), key=unicode.lower)
-        # list directories first...
-        for f in sd:
+        for f in sorted(os.listdir(d), key=unicode.lower):
             ff=os.path.join(d,f)
             if os.path.isdir(ff):
                 r.append('<li class="directory collapsed"><img src="/editor/static/images/file-icons/delete.png"><a href="#" rel="%s/">%s</a></li>' % (ff,f))
-        # ...then files
-        for f in sd:
-            ff=os.path.join(d,f)
-            if not os.path.isdir(ff):
+            else:
                 e=os.path.splitext(f)[1][1:] # get .ext and remove dot
                 if (e not in noneditable and f != '__init__.py'):
-                    r.append('<li class="file ext_%s"><img src="/editor/static/images/file-icons/delete.png" rel="%s"><a href="#" rel="%s">%s</a></li>' % (e,ff,ff,f))
+                    s.append('<li class="file ext_%s"><img src="/editor/static/images/file-icons/delete.png" rel="%s"><a href="#" rel="%s">%s</a></li>' % (e,ff,ff,f))
+        r += s
     except Exception,e:
         r.append('Could not load directory: %s' % str(e))
         print 'Error: ' + str(e)
