@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test I2C Bus</title>
+    {% include "include/rascal-head.html" %}
+    <style>
+        .table th, .table td {
+            text-align: center;
+        }
+        .table tbody tr:hover td,
+        .table tbody tr:hover th {
+          background-color: #666;
+        }
+        #scan_table {
+            margin-bottom: 3px;
+        }
+         #rescan {
+            margin-bottom: 10px;
+        }
+        a.chip_addr {
+            color: white;
+        }
+        .well.i2c {
+            color: #F8F8F8;
+            background-color: #333;
+        }
+        label, input[type="text"] {
+            font-size: 15px;
+        }
+    </style>
+</head>
+<body>
+    {% include "include/rascal-topbar.html" %}
+    <div class="container">
+        <div class="well rascal">
+            <h1>Test I2C Bus</h1>
+            <p>Find and test I2C devices</p>
+            
+            <h3>I2C Bus Scan</h3>
+            <p>Device addresses range from 0x03 to 0x77. If a chip was found at an address, its address is listed in
+                hexadecimal (e.g. 2d, 48). Click an address to enter it into the operations panel.
+                "--" indicates that the address was probed but no chip answered.
+                "U" means that probing was skipped because this address is currently in use by a driver.
+                This strongly suggests that there is a chip at this address.</p>
+            <div id="scan_table" class="well" style="background-color: #333;">
+                <div style="padding: 151px 400px"><img src="/static/images/ajax-loader.gif" width="32" height="32"></div>
+            </div>
+            <button id="rescan" class="btn btn-large btn-primary">Rescan</button>
+            
+            <h3>I2C Operations</h3>
+            <p>You can enter values as hexadecimal numbers preceded by 0x (e.g. 0x48) or as the equivalent
+                decimal number (e.g. 72). You must enter the chip address.
+                The register address and data to write default to zero.</p>
+            <div class="well i2c">
+                <div class="row">
+                    <div class="span3">
+                        <label>Chip address</label>
+                        <input id="address" type="text" class="span2" placeholder="0x03-0x77" />
+                    </div>
+                    <div class="span3">
+                        <label>Register address</label>
+                        <input id="register" type="text" class="span2" placeholder="0x00-0xff">
+                    </div>
+                    <div class="span3">
+                        <label>Data to write</label>
+                        <input id="data" type="text" class="span2" placeholder="0x0000-0xffff">
+                    </div>
+                </div> <!-- ./row -->
+                <div class="row">
+                    <div class="span3">
+                        <div class="control-group">
+                            <label class="control-label" for="size_byte">Transfer size</label>
+                            <div class="controls">
+                                <label class="radio inline">
+                                    <input id="size_byte" type="radio" name="sizeRadios" value="B" checked="checked" />
+                                    Byte
+                                </label>
+                                <label class="radio inline">
+                                    <input id="size_word" type="radio" name="sizeRadios" value="W" />
+                                    Word
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="span3">
+                        <div class="control-group">
+                            <label>Read result (decimal)</label>
+                            <input id="result10" type="text" class="span2" />
+                        </div>
+                    </div>
+                    <div class="span3">
+                        <div class="control-group">
+                            <label>Read result (hexadecimal)</label>
+                            <input id="result16" type="text" class="span2" />
+                        </div>
+                    </div>
+                </div>  <!-- ./row -->
+                <div class="row" style="margin: 10px 0;">
+                    <div class="span3">
+                        <button id="read" class="btn btn-large btn-danger rascal">Read</button>
+                    </div>
+                    <div class="span3">
+                        &nbsp;
+                    </div>
+                    <div class="span3">
+                        <button id="write" class="btn btn-large btn-warning rascal">Write</button>
+                    </div>
+                </div>  <!-- /.row -->
+            </div> <!-- /.well i2c -->
+            <div id="cmd">&nbsp;</div>
+            <div id="status">&nbsp;</div>
+        </div> <!-- /.well rascal -->
+    </div> <!-- /.container -->
+    <script language="javascript" type="text/javascript">
+        
+        function showCommand(cmd) {
+            $('#cmd')
+                .stop(true)
+                .text('Sent command: ' + cmd)
+                .css('visibility', 'visible')
+                .hide()
+                .fadeTo(10, 1)
+                .delay(2000)
+                .fadeTo(1000, 0);
+        }
+        
+        function showStatus(status) {
+            $('#status')
+                .stop(true)
+                .text('Rascal replied: ' + status)
+                .css('visibility', 'visible')
+                .hide()
+                .delay(500)
+                .fadeTo(10, 1)
+                .delay(1500)
+                .fadeTo(1000, 0);
+        }
+
+        function i2cscan() {
+            "use strict";
+            showCommand('/i2cscan')
+            $.post('/i2cscan', function (response) {
+                var
+                    scan = JSON.parse(response),
+                    s = '<table class="table table-bordered">',
+                    i, j, row, t, hexaddr;
+                s += '<tr><th width="7.2%"></th>';
+                for (j = 0; j < 16; j += 1) {
+                    s += '<th width="5.8%">' + j.toString(16) + '</th>';
+                }
+                s += '</tr>';
+                for (i = 0; i < 128; i += 16) {
+                    s += '<tr><td>' + i.toString(16) + ':</td>';
+                    row = scan[i];
+                    for (j = 0; j < 16; j += 1) {
+                        switch (row[j])
+                        {
+                            case -2:
+                                t = 'U';
+                                break;
+                            case -1:
+                                t = '--';
+                                break;
+                            case 0:
+                                t = '';
+                                break;
+                            default:
+                                hexaddr = row[j].toString(16);
+                                t = '<a href="#" class="chip_addr" onclick="setAddress(' + hexaddr + ');">' + hexaddr +'</a>';
+                                break;
+                        }
+                        s += '<td>' + t + '</td>';
+                    }
+                    s += '</tr>';
+                }                     
+                s += '</table>';
+                $('#scan_table').html(s);
+                showStatus('Success');
+            }).error(function (jqXHR, textStatus, errorThrown) {
+                showStatus('Error: ' + errorThrown);
+            });
+        }
+        
+        $('#rescan').click(function () {
+            i2cscan();
+        });
+
+        $('#read').click(function () {
+            "use strict";
+            var
+                addr = $('#address').attr('value'),
+                reg = $('#register').attr('value'),
+                size = $('input:radio:checked').attr('value'),
+                cmd;
+            if (addr !== '') {
+                if (reg === '') {
+                    reg = '0';
+                }
+                cmd = "/i2cget/" + addr + "/" + reg + '/' + size;
+                showCommand(cmd);
+                $.get(cmd, function (data, textStatus) {
+                    $('#result10').attr('value', data);
+                    $('#result16').attr('value', '0x' + parseInt(data).toString(16));
+                    if (parseInt(data) !== -1) {
+                        showStatus(data);
+                    } else {
+                        showStatus('Couldn\'t read from this address');
+                    }
+                }).error(function (jqXHR, textStatus, errorThrown) {
+                    showStatus('Error: ' + errorThrown);
+                });
+            } else {
+                showStatus('Chip address required');
+            }
+        });
+        
+        $('#write').click(function () {
+            "use strict";
+            var
+                addr = $('#address').attr('value'),
+                reg = $('#register').attr('value'),
+                val = $('#data').attr('value'),
+                size = $('input:radio:checked').attr('value'),
+                cmd;
+            if (addr !== '') {
+                if (reg === '') {
+                    reg = '0';
+                }
+                if (val === '') {
+                    val = '0';
+                }
+                cmd = "/i2cset/" + addr + "/" + reg + "/" + val + '/' + size;
+                showCommand(cmd);
+                $.get(cmd, function (data, textStatus) {
+                    $('#result10').attr('value', data);
+                    $('#result16').attr('value', '0x' + parseInt(data).toString(16));
+                    if (parseInt(data) === 0) {
+                        showStatus('Success');
+                    } else {
+                        showStatus('Couldn\'t write to this address');
+                    }
+                }).error(function (jqXHR, textStatus, errorThrown) {
+                    showStatus('Error: ' + errorThrown);
+                });
+            } else {
+                showStatus('Chip address required');
+            }
+        });
+        
+        function setAddress (hexaddr) {
+            $('#address').attr('value', '0x' + hexaddr);
+        }
+        
+        $(document).ready(function () {
+            i2cscan ();
+        });
+
+    </script>
+</body>
+</html>

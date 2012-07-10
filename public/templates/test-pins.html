@@ -23,8 +23,8 @@
     {% include "include/rascal-topbar.html" %}
     <div class="container">
         <div class="well rascal">
-            <h1>Test some pins</h1>
-            <p>A Panjandrum for turning the pins on and off</p>
+            <h1>Test digital pins</h1>
+            <p>View pin status, set pin direction and output status</p>
             <div class="row">
                 <div class="span4">
                     <div class="well"  style="background-color: #333;">
@@ -343,7 +343,6 @@
                     .fadeTo(10, 1)
                     .delay(1500)
                     .fadeTo(1000, 0);
-
             }).error(function (jqXHR, textStatus, errorThrown) {
                 $('#status')
                     .stop(true)
