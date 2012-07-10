@@ -44,6 +44,31 @@ def read_pins():
     import json
     return json.dumps(readPins(LIVE_PINS))
 
+@public.route('/i2cget/<addr>/<reg>/<mode>')
+def i2cget(addr, reg, mode):
+    from pytronics import i2cRead
+    iaddr = int(addr, 0)
+    ireg = int(reg, 0)
+    res = i2cRead(iaddr, ireg, mode)
+    print '## i2cget ## {0}'.format(res)
+    return str(res)
+    
+@public.route('/i2cset/<addr>/<reg>/<val>/<mode>')
+def i2cset(addr, reg, val, mode):
+    from pytronics import i2cWrite
+    iaddr = int(addr, 0)
+    ireg = int(reg, 0)
+    ival = int(val, 0)
+    res = i2cWrite(iaddr, ireg, ival, mode)
+    print '## i2cset ## {0}'.format(res)
+    return str(res)
+    
+@public.route('/i2cscan', methods=['POST'])
+def i2cscan():
+    from i2c import scanBus
+    import json
+    return json.dumps(scanBus())
+
 @public.route('/set-speed', methods=['POST'])
 def set_speed():
     import subprocess
