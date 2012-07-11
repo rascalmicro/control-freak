@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request
-# from uwsgidecorators import *
+from uwsgidecorators import *
 import time
 
 public = Flask(__name__)
