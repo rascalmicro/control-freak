@@ -74,7 +74,7 @@ function softTabs(cm) {
         ch = cm.coordsChar(cm.cursorCoords(true)).ch;
         ts = cm.getOption('tabSize');
         ns = ts - (ch % ts);
-        console.log('softTabs: inserting ' + ns + ' spaces');
+        // console.log('softTabs: inserting ' + ns + ' spaces');
         cm.replaceSelection(Array(ns + 1).join(' '), "end");
     }
 }
@@ -158,7 +158,7 @@ function editorSetMode(ext) {
     default:
         mode = 'text';
     }
-    console.log('mode ' + mode);
+    // console.log('mode ' + mode);
     editor.setOption('mode', mode);
 }
 
@@ -187,7 +187,7 @@ function applyTheme () {
     "use strict";
     var oldTheme = editor.getOption('theme');
     var newTheme;
-    console.log('applyTheme ' + preferences.theme);
+    // console.log('applyTheme ' + preferences.theme);
     editor.setOption('theme', preferences.theme);
     
     // Set theme for other panes
@@ -211,7 +211,7 @@ function applyTheme () {
 
     // Set active line highlight color
     hlLineStyle = 'activeline-' + newTheme;
-    console.log('+ hlLineStyle ' + hlLineStyle);
+    // console.log('+ hlLineStyle ' + hlLineStyle);
     if (preferences.highlightActive) {
         if (hlLine !== null) {
             activeline();
@@ -222,49 +222,49 @@ function applyTheme () {
 
 function applyFontSize() {
     "use strict";
-    console.log('applyFontSize ' + preferences.fontSize);
+    // console.log('applyFontSize ' + preferences.fontSize);
     $('.CodeMirror').css('font-size', preferences.fontSize + 'px');
 }
 
 function applyLineHeight() {
     "use strict";
-    console.log('applyLineHeight ' + preferences.lineHeight);
+    // console.log('applyLineHeight ' + preferences.lineHeight);
     $('.CodeMirror').css('line-height', preferences.lineHeight + 'em');
 }
 
 function applyTabSize() {
     "use strict";
-    console.log('applyTabSize ' + preferences.tabSize);
+    // console.log('applyTabSize ' + preferences.tabSize);
     editor.setOption('tabSize', preferences.tabSize);
 }
 
 function applySoftTabs() {
     "use strict";
     var ek = editor.getOption('extraKeys');
-    console.log('applySoftTabs ' + preferences.softTabs);
+    // console.log('applySoftTabs ' + preferences.softTabs);
     if (ek !== null) {
         if (ek.Tab !== null) {
-            console.log('+ deleting tab property');
+            // console.log('+ deleting tab property');
             delete ek.Tab;
         }
         if (preferences.softTabs) {
-            console.log('+ adding tab property softTabs');
+            // console.log('+ adding tab property softTabs');
             ek.Tab = softTabs;
         }
         editor.setOption('extraKeys', ek);
     } else {
         if (preferences.softTabs) {
-            console.log('+ creating tab property softTabs');
+            // console.log('+ creating tab property softTabs');
             editor.setOption('extraKeys', {'Tab': softTabs});
         }
     }
-    console.log('+ set indentWithTabs ' + !preferences.softTabs);
+    // console.log('+ set indentWithTabs ' + !preferences.softTabs);
     editor.setOption('indentWithTabs', !preferences.softTabs);
 }
 
 function applyVisibleTabs() {
     "use strict";
-    console.log('applyVisibleTabs ' + preferences.visibleTabs);
+    // console.log('applyVisibleTabs ' + preferences.visibleTabs);
     if (preferences.visibleTabs) {
         $('.CodeMirror').addClass('visibleTabs');
     } else {
@@ -274,26 +274,26 @@ function applyVisibleTabs() {
 
 function applyIndentUnit() {
     "use strict";
-    console.log('applyIndentUnit ' + preferences.indentUnit);
+    // console.log('applyIndentUnit ' + preferences.indentUnit);
     editor.setOption('indentUnit', preferences.indentUnit);
 }
 
 function applyLineNumbers() {
     "use strict";
-    console.log('applyLineNumbers ' + preferences.lineNumbers);
+    // console.log('applyLineNumbers ' + preferences.lineNumbers);
     editor.setOption('lineNumbers', preferences.lineNumbers);
 }
 
 function applyHighlightActive() {
     "use strict";
-    console.log('applyHighlightActive ' + preferences.highlightActive);
+    // console.log('applyHighlightActive ' + preferences.highlightActive);
     if (preferences.highlightActive != hlActive) {
         hlActive = preferences.highlightActive;
         if (hlActive) {
-            console.log('+ turning on hlActive');
+            // console.log('+ turning on hlActive');
             hlLine = editor.setLineClass(editor.getCursor().line, null, hlLineStyle);
         } else {
-            console.log('+ turning off hlActive');
+            // console.log('+ turning off hlActive');
             // Clear current highlight
             if (hlLine !== null) {
                 editor.setLineClass(hlLine, null, null);
@@ -306,13 +306,13 @@ function applyHighlightActive() {
 
 function applyLineWrapping() {
     "use strict";
-    console.log('applyLineWrapping ' + preferences.lineWrapping);
+    // console.log('applyLineWrapping ' + preferences.lineWrapping);
     editor.setOption('lineWrapping', preferences.lineWrapping);
 }
 
 function applyMatchBrackets() {
     "use strict";
-    console.log('applyMatchBrackets ' + preferences.matchBrackets);
+    // console.log('applyMatchBrackets ' + preferences.matchBrackets);
     editor.setOption('matchBrackets', preferences.matchBrackets);
 }
 
@@ -442,7 +442,7 @@ function applyAll() {
 function savePreferences() {
     "use strict";
     $.post('/editor/save_prefs', { section: 'CodeMirror', prefs: JSON.stringify(preferences) }, function (response) {
-        console.log('save_prefs ' + response);
+        // console.log('save_prefs ' + response);
     });
 }
 
@@ -450,7 +450,7 @@ function defaultPreferences() {
     var pd = prefs.defaults, p;
     
     for (p in pd) {
-        console.log('Restoring default ' + p + ': ' + pd[p]);
+        // console.log('Restoring default ' + p + ': ' + pd[p]);
         preferences[p] = pd[p];
     }
     applyAll();

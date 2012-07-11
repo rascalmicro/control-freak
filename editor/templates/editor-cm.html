@@ -303,13 +303,10 @@
             if (ADJUSTSIZE) {
                 w = $(window).width();
                 h = $(window).height();
-                saveMsg(w + ' x ' + h);
-                console.log('size ' + w + ' x ' + h);
+                // console.log('size ' + w + ' x ' + h);
                 dw = (w > (1260 + XW)) ? w - (1260 + XW) : 0;
                 dh = (h > (637 + XH)) ? h - (637 + XH) : 0;
-                console.log('resize ' + dw + ' x ' + dh);
-                // $('.rascalcontent').width(1260 + dw);
-                // $('#filetree').height(460 + dh);
+                // console.log('resize ' + dw + ' x ' + dh);
                 $('#filetree').height(455 + dh);
                 $('.CodeMirror-scroll').height(475 + dh);
                 if (rascal.picture.showing) {
