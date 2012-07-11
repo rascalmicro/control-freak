@@ -52,7 +52,7 @@ def i2cget(addr, reg, mode):
     res = i2cRead(iaddr, ireg, mode)
     print '## i2cget ## {0}'.format(res)
     return str(res)
-    
+
 @public.route('/i2cset/<addr>/<reg>/<val>/<mode>')
 def i2cset(addr, reg, val, mode):
     from pytronics import i2cWrite
@@ -62,7 +62,7 @@ def i2cset(addr, reg, val, mode):
     res = i2cWrite(iaddr, ireg, ival, mode)
     print '## i2cset ## {0}'.format(res)
     return str(res)
-    
+
 @public.route('/i2cscan', methods=['POST'])
 def i2cscan():
     from i2c import scanBus
