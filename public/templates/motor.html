@@ -23,7 +23,7 @@
         });
         $( "#slider" ).bind( "slidestop", function(event, ui) {
             var value = $( "#slider" ).slider( "option", "value" );
-            $.post("/set-speed", { speed: value });
+            $.get("/i2cset/0x29/" + value + "/0/C");
         });
     </script>
 </body>

@@ -69,15 +69,6 @@ def i2cscan():
     import json
     return json.dumps(scanBus())
 
-@public.route('/set-speed', methods=['POST'])
-def set_speed():
-    import subprocess
-    speed = request.form['speed']
-    cmd = 'i2cset -y 0 0x29 ' + str(speed)
-    print cmd
-    subprocess.Popen([cmd], shell=True)
-    return ('speed set')
-
 #@rbtimer(60)
 def fetch_calendar(num):
     import thermostat
