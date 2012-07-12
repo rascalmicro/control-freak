@@ -41,7 +41,8 @@
                 hexadecimal (e.g. 2d, 48). Click an address to enter it into the operations panel.
                 "--" indicates that the address was probed but no chip answered.
                 "U" means that probing was skipped because this address is currently in use by a driver.
-                This strongly suggests that there is a chip at this address.</p>
+                This strongly suggests that there is a chip at this address.
+            </p>
             <div id="scan_table" class="well" style="background-color: #333;">
                 <div style="padding: 151px 400px"><img src="/static/images/ajax-loader.gif" width="32" height="32"></div>
             </div>
@@ -50,7 +51,11 @@
             <h3>I2C Operations</h3>
             <p>You can enter values as hexadecimal numbers preceded by 0x (e.g. 0x48) or as the equivalent
                 decimal number (e.g. 72). You must enter the chip address.
-                The register address and data to write default to zero.</p>
+                The register address and data to write default to zero.
+                When size Short is selected, Write performs a "short write" to the specified chip and register.
+                In this mode, no data is written (data to write is ignored).
+                A Short Read reads a byte from the previously selected register (register address is ignored).
+            </p>
             <div class="well i2c">
                 <div class="row">
                     <div class="span3">
