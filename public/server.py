@@ -183,26 +183,6 @@ def sprinkler():
         pytronics.digitalWrite(2, 'LOW')
     return ('Sprinkler toggled')
 
-
-# @rbtimer(5)
-def toggle_led(num):
-    import pytronics
-    if pytronics.digitalRead('LED') == '1':
-        pytronics.digitalWrite('LED', 'LOW')
-    else:
-        pytronics.digitalWrite('LED', 'HIGH')
-
-# @cron(0, -6, -1, -1, -1)
-def ntp_daemon(num):
-    import subprocess
-    cmd = 'ntpdate uk.pool.ntp.org'
-    subp = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE)
-    try:
-        data = subp.communicate()[0].strip()
-        print '## NTPD ## ' + data
-    except:
-        print '## NTPD ## Failed.'
-
 ##### The following procedures support sending email via SMTP #####
 # They are used by email.html. Configure smtp settings in smtp_lib.py
 @public.route('/email.html')
@@ -321,6 +301,14 @@ def flash_led():
         pytronics.digitalWrite('LED', 'HIGH')
         message = "LED on"
     return (message)
+
+# Called from hello-TMP102.html
+@public.route('/read_temp', methods=['POST'])
+def read_temp():
+    from pytronics import i2cRead
+    temp = i2cRead(0x48, 0, 'W')
+    strTemp = '{0:0.1f}{1}C'.format(((temp % 0x0100 * 16) + (temp / 0x1000)) * 0.0625, unichr(176))
+    return strTemp
 
 
 if __name__ == "__main__":
