@@ -4,44 +4,27 @@ body {
 
 /* Login */
 .centered {
-    width: 500px;
+    margin-top: 300px;
     margin-left: auto;
     margin-right: auto;
-}
-
-#login-form {
-    margin-top: 300px;
-    padding: 0; /* to reset -webkit-padding-start */
-}
-
-#login-form li {
-    list-style-type: none;
+    width: 500px;
 }
 
 input {
     margin-top: 5px;
     margin-bottom: 5px;
-    width: 120px;
 }
 
 #password-field {
+    margin-right: 5px;
     width: 300px;
     height: 34px;
     font-size: 2em;
-    margin-right: 10px;
 }
 
-#login {
+#login-btn {
+    margin: 3px 0 7px 0;
     width: 120px;
-}
-
-#message-panel {
-    float: right;
-    clear: none;
-    color: #EF4A42;
-    margin: 5px;
-    height: 40px;
-    width: 642px;
 }
 
 /* log and monitor */

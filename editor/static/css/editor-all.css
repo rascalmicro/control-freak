@@ -67,7 +67,16 @@ p {
     font-family: "Lucida Grande","Lucida Sans",sans-serif;
     font-size: 16px;
 }
-             
+
+[class^="icon-"],
+[class*=" icon-"] {
+    background-image: url("/editor/static/images/glyphicons-halflings.png");
+}
+
+.icon-white {
+    background-image: url("/editor/static/images/glyphicons-halflings-white.png");
+}
+
 @font-face {
   font-family: 'Molengo';
   font-style: normal;
