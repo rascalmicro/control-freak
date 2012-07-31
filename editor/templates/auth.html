@@ -16,19 +16,42 @@
     </div>
     <div class="container-fluid">
         <div class="centered">
-            <form action="" method=post>
-                <ul id="login-form">
-                      <li>Password:</li>
-                      <li><input id="password-field" type=text name=password><input id="login" type="submit" value="Login" class="btn btn-large btn-danger rascal" alt="Login"></li>
-                      {% for message in get_flashed_messages() %}
-                      <li><div class=flash>{{ message }}</div></li>
-                      {% endfor %}
-                </ul>
+            <form action="" method="post">
+                <table id="login-form" align="center">
+                    <tr>
+                        <td colspan="2">Password:</td></tr>
+                    <tr>
+                        <td><input id="password-field" type="{{ type }}" name="password"></td>
+                        <td><input id="login-btn" type="submit" value="Login" class="btn btn-large btn-danger rascal"></td>
+                    </tr>
+                    <tr valign="top">
+                        <td>
+                            {% for message in get_flashed_messages() %}
+                            <div class="flash">{{ message }}</div>
+                            {% endfor %}
+                        </td>
+                        <td><input id="mode" name="showPassword" type="checkbox" value="True"> Show password</td>
+                    </tr>
+                </table>
             </form>
-        </div>
+         </div>
     </div>
     <script>
-        $(".flash").delay(5000).fadeOut("slow");
+        $('.flash').delay(5000).fadeOut('slow');
+        
+        $('#mode').click(function () {
+            if ($('#password-field').prop('type') === 'text') {
+                $('#password-field').prop('type', 'password');
+            } else {
+                $('#password-field').prop('type', 'text');
+            }
+        });
+    
+        $(document).ready(function () {
+            if ($('#password-field').prop('type') === 'text') {
+                $('#mode').attr('checked', 'checked');
+            }
+        });
     </script>
 </body>
 </html>
