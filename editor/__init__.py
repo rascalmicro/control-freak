@@ -29,18 +29,18 @@ def redirect_to_static(path):
 
 ## login support
 class Anonymous(AnonymousUser):
-    name = u"Anonymous"
+    name = u'Anonymous'
 
-PASSWD_FILE = "/etc/passwd"
-# PASSWD_FILE = "/var/www/passwd"
+PASSWD_FILE = '/etc/passwd'
+# PASSWD_FILE = '/var/www/passwd'
 
 USERS = {
-    1: User(u"rascal", 1),
+    1: User(u'rascal', 1),
 }
 
 USER_NAMES = dict((u.name, u) for u in USERS.itervalues())
 
-SECRET_KEY = "rascal"
+SECRET_KEY = 'rascal'
 DEBUG = True
 
 editor.config.from_object(__name__)
@@ -48,9 +48,9 @@ editor.config.from_object(__name__)
 login_manager = LoginManager()
 
 login_manager.anonymous_user = Anonymous
-login_manager.login_view = "/editor/auth"
-login_manager.login_message = u"Please log in to access this page."
-login_manager.refresh_view = "/editor/reauth"
+login_manager.login_view = '/editor/auth'
+login_manager.login_message = u'Please log in to access this page.'
+login_manager.refresh_view = '/editor/reauth'
 
 @login_manager.user_loader
 def load_user(id):
@@ -68,39 +68,54 @@ def get_hash(username):
     import os
     return os.urandom(13) # In the event that the account doesn't exist, return random noise to prevent login
 
-@editor.route("/editor/auth", methods=["GET", "POST"])
+@editor.route('/editor/auth', methods=['GET', 'POST'])
 def auth():
-    import crypt
-    if request.method == "POST" and "password" in request.form:
-        pw = request.form["password"]
+    import crypt, ConfigParser
+    section = 'Login'
+    key = 'showPassword'
+    if request.method == 'POST' and 'password' in request.form:
+        # Save show password preference in editor config
+        showPassword = True if 'showPassword' in request.form else False
+        try:
+            config = ConfigParser.SafeConfigParser()
+            config.optionxform = str    # Don't convert to lower case
+            config.read(CONFIG_FILE)
+            if not config.has_section(section):
+                config.add_section(section)
+            config.set(section, key, str(showPassword))
+            with open(CONFIG_FILE, 'wb') as configfile:
+                config.write(configfile)
+        except Exception, e:
+            print '## auth save_pref ## Unexpected error: %s' % str(e)
+        # Validate password
+        pw = request.form['password']
         hash = get_hash('root')
         salt = hash[0:2]
         if crypt.crypt(pw, salt) == hash:
             if login_user(USER_NAMES['rascal']):
-                flash("Logged in!")
-                return redirect(request.args.get("next") or "/")
+                flash('Logged in!')
+                return redirect(request.args.get('next') or '/')
             else:
-                flash("Sorry, but you could not log in.")
+                flash('Sorry, but you could not log in.')
         else:
-            flash("Sorry, but you could not log in.")
-    return render_template("auth.html")
+            flash('Sorry, but you could not log in.')
+    # Get show password preference
+    config = ConfigParser.SafeConfigParser()
+    config.read(CONFIG_FILE)
+    try:
+        showPassword = config.getboolean(section, key)
+    except (ConfigParser.NoSectionError, ConfigParser.NoOptionError):
+        showPassword = False
+    # Set type of password input element (auth page uses this to sets checkbox state)
+    pwtype = 'text' if showPassword else 'password'            
+    return render_template('auth.html', type=pwtype)
 
-@editor.route("/editor/reauth", methods=["GET", "POST"])
-@login_required
-def reauth():
-    print '## REAUTH ##'
-    if request.method == "POST":
-        confirm_login()
-        flash(u"Reauthenticated.")
-        return redirect(request.args.get("next") or "/")
-    return render_template("reauth.html")
-
-@editor.route("/editor/logout")
+@editor.route('/editor/logout')
 @login_required
 def logout():
     logout_user()
-    flash("Logged out.")
-    return redirect("/")
+    flash('Logged out.')
+    return redirect('/')
 
 ## editor functions
 # Start editor specified by editor-xx file
@@ -124,7 +139,7 @@ def start_edit():
 def dirlist(d): # This function heavily based on Martin Skou's connector script for jQuery File Tree
     import os
     print '## dirlist ## ' + d
-    noneditable = ["pyc", "pyo"]
+    noneditable = ['pyc', 'pyo']
     r=['<ul class="jqueryFileTree" style="display: none;">']
     s=[]
     try:
@@ -149,7 +164,7 @@ def get_dirlist():
     try:
         request.form['dir']
     except KeyError:
-        print("Key error in attempt to list directory contents.")
+        print('Key error in attempt to list directory contents.')
     return str(dirlist(request.form['dir']))
 
 @editor.route('/editor/move_item', methods=['POST'])
@@ -158,7 +173,7 @@ def move_item():
     import subprocess
     src = request.form['src']
     dst = request.form['dst']
-    print "## move_item ## " + src + " to " + dst
+    print '## move_item ## ' + src + ' to ' + dst
     res = subprocess.call(['mv', src, dst])
     if res <> 0:
         return 'Bad request', 400
@@ -219,7 +234,7 @@ def new_template():
 def delete_file():
     import subprocess
     fname = request.form['filename']
-    print "Deleting file: " + fname
+    print 'Deleting file: ' + fname
     res = subprocess.call(['rm', '/var/www/public/' + fname])
     if res <> 0:
         return 'Bad Request', 400
@@ -244,7 +259,7 @@ def new_folder():
 def delete_folder():
     import subprocess
     fname = request.form['filename']
-    print "Deleting folder: " + fname
+    print 'Deleting folder: ' + fname
     res = subprocess.call(['rm', '-rf', '/var/www/public/' + fname])
     if res <> 0:
         return 'Bad Request', 400
@@ -484,5 +499,5 @@ def monitor():
         abort(404)
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     editor.run(host='127.0.0.1:5001', debug=True)
