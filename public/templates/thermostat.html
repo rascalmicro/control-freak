@@ -2,18 +2,16 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>DIY thermostat demo</title>
-    <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Droid+Sans|Molengo">
-    <link rel="stylesheet" type="text/css" href="/static/css/demo.css">
-    <link rel="shortcut icon" href="/static/images/favicon.ico">
-    <script src="/static/js/jquery-1.7.2.js"></script>
-    <script language="javascript" type="text/javascript" src="/static/js/jquery.jqplot-1.0.0b2.js"></script>
-    <link rel="stylesheet" type="text/css" href="/static/css/jquery.jqplot-1.0.0b2.css" />
+    <title>Thermostat demo</title>
+    {% include "include/rascal-head.html" %}
 </head>
 <body>
-    <div class="rascalcontent">
-        <h1>DIY thermostat demo</h1>
-        <div id="chart1" style="height:500px;width:900px;"></div>
+    {% include "include/rascal-topbar.html" %}
+    <div class="container">
+        <div class="well rascal">
+            <h1>DIY thermostat demo</h1>
+            <div id="chart1" style="height:500px;width:900px;"></div>
+        </div>
     </div>
     <script language="javascript" type="text/javascript">
 
