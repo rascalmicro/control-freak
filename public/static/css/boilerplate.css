@@ -32,6 +32,10 @@ a.rascal.red {
     background-image: url("/static/images/glyphicons-halflings-white.png");
 }
 
+.jqplot-target {
+    color: #E7E8E9; /* Change jQplot default text color because it matches the Rascal bg color */
+}
+
 /* topbar */
 .navbar-inner, .footer {
     background-color: #424242;

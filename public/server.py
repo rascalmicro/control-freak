@@ -96,7 +96,7 @@ def template(template_name):
 def index():
     import pytronics
     pin = pytronics.digitalRead(2)
-    (chan0, chan1, chan2, chan3) = pytronics.summarize_analog_data()
+    (chan0, chan1, chan2, chan3) = [pytronics.analogRead(chan) for chan in ['A0', 'A1', 'A2', 'A3']]
     return render_template('/relay.html', chan0=chan0, chan1=chan1, chan2=chan2, chan3=chan3, pin=pin)
 
 @public.route('/toggle', methods=['POST'])
