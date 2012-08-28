@@ -11,12 +11,29 @@ ALLOWED_DIRECTORIES = set(['static/uploads/', 'static/pictures/'])
 LIVE_PINS = ['LED', '2', '3', '4', '5', '8', '9', '10', '11', '12', '13']
 # public.config['MAX_CONTENT_LENGTH'] = 4 * 1024 * 1024
 
+@public.route('/')
+@public.route('/index.html')
+def default_page():
+    with open('/etc/hostname', 'r') as f:
+        name = f.read().strip().capitalize()
+    return render_template('/index.html', hostname=name, template_list = get_public_templates())
+
 def toggle_pin(pin):
     from pytronics import digitalRead, digitalWrite
     if digitalRead(pin) == '1':
         digitalWrite(pin, 'LOW')
     else:
         digitalWrite(pin, 'HIGH')
+
+def get_public_templates():
+    import os
+    r = []
+    d = '/var/www/public/templates'
+    for f in os.listdir(d):
+        ff=os.path.join(d,f)
+        if os.path.isfile(ff):
+            r.append(f)
+    return sorted(r)
 
 @public.route('/pin/<pin>/<state>')
 def update_pin(pin, state):

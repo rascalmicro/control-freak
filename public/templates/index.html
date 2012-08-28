@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title></title>
+    {% include "include/rascal-head.html" %}
+</head>
+<body>
+    {% include "include/rascal-topbar.html" %}
+    <div class="container">
+        <div class="well rascal">
+            <h1>Victory! You have located the homepage of {{hostname}}.</h1>
+            <hr />
+            <h2>Templates on your Rascal right now</h2>
+            <ul>
+            {% for file in template_list %}
+                <li><a href="{{ file }}">{{ file }}</a></li>
+            {% endfor %}
+            </ul>
+        </div>
+    </div>
+    <script language="javascript" type="text/javascript">
+    // You could add some Javascript between these script tags, if you want.
+    // jQuery and jqPlot are already included in the header above.
+    </script>
+</body>
+</html>

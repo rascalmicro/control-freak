@@ -16,11 +16,8 @@ p {
     line-height: 1.4em;
 }
 
-a.rascal.red {
-    /* color: #9FD4FF; pale blue */
-    /* color: #c6433c; logo red - difficult to read */
-    color: OrangeRed;
-    /* color: #DC322F; solarized red */
+a, a:hover {
+    color: #631D1D;
 }
 
 [class^="icon-"],
