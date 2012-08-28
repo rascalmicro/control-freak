@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request
 from uwsgidecorators import *
-import time
+import os, pytronics, time
 
 public = Flask(__name__)
 public.config['PROPAGATE_EXCEPTIONS'] = True
@@ -19,14 +19,12 @@ def default_page():
     return render_template('/index.html', hostname=name, template_list = get_public_templates())
 
 def toggle_pin(pin):
-    from pytronics import digitalRead, digitalWrite
-    if digitalRead(pin) == '1':
-        digitalWrite(pin, 'LOW')
+    if pytronics.digitalRead(pin) == '1':
+        pytronics.digitalWrite(pin, 'LOW')
     else:
-        digitalWrite(pin, 'HIGH')
+        pytronics.digitalWrite(pin, 'HIGH')
 
 def get_public_templates():
-    import os
     r = []
     d = '/var/www/public/templates'
     for f in os.listdir(d):
@@ -37,19 +35,18 @@ def get_public_templates():
 
 @public.route('/pin/<pin>/<state>')
 def update_pin(pin, state):
-    from pytronics import digitalWrite, pinMode
     try:
         if state.lower() == 'on':
-            digitalWrite(pin, 'HIGH')
+            pytronics.digitalWrite(pin, 'HIGH')
             return 'Set pin %s high' % pin
         elif state.lower() == 'off':                       
-            digitalWrite(pin, 'LOW')
+            pytronics.digitalWrite(pin, 'LOW')
             return 'Set pin %s low' % pin
         elif state.lower() == 'in':
-            pinMode(pin,'INPUT')
+            pytronics.pinMode(pin,'INPUT')
             return 'Set pin %s input' % pin
         elif state.lower() == 'out':
-            pinMode(pin,'OUTPUT')
+            pytronics.pinMode(pin,'OUTPUT')
             return 'Set pin %s output' % pin
         return "Something's wrong with your syntax. You should send something like: /pin/2/on"
     except:
@@ -57,26 +54,23 @@ def update_pin(pin, state):
 
 @public.route('/read-pins', methods=['POST'])
 def read_pins():
-    from pytronics import readPins
     import json
-    return json.dumps(readPins(LIVE_PINS))
+    return json.dumps(pytronics.readPins(LIVE_PINS))
 
 @public.route('/i2cget/<addr>/<reg>/<mode>')
 def i2cget(addr, reg, mode):
-    from pytronics import i2cRead
     iaddr = int(addr, 0)
     ireg = int(reg, 0)
-    res = i2cRead(iaddr, ireg, mode)
+    res = pytronics.i2cRead(iaddr, ireg, mode)
     print '## i2cget ## {0}'.format(res)
     return str(res)
 
 @public.route('/i2cset/<addr>/<reg>/<val>/<mode>')
 def i2cset(addr, reg, val, mode):
-    from pytronics import i2cWrite
     iaddr = int(addr, 0)
     ireg = int(reg, 0)
     ival = int(val, 0)
-    res = i2cWrite(iaddr, ireg, ival, mode)
+    res = pytronics.i2cWrite(iaddr, ireg, ival, mode)
     print '## i2cset ## {0}'.format(res)
     return str(res)
 
@@ -86,6 +80,27 @@ def i2cscan():
     import json
     return json.dumps(scanBus())
 
+@public.route('/spi/<channel>/read')
+def spi_read(channel):
+    if str(channel) not in ['0', '1', '2', '3']:
+        return "You seem to be trying to read from SPI channel {0}, which does not exist. Try 0, 1, 2, or 3.".format(channel)
+    return pytronics.spiRead(channel)
+
+@public.route('/spi/<channel>/write/<data>')
+def spi_write():
+    if str(channel) not in ['0', '1', '2', '3']:
+        return "You seem to be trying to write to SPI channel {0}, which does not exist. Try 0, 1, 2, or 3.".format(channel)
+    return pytronics.spiWrite(data, channel)
+
+@public.route('/spi/<channel>/speed/', defaults={'target': ''})
+@public.route('/spi/<channel>/speed/<target>')
+def spi_speed(channel, target):
+    if str(channel) not in ['0', '1', '2', '3']:
+        return "You seem to be trying to use SPI channel {0}, which does not exist. Try 0, 1, 2, or 3.".format(channel)
+    if str(target) == '':
+        return str(pytronics.spiGetSpeed(str(channel)))
+    return str(pytronics.spiSetSpeed(target, channel))
+
 #@rbtimer(60)
 def fetch_calendar(num):
     import thermostat
@@ -94,7 +109,7 @@ def fetch_calendar(num):
 
 #@rbtimer(3)
 def update_relay(num):
-    import pytronics, thermostat
+    import thermostat
     actual = float(thermostat.read_sensor(0x48)) * 1.8 + 32.0
     target = float(thermostat.get_target_temp('/var/www/public/static/basic.ics', 'America/New_York'))
     print("Measured temperature: %f degrees. Target is %f degrees." % (actual, target))
@@ -111,14 +126,12 @@ def template(template_name):
 
 @public.route('/relay.html')
 def index():
-    import pytronics
     pin = pytronics.digitalRead(2)
     (chan0, chan1, chan2, chan3) = [pytronics.analogRead(chan) for chan in ['A0', 'A1', 'A2', 'A3']]
     return render_template('/relay.html', chan0=chan0, chan1=chan1, chan2=chan2, chan3=chan3, pin=pin)
 
 @public.route('/toggle', methods=['POST'])
 def toggle():
-    import pytronics
     if(request.form['target_state'] == '1'):
         pytronics.digitalWrite(2, 'HIGH')
         result = 'Pins set high'
@@ -141,7 +154,6 @@ def temperature():
 
 @public.route('/analog', methods=['POST'])
 def analog():
-    from pytronics import analogRead
     import json, time
     try:
         ad_ref = float(request.form['adref'])
@@ -149,19 +161,17 @@ def analog():
         ad_ref = 3.3
     data = {
         "time" : float(time.time()),
-        "A0" : float(analogRead('A0')) * ad_ref / 1024.0
+        "A0" : float(pytronics.analogRead('A0')) * ad_ref / 1024.0
     }
     return json.dumps(data)
 
 @public.route('/send-to-lcd', methods=['POST'])
 def send_to_lcd():
-    import pytronics
     pytronics.serialWrite(request.form['serial_text'], 9600)
     return render_template('/lcd.html')
 
 @public.route('/clear-lcd', methods=['POST'])
 def clear_lcd():
-    import pytronics
     pytronics.serialWrite(chr(0xFE) + chr(0x01), 9600)
     return render_template('/lcd.html')
 
@@ -192,7 +202,6 @@ def parse_sms():
 
 @public.route('/sprinkler', methods=['POST'])
 def sprinkler():
-    import pytronics
     command = request.form['command']
     if(command == "ON"):
         pytronics.digitalWrite(2, 'HIGH')
@@ -238,7 +247,6 @@ def allowed_folder(folder):
 
 @public.route('/xupload', methods=['POST'])
 def xupload_file():
-    import os
     from werkzeug import secure_filename
     from werkzeug.exceptions import RequestEntityTooLarge
     if request.method == 'POST':
@@ -270,7 +278,7 @@ def xupload_file():
 
 @public.route('/list-directory', methods=['POST'])
 def list_directory():
-    import os, json
+    import json
     root = '/var/www/public/'
     dir = request.form['directory']
     try:
@@ -284,7 +292,6 @@ def list_directory():
 
 @public.route('/clear-directory', methods=['POST'])
 def clear_directory():
-    import os
     root = '/var/www/public/'
     dir = request.form['directory']
     if dir not in ALLOWED_DIRECTORIES:
@@ -310,7 +317,6 @@ def clear_directory():
 # Called from hello.html
 @public.route('/flash_led', methods=['POST'])
 def flash_led():
-    import pytronics
     if pytronics.digitalRead('LED') == '1':
         pytronics.digitalWrite('LED', 'LOW')
         message = "LED off"
@@ -322,8 +328,7 @@ def flash_led():
 # Called from hello-TMP102.html
 @public.route('/read_temp', methods=['POST'])
 def read_temp():
-    from pytronics import i2cRead
-    temp = i2cRead(0x48, 0, 'W')
+    temp = pytronics.i2cRead(0x48, 0, 'W')
     strTemp = '{0:0.1f}{1}C'.format(((temp % 0x0100 * 16) + (temp / 0x1000)) * 0.0625, unichr(176))
     return strTemp
 

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test SPI Communication</title>
+    {% include "include/rascal-head.html" %}
+</head>
+<body>
+    {% include "include/rascal-topbar.html" %}
+    <div class="container">
+        <div class="well rascal">
+            <h1>Test SPI Communication</h1>
+            <p>Communicate with 1-4 devices using the Rascal's serial peripheral interface (SPI)</p>
+            
+            <button id="rescan" class="btn btn-large btn-primary">Rescan</button>
+            
+            <h3>SPI Operations</h3>
+            Set speed to: {{speed}} bps
+            <p>You can enter values as hexadecimal numbers preceded by 0x (e.g. 0x48) or as the equivalent
+                decimal number (e.g. 72). You must enter the chip address.
+                The register address and data to write default to zero.
+                When size Short is selected, Write performs a "short write" to the specified chip and register.
+                In this mode, no data is written (data to write is ignored).
+                A Short Read reads a byte from the previously selected register (register address is ignored).
+            </p>
+            <div class="span3">
+                <div class="control-group">
+                    <label class="control-label" for="size_byte">Transfer size</label>
+                    <div class="controls">
+                        <label class="radio inline">
+                            <input id="size_byte" type="radio" name="sizeRadios" value="0" checked="checked" />
+                            Channel 0
+                        </label>
+                        <label class="radio inline">
+                            <input id="size_word" type="radio" name="sizeRadios" value="1" />
+                            Channel 1
+                        </label>
+                        <label class="radio inline">
+                            <input id="size_short" type="radio" name="sizeRadios" value="2" />
+                            Channel 2
+                        </label>
+                        <label class="radio inline">
+                            <input id="size_short" type="radio" name="sizeRadios" value="3" />
+                            Channel 3
+                        </label>
+                    </div> <!-- /.controls -->
+                </div> <!-- /.control-group -->
+            </div> <!-- /.span3 -->
+        </div> <!-- /.well rascal -->
+    </div> <!-- /.container -->
+    <script language="javascript" type="text/javascript">
+    </script>
+</body>
+</html>
+
