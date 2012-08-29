@@ -11,17 +11,11 @@
             <h1>Test SPI Communication</h1>
             <p>Communicate with 1-4 devices using the Rascal's serial peripheral interface (SPI)</p>
             
-            <button id="rescan" class="btn btn-large btn-primary">Rescan</button>
+            <button id="set-speed" class="btn btn-large btn-primary">Set speed</button>
             
             <h3>SPI Operations</h3>
             Set speed to: {{speed}} bps
-            <p>You can enter values as hexadecimal numbers preceded by 0x (e.g. 0x48) or as the equivalent
-                decimal number (e.g. 72). You must enter the chip address.
-                The register address and data to write default to zero.
-                When size Short is selected, Write performs a "short write" to the specified chip and register.
-                In this mode, no data is written (data to write is ignored).
-                A Short Read reads a byte from the previously selected register (register address is ignored).
-            </p>
+            <p>The Rascal acts an SPI master node. It has 4 chip select lines that determine which slave it talks to.</p>
             <div class="span3">
                 <div class="control-group">
                     <label class="control-label" for="size_byte">Transfer size</label>
@@ -51,4 +45,3 @@
     </script>
 </body>
 </html>
-
