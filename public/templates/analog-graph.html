@@ -14,6 +14,10 @@
         .jqplot-title, .jqplot-axis {
             color: #ddd;
         }
+        
+        .jqplot-table-legend-label {
+            color: #111;
+        }   
     </style>
 </head>
 <body>
@@ -22,6 +26,7 @@
         <div class="well rascal">
             <h1>Analog graph demo</h1>
             <div id="chart1"></div>
+            <p>If your readings appear stuck at 3.3 V, it's probably because you haven't connected the ADREF pin to a reference. Try connecting it to 3.3 V or lower. Never connect it to anything above 3.3 V. It will burn out around 3.6 V.</p>
         </div>
     </div>
     
@@ -30,7 +35,7 @@
         var chartOptions = {
             legend: {
                 show: true,
-                location: "nw" },
+                location: "ne" },
             title: "Channel 0",
             series: [
                 {label: "Channel 0", lineWidth:3, showMarker:false}
@@ -46,8 +51,8 @@
                 yaxis: {
                     label: "Sensor voltage [V]",
                     min: 0,
-                    max: 2.5,
-                    numberTicks: 6 },
+                    max: 3.5,
+                    numberTicks: 8 },
             },
             seriesColors: [ "#cd2820" ]
         };
