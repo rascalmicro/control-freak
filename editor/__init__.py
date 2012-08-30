@@ -207,7 +207,7 @@ BOILERPLATE = """<!DOCTYPE html>
             You can add some text here, or use template variables: {{magic}}
         </div>
     </div>
-    <script language="javascript" type="text/javascript">
+    <script type="text/javascript">
     // You could add some Javascript between these script tags, if you want.
     // jQuery and jqPlot are already included in the header above.
     </script>

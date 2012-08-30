@@ -13,7 +13,7 @@
             <button id="sprinkler-off" value="OFF" class="btn primary">OFF</button>
         </div>
     </div>
-    <script language="javascript" type="text/javascript">
+    <script type="text/javascript">
     $("#sprinkler-on").click( function() {
         $.post("/sprinkler", { command: "ON" });
     });

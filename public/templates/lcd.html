@@ -27,7 +27,7 @@
             <input id="clear-lcd" type="button" value="Clear LCD" class="btn btn-large btn-danger rascal" alt="Clear LCD">
         </div>
     </div>
-    <script language="javascript" type="text/javascript">
+    <script type="text/javascript">
         $("#send-to-lcd").click( function() {
             $.post("/send-to-lcd", { serial_text: $("#serial-text").val() });
         });
