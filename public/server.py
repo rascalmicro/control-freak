@@ -124,6 +124,15 @@ def update_relay(num):
 def template(template_name):
     return render_template(template_name + '.html', magic="Hey presto!")
 
+@public.route('/<doc_name>.markdown')
+def document(doc_name):
+    import markdown2
+    head = open('/var/www/public/templates/include/rascal-head.html', 'r')
+    topbar = open('/var/www/public/templates/include/rascal-topbar.html', 'r')
+    md = open('/var/www/public/templates/' + doc_name + '.markdown', 'r')
+    source = head.read() + topbar.read() + '<div class="container"><div class="well rascal">' + md.read() + '</div></div>'
+    return markdown2.markdown(source, extras=['fenced-code-blocks'])
+
 @public.route('/relay.html')
 def index():
     pin = pytronics.digitalRead(2)
