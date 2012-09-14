@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title></title>
+    {% include "include/rascal-head.html" %}
+    <style>
+        body {
+            color: #333333;
+        }
+    </style>
+</head>
+<body>
+    {% include "include/rascal-topbar.html" %}
+    <div class="container">
+        <div class="well">
+            {% autoescape false %}
+                {{markdown}}
+            {% endautoescape %}
+        </div>
+    </div>
+    <script type="text/javascript">
+    </script>
+</body>
+</html>

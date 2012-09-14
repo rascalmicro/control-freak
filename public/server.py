@@ -127,11 +127,9 @@ def template(template_name):
 @public.route('/<doc_name>.markdown')
 def document(doc_name):
     import markdown2
-    head = open('/var/www/public/templates/include/rascal-head.html', 'r')
-    topbar = open('/var/www/public/templates/include/rascal-topbar.html', 'r')
-    md = open('/var/www/public/templates/' + doc_name + '.markdown', 'r')
-    source = head.read() + topbar.read() + '<div class="container"><div class="well rascal">' + md.read() + '</div></div>'
-    return markdown2.markdown(source, extras=['fenced-code-blocks'])
+    with open('/var/www/public/templates/' + doc_name + '.markdown', 'r') as mdfile:
+        return render_template('documentation.html', markdown=markdown2.markdown(mdfile.read()))
+    return 'Not Found', 404
 
 @public.route('/relay.html')
 def index():
