@@ -1,0 +1,32 @@
+/* styles for the Rascal documentation tab */
+.doc-panel {
+    position: absolute;
+    top: 50px;
+    width: 450px;
+    /* left = width + 2 * padding (2 * 19) + 2 * border (2 * 1) = width + 40 */
+    left: -490px;
+    color: #333333;
+    background-color: #ffffff;
+    /* font-size: 0.9em; */
+}
+
+/*
+.doc-panel hr {
+    border-top-color: #ddd;
+    border-bottom-color: #eee;
+}
+*/
+
+.doc-panel a.doc-tab {
+    background: transparent url(/static/images/doc-tab.png) no-repeat scroll 0 0;
+    border-width: 1px 1px 1px 0;
+    display: block;
+    height: 100px;
+    left: 56px;
+    bottom: 11px;
+    position: relative;
+    float: right;
+    text-indent: -9999px;
+    width: 36px;
+    outline: none;
+}

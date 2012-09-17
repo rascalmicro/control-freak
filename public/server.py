@@ -11,18 +11,13 @@ ALLOWED_DIRECTORIES = set(['static/uploads/', 'static/pictures/'])
 LIVE_PINS = ['LED', '2', '3', '4', '5', '8', '9', '10', '11', '12', '13']
 # public.config['MAX_CONTENT_LENGTH'] = 4 * 1024 * 1024
 
+### Home page ###
 @public.route('/')
 @public.route('/index.html')
 def default_page():
     with open('/etc/hostname', 'r') as f:
         name = f.read().strip().capitalize()
     return render_template('/index.html', hostname=name, template_list = get_public_templates())
-
-def toggle_pin(pin):
-    if pytronics.digitalRead(pin) == '1':
-        pytronics.digitalWrite(pin, 'LOW')
-    else:
-        pytronics.digitalWrite(pin, 'HIGH')
 
 def get_public_templates():
     r = []
@@ -32,6 +27,37 @@ def get_public_templates():
         if os.path.isfile(ff):
             r.append(f)
     return sorted(r)
+
+### Generic HTML and Markdown templates, support for doc tab ###
+@public.route('/<template_name>.html')
+def template(template_name):
+    return render_template(template_name + '.html', magic="Hey presto!")
+
+@public.route('/<doc_name>.markdown')
+def document(doc_name):
+    import markdown2
+    with open('/var/www/public/templates/' + doc_name + '.markdown', 'r') as mdf:
+        return render_template('markdown.html', markdown=markdown2.markdown(mdf.read()))
+    return 'Not Found', 404
+
+@public.route('/get_markdown', methods=['POST'])
+def get_markdown():
+    import markdown2
+    doc_name = request.form['docName']
+    try:
+        with open('/var/www/public/templates/' + doc_name + '.markdown', 'r') as mdf:
+            return markdown2.markdown(mdf.read())
+    except:
+        with open('/var/www/public/templates/default.markdown', 'r') as mdf:
+            return markdown2.markdown(mdf.read())
+    return 'Internal server error', 500
+
+### Support for pins ###
+def toggle_pin(pin):
+    if pytronics.digitalRead(pin) == '1':
+        pytronics.digitalWrite(pin, 'LOW')
+    else:
+        pytronics.digitalWrite(pin, 'HIGH')
 
 @public.route('/pin/<pin>/<state>')
 def update_pin(pin, state):
@@ -56,23 +82,38 @@ def update_pin(pin, state):
 def read_pins():
     import json
     return json.dumps(pytronics.readPins(LIVE_PINS))
-
+        
+### Support for i2c ###
 @public.route('/i2cget/<addr>/<reg>/<mode>')
 def i2cget(addr, reg, mode):
     iaddr = int(addr, 0)
     ireg = int(reg, 0)
-    res = pytronics.i2cRead(iaddr, ireg, mode)
-    print '## i2cget ## {0}'.format(res)
-    return str(res)
+    try:
+        res = pytronics.i2cRead(iaddr, ireg, mode)
+        print '## i2cget ## {0}'.format(res)
+        return str(res)
+    except (OSError, IOError) as e:
+        import errno
+        print '## i2cget ## Error: [{0}] {1}'.format(errno.errorcode[e.errno], e.strerror)
+        return str(-1)
+    except Exception as e:
+        return 'Internal server error', 500
 
 @public.route('/i2cset/<addr>/<reg>/<val>/<mode>')
 def i2cset(addr, reg, val, mode):
     iaddr = int(addr, 0)
     ireg = int(reg, 0)
     ival = int(val, 0)
-    res = pytronics.i2cWrite(iaddr, ireg, ival, mode)
-    print '## i2cset ## {0}'.format(res)
-    return str(res)
+    try:
+        pytronics.i2cWrite(iaddr, ireg, ival, mode)
+        print '## i2cset ##'
+        return str(0)
+    except (OSError, IOError) as e:
+        import errno
+        print '## i2cset ## Error: [{0}] {1}'.format(errno.errorcode[e.errno], e.strerror)
+        return str(-1)
+    except Exception as e:
+        return 'Internal server error', 500
 
 @public.route('/i2cscan', methods=['POST'])
 def i2cscan():
@@ -80,6 +121,7 @@ def i2cscan():
     import json
     return json.dumps(scanBus())
 
+### Support for SPI bus ###
 @public.route('/spi/<channel>/read')
 def spi_read(channel):
     if str(channel) not in ['0', '1', '2', '3']:
@@ -101,29 +143,22 @@ def spi_speed(channel, target):
         return str(pytronics.spiGetSpeed(str(channel)))
     return str(pytronics.spiSetSpeed(target, channel))
 
-#@rbtimer(60)
-def fetch_calendar(num):
-    import thermostat
-    thermostat.update_calendar_file()
-    print('Calendar reload attempt')
+### Specific demos ###
+# analog-graph
+@public.route('/analog', methods=['POST'])
+def analog():
+    import json
+    try:
+        ad_ref = float(request.form['adref'])
+    except KeyError:
+        ad_ref = 3.3
+    data = {
+        "time" : float(time.time()),
+        "A0" : float(pytronics.analogRead('A0')) * ad_ref / 1024.0
+    }
+    return json.dumps(data)
 
-#@rbtimer(3)
-def update_relay(num):
-    import thermostat
-    actual = float(thermostat.read_sensor(0x48)) * 1.8 + 32.0
-    target = float(thermostat.get_target_temp('/var/www/public/static/basic.ics', 'America/New_York'))
-    print("Measured temperature: %f degrees. Target is %f degrees." % (actual, target))
-    if actual < target:
-        pytronics.digitalWrite(2, 'HIGH')
-        print("Heat on")
-    else:
-        pytronics.digitalWrite(2, 'LOW')
-        print("Heat off")
-
-@public.route('/<template_name>.html')
-def template(template_name):
-    return render_template(template_name + '.html', magic="Hey presto!")
-
+# relay (also calls analog)
 @public.route('/relay.html')
 def index():
     pin = pytronics.digitalRead(2)
@@ -142,6 +177,8 @@ def toggle():
         result = 'Target_state is screwed up'
     return result
 
+# thermostat
+#@rbtimer(60)
 @public.route('/temperature', methods=['POST'])
 def temperature():
     import json, thermostat
@@ -152,19 +189,35 @@ def temperature():
     }
     return json.dumps(data)
 
-@public.route('/analog', methods=['POST'])
-def analog():
-    import json, time
-    try:
-        ad_ref = float(request.form['adref'])
-    except KeyError:
-        ad_ref = 3.3
-    data = {
-        "time" : float(time.time()),
-        "A0" : float(pytronics.analogRead('A0')) * ad_ref / 1024.0
-    }
-    return json.dumps(data)
+def fetch_calendar(num):
+    import thermostat
+    thermostat.update_calendar_file()
+    print('Calendar reload attempt')
 
+#@rbtimer(3)
+def update_relay(num):
+    import thermostat
+    actual = float(thermostat.read_sensor(0x48)) * 1.8 + 32.0
+    target = float(thermostat.get_target_temp('/var/www/public/static/basic.ics', 'America/New_York'))
+    print("Measured temperature: %f degrees. Target is %f degrees." % (actual, target))
+    if actual < target:
+        pytronics.digitalWrite(2, 'HIGH')
+        print("Heat on")
+    else:
+        pytronics.digitalWrite(2, 'LOW')
+        print("Heat off")
+
+@public.route('/sms', methods=['POST'])
+def parse_sms():
+    import subprocess
+    message = request.form['Body']
+    print "Received text message: " + str(message)
+    f = open('/var/www/public/thermostat-target.txt', 'w')
+    f.write(str(message))
+    f.close()
+    return ('Message processed')
+
+# lcd (serial)
 @public.route('/send-to-lcd', methods=['POST'])
 def send_to_lcd():
     pytronics.serialWrite(request.form['serial_text'], 9600)
@@ -175,6 +228,7 @@ def clear_lcd():
     pytronics.serialWrite(chr(0xFE) + chr(0x01), 9600)
     return render_template('/lcd.html')
 
+# ck (Color Kinetics) - also called by blinkm
 @public.route('/set-color', methods=['POST'])
 def set_color():
     import colorsys, kinet, subprocess
@@ -200,6 +254,7 @@ def parse_sms():
     f.close()
     return ('Message processed')
 
+# sprinkler
 @public.route('/sprinkler', methods=['POST'])
 def sprinkler():
     command = request.form['command']
@@ -208,9 +263,11 @@ def sprinkler():
     else:
         pytronics.digitalWrite(2, 'LOW')
     return ('Sprinkler toggled')
+### End of specific demo procedures
 
-##### The following procedures support sending email via SMTP #####
+### The following procedures support sending email via SMTP ###
 # They are used by email.html. Configure smtp settings in smtp_lib.py
+@public.route('/')
 @public.route('/email.html')
 def email_form():
     import smtp_lib
@@ -234,9 +291,9 @@ def send_email():
         "message" : result[1]
     }
     return json.dumps(data)
-##### End of email procedures
+### End of email procedures
 
-#### The following procedures support file upload #####
+### The following procedures support file upload ###
 # They are called from rascal-1.03.js and used by upload-cf.html, upload-dd.html and album.html
 def allowed_file(filename):
     return '.' in filename and \
@@ -247,6 +304,7 @@ def allowed_folder(folder):
 
 @public.route('/xupload', methods=['POST'])
 def xupload_file():
+    import os
     from werkzeug import secure_filename
     from werkzeug.exceptions import RequestEntityTooLarge
     if request.method == 'POST':
@@ -278,7 +336,7 @@ def xupload_file():
 
 @public.route('/list-directory', methods=['POST'])
 def list_directory():
-    import json
+    import os, json
     root = '/var/www/public/'
     dir = request.form['directory']
     try:
@@ -292,6 +350,7 @@ def list_directory():
 
 @public.route('/clear-directory', methods=['POST'])
 def clear_directory():
+    import os
     root = '/var/www/public/'
     dir = request.form['directory']
     if dir not in ALLOWED_DIRECTORIES:
@@ -312,7 +371,7 @@ def clear_directory():
     except Exception, e:
         print '## clear_directory ## {}'.format(e)
     return 'Bad request', 400
-##### End of upload procedures #####
+### End of upload procedures ###
 
 # Called from hello.html
 @public.route('/flash_led', methods=['POST'])
@@ -328,9 +387,16 @@ def flash_led():
 # Called from hello-TMP102.html
 @public.route('/read_temp', methods=['POST'])
 def read_temp():
-    temp = pytronics.i2cRead(0x48, 0, 'W')
-    strTemp = '{0:0.1f}{1}C'.format(((temp % 0x0100 * 16) + (temp / 0x1000)) * 0.0625, unichr(176))
-    return strTemp
+    try:
+        temp = pytronics.i2cRead(0x48, 0, 'I', 2)
+        strTemp = '{0:0.1f}{1}C'.format(((temp[0] << 4) | (temp[1] >> 4)) / 16.0, unichr(176))
+        return strTemp
+    except (OSError, IOError) as e:
+        import errno
+        print '## i2cget ## Error: [{0}] {1}'.format(errno.errorcode[e.errno], e.strerror)
+        return 'Can\'t read from TMP102 (see log)'
+    except Exception as e:
+        return 'Internal server error', 500
 
 
 if __name__ == "__main__":
