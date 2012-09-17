@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!-- 10 Sep 2012 dsmall Changes for bootstrap v2.1.1 - add well border-color -->
 <html>
 <head>
     <title>Test I2C Bus</title>
@@ -23,6 +24,7 @@
         .well.i2c {
             color: #F8F8F8;
             background-color: #333;
+            border-color: #222;
         }
         label, input[type="text"] {
             font-size: 15px;
@@ -43,7 +45,7 @@
                 "U" means that probing was skipped because this address is currently in use by a driver.
                 This strongly suggests that there is a chip at this address.
             </p>
-            <div id="scan_table" class="well" style="background-color: #333;">
+            <div id="scan_table" class="well i2c">
                 <div style="padding: 151px 400px"><img src="/static/images/ajax-loader.gif" width="32" height="32"></div>
             </div>
             <button id="rescan" class="btn btn-large btn-primary">Rescan</button>

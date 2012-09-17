@@ -22,6 +22,8 @@
             $("#message").fadeOut(100, function () {
                 $.post("/read_temp", function (response) {
                     $("#message").text(response).fadeIn(100);
+                }).error(function (jqXHR, textStatus, errorThrown) {
+                    $("#message").text(errorThrown).fadeIn(100);
                 });
             });
         });

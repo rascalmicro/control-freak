@@ -1,9 +1,15 @@
 <!DOCTYPE html>
+<!-- 10 Sep 2012 dsmall Changes for bootstrap v2.1.1 - add well border-color and btn-small -->
 <html>
 <head>
     <title>Test pins</title>
     {% include "include/rascal-head.html" %}
     <style>
+        .well.pins {
+            color: #F8F8F8;
+            background-color: #333;
+            border-color: #222;
+        }
         th {
             font-size: 0.8em;
         }
@@ -27,7 +33,7 @@
             <p>View pin status, set pin direction and output status</p>
             <div class="row">
                 <div class="span4">
-                    <div class="well"  style="background-color: #333;">
+                    <div class="well pins">
                     <table>
                         <tr>
                             <th>
@@ -44,14 +50,14 @@
                             </td>
                             <td>
                                 <div class="btn-group" data-toggle="buttons-radio">
-                                    <button id="LED" value="in" class="btn btn-primary" disabled="disabled">In</button>
-                                    <button id="LED" value="out" class="btn btn-primary active" disabled="disabled">Out</button>
+                                    <button id="LED" value="in" class="btn btn-small btn-primary" disabled="disabled">In</button>
+                                    <button id="LED" value="out" class="btn btn-small btn-primary active" disabled="disabled">Out</button>
                                 </div>                  
                             </td>
                             <td>
                                 <div class="btn-group" data-toggle="buttons-radio">
-                                    <button id="LED" value="off" class="btn btn-danger active">Off</button>
-                                    <button id="LED" value="on" class="btn btn-danger">On</button>
+                                    <button id="LED" value="off" class="btn btn-small btn-danger active">Off</button>
+                                    <button id="LED" value="on" class="btn btn-small btn-danger">On</button>
                                 </div>                  
                             </td>
                         </tr>
@@ -62,14 +68,14 @@
                             </td>
                             <td>
                                 <div class="btn-group" data-toggle="buttons-radio">
-                                    <button id="0" value="in" class="btn btn-primary">In</button>
-                                    <button id="0" value="out" class="btn btn-primary active">Out</button>
+                                    <button id="0" value="in" class="btn btn-small btn-primary">In</button>
+                                    <button id="0" value="out" class="btn btn-small btn-primary active">Out</button>
                                 </div>                  
                             </td>
                             <td>
                                 <div class="btn-group" data-toggle="buttons-radio">
-                                    <button id="0" value="off" class="btn btn-danger active">Off</button>
-                                    <button id="0" value="on" class="btn btn-danger">On</button>
+                                    <button id="0" value="off" class="btn btn-small btn-danger active">Off</button>
+                                    <button id="0" value="on" class="btn btn-small btn-danger">On</button>
                                 </div>                  
                             </td>
                         </tr>
@@ -80,14 +86,14 @@
                             </td>
                             <td>
                                 <div class="btn-group" data-toggle="buttons-radio">
-                                    <button id="1" value="in" class="btn btn-primary">In</button>
-                                    <button id="1" value="out" class="btn btn-primary active">Out</button>
+                                    <button id="1" value="in" class="btn btn-small btn-primary">In</button>
+                                    <button id="1" value="out" class="btn btn-small btn-primary active">Out</button>
                                 </div>                  
                             </td>
                             <td>
                                 <div class="btn-group" data-toggle="buttons-radio">
-                                    <button id="1" value="off" class="btn btn-danger active">Off</button>
-                                    <button id="1" value="on" class="btn btn-danger">On</button>
+                                    <button id="1" value="off" class="btn btn-small btn-danger active">Off</button>
+                                    <button id="1" value="on" class="btn btn-small btn-danger">On</button>
                                 </div>                  
                             </td>
                         </tr>
@@ -98,14 +104,14 @@
                             </td>
                             <td>
                                 <div class="btn-group" data-toggle="buttons-radio">
-                                    <button id="2" value="in" class="btn btn-primary">In</button>
-                                    <button id="2" value="out" class="btn btn-primary active">Out</button>
+                                    <button id="2" value="in" class="btn btn-small btn-primary">In</button>
+                                    <button id="2" value="out" class="btn btn-small btn-primary active">Out</button>
                                 </div>                  
                             </td>
                             <td>
                                 <div class="btn-group" data-toggle="buttons-radio">
-                                    <button id="2" value="off" class="btn btn-danger active">Off</button>
-                                    <button id="2" value="on" class="btn btn-danger">On</button>
+                                    <button id="2" value="off" class="btn btn-small btn-danger active">Off</button>
+                                    <button id="2" value="on" class="btn btn-small btn-danger">On</button>
                                 </div>                  
                             </td>
                         </tr>
@@ -116,14 +122,14 @@
                             </td>
                             <td>
                                 <div class="btn-group" data-toggle="buttons-radio">
-                                    <button id="3" value="in" class="btn btn-primary">In</button>
-                                    <button id="3" value="out" class="btn btn-primary active">Out</button>
+                                    <button id="3" value="in" class="btn btn-small btn-primary">In</button>
+                                    <button id="3" value="out" class="btn btn-small btn-primary active">Out</button>
                                 </div>                  
                             </td>
                             <td>
                                 <div class="btn-group" data-toggle="buttons-radio">
-                                    <button id="3" value="off" class="btn btn-danger active">Off</button>
-                                    <button id="3" value="on" class="btn btn-danger">On</button>
+                                    <button id="3" value="off" class="btn btn-small btn-danger active">Off</button>
+                                    <button id="3" value="on" class="btn btn-small btn-danger">On</button>
                                 </div>                  
                             </td>
                         </tr>
@@ -134,14 +140,14 @@
                             </td>
                             <td>
                                 <div class="btn-group" data-toggle="buttons-radio">
-                                    <button id="4" value="in" class="btn btn-primary">In</button>
-                                    <button id="4" value="out" class="btn btn-primary active">Out</button>
+                                    <button id="4" value="in" class="btn btn-small btn-primary">In</button>
+                                    <button id="4" value="out" class="btn btn-small btn-primary active">Out</button>
                                 </div>                  
                             </td>
                             <td>
                                 <div class="btn-group" data-toggle="buttons-radio">
-                                    <button id="4" value="off" class="btn btn-danger active">Off</button>
-                                    <button id="4" value="on" class="btn btn-danger">On</button>
+                                    <button id="4" value="off" class="btn btn-small btn-danger active">Off</button>
+                                    <button id="4" value="on" class="btn btn-small btn-danger">On</button>
                                 </div>                  
                             </td>
                         </tr>
@@ -152,14 +158,14 @@
                             </td>
                             <td>
                                 <div class="btn-group" data-toggle="buttons-radio">
-                                    <button id="5" value="in" class="btn btn-primary">In</button>
-                                    <button id="5" value="out" class="btn btn-primary active">Out</button>
+                                    <button id="5" value="in" class="btn btn-small btn-primary">In</button>
+                                    <button id="5" value="out" class="btn btn-small btn-primary active">Out</button>
                                 </div>                  
                             </td>
                             <td>
                                 <div class="btn-group" data-toggle="buttons-radio">
-                                    <button id="5" value="off" class="btn btn-danger active">Off</button>
-                                    <button id="5" value="on" class="btn btn-danger">On</button>
+                                    <button id="5" value="off" class="btn btn-small btn-danger active">Off</button>
+                                    <button id="5" value="on" class="btn btn-small btn-danger">On</button>
                                 </div>                  
                             </td>
                         </tr>
@@ -170,14 +176,14 @@
                             </td>
                             <td>
                                 <div class="btn-group" data-toggle="buttons-radio">
-                                    <button id="6" value="in" class="btn btn-primary">In</button>
-                                    <button id="6" value="out" class="btn btn-primary active">Out</button>
+                                    <button id="6" value="in" class="btn btn-small btn-primary">In</button>
+                                    <button id="6" value="out" class="btn btn-small btn-primary active">Out</button>
                                 </div>                  
                             </td>
                             <td>
                                 <div class="btn-group" data-toggle="buttons-radio">
-                                    <button id="6" value="off" class="btn btn-danger active">Off</button>
-                                    <button id="6" value="on" class="btn btn-danger">On</button>
+                                    <button id="6" value="off" class="btn btn-small btn-danger active">Off</button>
+                                    <button id="6" value="on" class="btn btn-small btn-danger">On</button>
                                 </div>                  
                             </td>
                         </tr>
@@ -188,14 +194,14 @@
                             </td>
                             <td>
                                 <div class="btn-group" data-toggle="buttons-radio">
-                                    <button id="7" value="in" class="btn btn-primary">In</button>
-                                    <button id="7" value="out" class="btn btn-primary active">Out</button>
+                                    <button id="7" value="in" class="btn btn-small btn-primary">In</button>
+                                    <button id="7" value="out" class="btn btn-small btn-primary active">Out</button>
                                 </div>                  
                             </td>
                             <td>
                                 <div class="btn-group" data-toggle="buttons-radio">
-                                    <button id="7" value="off" class="btn btn-danger active">Off</button>
-                                    <button id="7" value="on" class="btn btn-danger">On</button>
+                                    <button id="7" value="off" class="btn btn-small btn-danger active">Off</button>
+                                    <button id="7" value="on" class="btn btn-small btn-danger">On</button>
                                 </div>                  
                             </td>
                         </tr>
@@ -206,14 +212,14 @@
                             </td>
                             <td>
                                 <div class="btn-group" data-toggle="buttons-radio">
-                                    <button id="8" value="in" class="btn btn-primary">In</button>
-                                    <button id="8" value="out" class="btn btn-primary active">Out</button>
+                                    <button id="8" value="in" class="btn btn-small btn-primary">In</button>
+                                    <button id="8" value="out" class="btn btn-small btn-primary active">Out</button>
                                 </div>                  
                             </td>
                             <td>
                                 <div class="btn-group" data-toggle="buttons-radio">
-                                    <button id="8" value="off" class="btn btn-danger active">Off</button>
-                                    <button id="8" value="on" class="btn btn-danger">On</button>
+                                    <button id="8" value="off" class="btn btn-small btn-danger active">Off</button>
+                                    <button id="8" value="on" class="btn btn-small btn-danger">On</button>
                                 </div>                  
                             </td>
                         </tr>
@@ -224,14 +230,14 @@
                             </td>
                             <td>
                                 <div class="btn-group" data-toggle="buttons-radio">
-                                    <button id="9" value="in" class="btn btn-primary">In</button>
-                                    <button id="9" value="out" class="btn btn-primary active">Out</button>
+                                    <button id="9" value="in" class="btn btn-small btn-primary">In</button>
+                                    <button id="9" value="out" class="btn btn-small btn-primary active">Out</button>
                                 </div>                  
                             </td>
                             <td>
                                 <div class="btn-group" data-toggle="buttons-radio">
-                                    <button id="9" value="off" class="btn btn-danger active">Off</button>
-                                    <button id="9" value="on" class="btn btn-danger">On</button>
+                                    <button id="9" value="off" class="btn btn-small btn-danger active">Off</button>
+                                    <button id="9" value="on" class="btn btn-small btn-danger">On</button>
                                 </div>                  
                             </td>
                         </tr>
@@ -242,14 +248,14 @@
                             </td>
                             <td>
                                 <div class="btn-group" data-toggle="buttons-radio">
-                                    <button id="10" value="in" class="btn btn-primary">In</button>
-                                    <button id="10" value="out" class="btn btn-primary active">Out</button>
+                                    <button id="10" value="in" class="btn btn-small btn-primary">In</button>
+                                    <button id="10" value="out" class="btn btn-small btn-primary active">Out</button>
                                 </div>                  
                             </td>
                             <td>
                                 <div class="btn-group" data-toggle="buttons-radio">
-                                    <button id="10" value="off" class="btn btn-danger active">Off</button>
-                                    <button id="10" value="on" class="btn btn-danger">On</button>
+                                    <button id="10" value="off" class="btn btn-small btn-danger active">Off</button>
+                                    <button id="10" value="on" class="btn btn-small btn-danger">On</button>
                                 </div>                  
                             </td>
                         </tr>
@@ -260,14 +266,14 @@
                             </td>
                             <td>
                                 <div class="btn-group" data-toggle="buttons-radio">
-                                    <button id="11" value="in" class="btn btn-primary">In</button>
-                                    <button id="11" value="out" class="btn btn-primary active">Out</button>
+                                    <button id="11" value="in" class="btn btn-small btn-primary">In</button>
+                                    <button id="11" value="out" class="btn btn-small btn-primary active">Out</button>
                                 </div>                  
                             </td>
                             <td>
                                 <div class="btn-group" data-toggle="buttons-radio">
-                                    <button id="11" value="off" class="btn btn-danger active">Off</button>
-                                    <button id="11" value="on" class="btn btn-danger">On</button>
+                                    <button id="11" value="off" class="btn btn-small btn-danger active">Off</button>
+                                    <button id="11" value="on" class="btn btn-small btn-danger">On</button>
                                 </div>                  
                             </td>
                         </tr>
@@ -278,14 +284,14 @@
                             </td>
                             <td>
                                 <div class="btn-group" data-toggle="buttons-radio">
-                                    <button id="12" value="in" class="btn btn-primary">In</button>
-                                    <button id="12" value="out" class="btn btn-primary active">Out</button>
+                                    <button id="12" value="in" class="btn btn-small btn-primary">In</button>
+                                    <button id="12" value="out" class="btn btn-small btn-primary active">Out</button>
                                 </div>                  
                             </td>
                             <td>
                                 <div class="btn-group" data-toggle="buttons-radio">
-                                    <button id="12" value="off" class="btn btn-danger active">Off</button>
-                                    <button id="12" value="on" class="btn btn-danger">On</button>
+                                    <button id="12" value="off" class="btn btn-small btn-danger active">Off</button>
+                                    <button id="12" value="on" class="btn btn-small btn-danger">On</button>
                                 </div>                  
                             </td>
                         </tr>
@@ -296,14 +302,14 @@
                             </td>
                             <td>
                                 <div class="btn-group" data-toggle="buttons-radio">
-                                    <button id="13" value="in" class="btn btn-primary">In</button>
-                                    <button id="13" value="out" class="btn btn-primary active">Out</button>
+                                    <button id="13" value="in" class="btn btn-small btn-primary">In</button>
+                                    <button id="13" value="out" class="btn btn-small btn-primary active">Out</button>
                                 </div>                  
                             </td>
                             <td>
                                 <div class="btn-group" data-toggle="buttons-radio">
-                                    <button id="13" value="off" class="btn btn-danger active">Off</button>
-                                    <button id="13" value="on" class="btn btn-danger">On</button>
+                                    <button id="13" value="off" class="btn btn-small btn-danger active">Off</button>
+                                    <button id="13" value="on" class="btn btn-small btn-danger">On</button>
                                 </div>                  
                             </td>
                         </tr>
@@ -312,7 +318,7 @@
                 </div>
                 <div class="span6">
                     <div class="well">
-                        <img src="static/images/pinout.png" height="479" />
+                        <img src="static/images/pinout-1.2.png" width="422" />
                     </div>
                 </div>
             </div>
