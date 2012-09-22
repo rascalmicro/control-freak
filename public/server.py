@@ -33,11 +33,18 @@ def get_public_templates():
 def template(template_name):
     return render_template(template_name + '.html', magic="Hey presto!")
 
-@public.route('/<doc_name>.markdown')
+@public.route('/<doc_name>.md')
 def document(doc_name):
+    return render_markdown('', doc_name)
+
+@public.route('/docs/<doc_name>.md')
+def document_docs(doc_name):
+    return render_markdown('docs/', doc_name)
+
+def render_markdown(path, doc_name):
     import markdown2
-    with open('/var/www/public/templates/' + doc_name + '.markdown', 'r') as mdf:
-        return render_template('markdown.html', markdown=markdown2.markdown(mdf.read()))
+    with open('/var/www/public/templates/' + path + doc_name + '.md', 'r') as mdf:
+        return render_template('markdown.html', title=doc_name, markdown=markdown2.markdown(mdf.read()))
     return 'Not Found', 404
 
 @public.route('/get_markdown', methods=['POST'])
@@ -45,11 +52,15 @@ def get_markdown():
     import markdown2
     doc_name = request.form['docName']
     try:
-        with open('/var/www/public/templates/' + doc_name + '.markdown', 'r') as mdf:
+        with open('/var/www/public/templates/docs/' + doc_name + '.md', 'r') as mdf:
             return markdown2.markdown(mdf.read())
     except:
-        with open('/var/www/public/templates/default.markdown', 'r') as mdf:
-            return markdown2.markdown(mdf.read())
+        try:
+            with open('/var/www/public/templates/' + doc_name + '.md', 'r') as mdf:
+                return markdown2.markdown(mdf.read())
+        except:
+            with open('/var/www/public/templates/docs/default.md', 'r') as mdf:
+                return markdown2.markdown(mdf.read())
     return 'Internal server error', 500
 
 ### Support for pins ###
