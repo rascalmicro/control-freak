@@ -402,20 +402,6 @@ def flash_led():
         message = "LED on"
     return (message)
 
-# Called from hello-TMP102.html
-@public.route('/read_temp', methods=['POST'])
-def read_temp():
-    try:
-        temp = pytronics.i2cRead(0x48, 0, 'I', 2)
-        strTemp = '{0:0.1f}{1}C'.format(((temp[0] << 4) | (temp[1] >> 4)) / 16.0, unichr(176))
-        return strTemp
-    except (OSError, IOError) as e:
-        import errno
-        print '## i2cget ## Error: [{0}] {1}'.format(errno.errorcode[e.errno], e.strerror)
-        return 'Can\'t read from TMP102 (see log)'
-    except Exception as e:
-        return 'Internal server error', 500
-
 
 if __name__ == "__main__":
     public.run(host='127.0.0.1:5000', debug=True)

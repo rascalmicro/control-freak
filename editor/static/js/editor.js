@@ -566,6 +566,13 @@ var template_note = {
     other: 'Create an empty file in the static folder. You will be able to drag it to another folder.'
 };
 
+var template_btn = {
+    html: 'Create template',
+    doctab: 'Create template',
+    markdown: 'Create template',
+    other: 'Create file'
+};
+
 $('#new-template').click(function () {
     "use strict";
     $('#template-title').text(template_title.html);
@@ -630,6 +637,7 @@ $('#template-radios input:radio').click(function() {
     $('#template-title').text(template_title[val]);
     $('#template-message').text(template_message[val]);
     $('#template-note small').text(template_note[val]);
+    $('#template-create').text(template_btn[val]);
     $('#template-name').focus();
 });
 

@@ -3,8 +3,8 @@
 var prefs = {
     defaults: {
         theme: 'blackboard',
-        fontSize: 13,
-        lineHeight: 1.2,
+        fontSize: 12,
+        lineHeight: 1.4,
         tabSize: 4,
         softTabs: true,
         visibleTabs: false,
