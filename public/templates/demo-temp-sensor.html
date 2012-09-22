@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Temperature sensor demo</title>
+    {% include "include/rascal-head.html" %}
+    <style>
+        .well.lcd-frame {
+            margin: 0;
+            border: 10px solid #333;
+            color: #ccc;
+            background-color: #3464c6;
+            display: inline-block;
+        }
+        .temp {
+            margin: 0 auto;
+            padding: 25px 25px;
+            font-family: "URW Gothic L", sans-serif;
+            font-size: 48px;
+        }
+    </style>
+</head>
+<body>
+    {% include "include/rascal-topbar.html" %}
+    <div class="container">
+        <div class="well rascal">
+            <h1>Temperature sensor demo</h1>
+            <p>Read the temperature from an I2C device. This demo is uses a TMP102
+                <a href="http://www.sparkfun.com/products/9418" class="rascal red" target="sparkfun">Digital Temperature Sensor</a>
+                manufactured by Sparkfun, at its base address 0x48.</p>
+            <div class="well lcd-frame">
+                <div class="span3">
+                    <div id="temp" class="temp">&nbsp;</div>
+                </div>
+            </div>
+            <div>
+                <input id="read_temp" type="button" value="Read Temperature" class="btn btn-large btn-danger rascal" />
+            </div>
+            <div id="status">&nbsp;</div>
+        </div>
+    </div>
+    <script type="text/javascript">
+
+        /* Read a word from the TMP102 to get the temperature as a 12-bit value */
+        $("#read_temp").click(function () {
+            var
+                addr = '0x48',
+                reg = '0',
+                size = 'W';
+            $.get('/i2cget/' + addr + '/' + reg + '/' + size, function (data, textStatus) {
+                var iTemp = parseInt(data);
+                if (iTemp !== -1) {
+                    $('#status').html('&nbsp;');
+                    displayTemp(iTemp);
+                } else {
+                    $('#status').text('Couldn\'t read from I2C address ' + addr);
+                }
+            }).error(function (jqXHR, textStatus, errorThrown) {
+                ('#status').text(errorThrown);
+            });
+        });
+        
+        /* Display the value as a decimal number */
+        function displayTemp(iTemp) {
+            var degrees, fraction, strTemp;
+            // Whole degrees are returned in the low byte
+            degrees = iTemp & 0xff;
+            // The fractional part is in the top four bits of high byte
+            fraction = (iTemp >> 12) / 16.0;
+            // Round the fraction to one decimal place
+            fraction = Math.round(fraction * 10) / 10;
+            // Compose string for display (the unicode character \u00b0 is the degree symbol)
+            strTemp = (degrees + fraction).toString() + '\u00b0C';
+            
+            // Fade out previous reading to make it obvious that a new reading has been taken :-)
+            $('.temp').fadeOut(200, 0, function () {
+                $('#temp').text(strTemp);
+                $('.temp').fadeTo(200, 1);
+            });
+       }
+        
+    </script>
+</body>
+</html>
