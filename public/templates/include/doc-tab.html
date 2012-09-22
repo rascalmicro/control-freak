@@ -11,8 +11,10 @@
         speed: 300,
         containerWidth: $('.doc-panel').outerWidth(),
         
-        init: function(){
-            
+        init: function() {
+
+            $('.doc-panel').css('left', '-' + (parseInt($('.doc-panel').css('width')) + 40).toString() + 'px');
+
             $('a.doc-tab').click(function(event){
                 if ($('.doc-panel').hasClass('open')) {
                     $('.doc-panel')

@@ -31,8 +31,8 @@ def redirect_to_static(path):
 class Anonymous(AnonymousUser):
     name = u'Anonymous'
 
-PASSWD_FILE = '/etc/passwd'
-# PASSWD_FILE = '/var/www/passwd'
+# PASSWD_FILE = '/etc/passwd'
+PASSWD_FILE = '/var/www/passwd'
 
 USERS = {
     1: User(u'rascal', 1),
@@ -207,6 +207,7 @@ BOILERPLATE = """<!DOCTYPE html>
             You can add some text here, or use template variables: {{magic}}
         </div>
     </div>
+    <!-- DOCTAB --> 
     <script type="text/javascript">
     // You could add some Javascript between these script tags, if you want.
     // jQuery and jqPlot are already included in the header above.
@@ -214,18 +215,61 @@ BOILERPLATE = """<!DOCTYPE html>
 </body>
 </html>
 """
+DOCTAB = '{% include "include/doc-tab.html" %}'
+
+MARKDOWN = """Edit Me!
+========
+
+--
+
+#### Formatted Text
+Rascal documentation is formatted using Markdown, a text-to-HTML conversion
+tool which allows you to write in plain text format and converts it to HTML
+when viewed in a web browser.
+
+Leave a blank line to start a new paragraph.
+
+#### Lists
+
+1. One potato
+2. Two potatoes
+
+* Oranges
+* Lemons
+
+#### Miscellaneous
+
+> This is a blockquote
+
+    This could be an example of some code
+
+See the [Markdown web page][mwp] for more information.
+
+[mwp]: http://daringfireball.net/projects/markdown/
+"""
 
 @editor.route('/editor/new_template', methods=['POST'])
 @login_required
 def new_template():
     import os
     name = secure_path(request.form['templateName'])
-    path = '/var/www/public/templates/' + name
+    option = request.form['templateOption']
+    if option == 'other':
+        path = '/var/www/public/static/' + name
+    elif option == 'markdown':
+        path = '/var/www/public/templates/docs/' + name
+    else:
+        path = '/var/www/public/templates/' + name
     if os.path.exists(path):
         return 'Conflict', 409
     else:
         f = open(path, 'w')
-        f.write(BOILERPLATE)
+        if option == 'html':
+            f.write(BOILERPLATE.replace('DOCTAB', DOCTAB))
+        elif option == 'doctab':
+            f.write(BOILERPLATE.replace('<!-- DOCTAB -->', DOCTAB))
+        elif option == 'markdown':
+            f.write(MARKDOWN)
         f.close()
     return 'OK', 200
 
