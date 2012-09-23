@@ -26,7 +26,7 @@
             <h1>Temperature sensor demo</h1>
             <p>Read the temperature from an I2C device. This demo is uses a TMP102
                 <a href="http://www.sparkfun.com/products/9418" class="rascal red" target="sparkfun">Digital Temperature Sensor</a>
-                manufactured by Sparkfun, at its base address 0x48.</p>
+                available from SparkFun, at its base address 0x48.</p>
             <div class="well lcd-frame">
                 <div class="span3">
                     <div id="temp" class="temp">&nbsp;</div>
@@ -38,6 +38,7 @@
             <div id="status">&nbsp;</div>
         </div>
     </div>
+    {% include "include/doc-tab.html" %} 
     <script type="text/javascript">
 
         /* Read a word from the TMP102 to get the temperature as a 12-bit value */
@@ -46,11 +47,11 @@
                 addr = '0x48',
                 reg = '0',
                 size = 'W';
-            $.get('/i2cget/' + addr + '/' + reg + '/' + size, function (data, textStatus) {
-                var iTemp = parseInt(data);
-                if (iTemp !== -1) {
+            $.get('/i2cget/' + addr + '/' + reg + '/' + size, function (strData, textStatus) {
+                var data = parseInt(strData);
+                if (data !== -1) {
                     $('#status').html('&nbsp;');
-                    displayTemp(iTemp);
+                    displayTemp(data);
                 } else {
                     $('#status').text('Couldn\'t read from I2C address ' + addr);
                 }
@@ -60,12 +61,12 @@
         });
         
         /* Display the value as a decimal number */
-        function displayTemp(iTemp) {
+        function displayTemp(data) {
             var degrees, fraction, strTemp;
             // Whole degrees are returned in the low byte
-            degrees = iTemp & 0xff;
+            degrees = data & 0xff;
             // The fractional part is in the top four bits of high byte
-            fraction = (iTemp >> 12) / 16.0;
+            fraction = (data >> 12) / 16.0;
             // Round the fraction to one decimal place
             fraction = Math.round(fraction * 10) / 10;
             // Compose string for display (the unicode character \u00b0 is the degree symbol)
