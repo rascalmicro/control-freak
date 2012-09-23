@@ -602,18 +602,26 @@ $('#template-create').click(function () {
                 case 'html':
                 case 'doctab':
                     templateName += '.html';
-                    path = '/var/www/public/templates/';
                     break;
                 case 'markdown':
                     templateName += '.md';
+                    break;
+            }
+        }
+        $.post('/editor/new_template', { templateName: templateName,
+                templateOption: templateOption }, function (response) {
+            switch (templateOption) {
+                case 'html':
+                case 'doctab':
+                    path = '/var/www/public/templates/';
+                    break;
+                case 'markdown':
                     path = '/var/www/public/templates/docs/';
                     break;
                 default:
                     path = '/var/www/public/static/';
             }
-        }
-        $.post('/editor/new_template', { templateName: templateName,
-                templateOption: templateOption }, function (response) {
+            console.log('new_template: ' + path);
             displayTree(path);
             $('#modal-t').modal('hide')
         }).error(function (jqXHR, textStatus, errorThrown) {
