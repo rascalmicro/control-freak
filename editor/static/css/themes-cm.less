@@ -51,6 +51,10 @@
     background-color: @highlight-blackboard !important;
 }
 
+/* Beriberi ds lighten selected to make it stand out from highlighted line */
+.cm-s-blackboard .CodeMirror-selected { background: lighten(#253B76, 6%) !important; }
+/* .cm-s-blackboard .CodeMirror-selected { background: lighten(@highlight-blackboard, 12%) !important; } */
+
 // night theme
 @color-night: #F8F8F8;
 @background-night: #0A001F;
@@ -77,6 +81,7 @@
     background-color: @highlight-night !important;
 }
 
+/* Anthrax ds make comments more readable */
 .cm-s-night span.cm-comment { color: lighten(#6900a1, 20%); }
 
 // Solarized core tones
