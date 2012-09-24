@@ -31,8 +31,8 @@ def redirect_to_static(path):
 class Anonymous(AnonymousUser):
     name = u'Anonymous'
 
-# PASSWD_FILE = '/etc/passwd'
-PASSWD_FILE = '/var/www/passwd'
+PASSWD_FILE = '/etc/passwd'
+# PASSWD_FILE = '/var/www/passwd'
 
 USERS = {
     1: User(u'rascal', 1),
