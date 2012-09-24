@@ -4,8 +4,8 @@
     <meta charset="utf-8">
     <title>Thermostat demo</title>
     {% include "include/rascal-head.html" %}
-    <script type="text/javascript" src="/static/js/jqplot-plugins/jqplot.canvasTextRenderer.min.js"></script>
-    <script type="text/javascript" src="/static/js/jqplot-plugins/jqplot.canvasAxisLabelRenderer.min.js"></script>
+    <script type="text/javascript" src="/static/js/jqplot-plugins/jqplot.canvasTextRenderer.js"></script>
+    <script type="text/javascript" src="/static/js/jqplot-plugins/jqplot.canvasAxisLabelRenderer.js"></script>
 </head>
 <body>
     {% include "include/rascal-topbar.html" %}
@@ -62,10 +62,13 @@
     a0 = new Array();
     a1 = new Array();
     a2 = new Array();
+    firstTime = true;
+    var plot1;
 
     setInterval(function() {
         $.post("/temperature", function(response) {
             data = $.parseJSON(response);
+            var i;
             if(a0.length > chartOptions.axes.xaxis.max) {
                 a0.pop();
                 a1.pop();
@@ -73,14 +76,28 @@
             }
             actual = data.actual * 1.8 + 32.0
             threshold = data.target
-            a0.unshift(actual);
-            a1.unshift(threshold);
+            a0.unshift([0, actual]);
+            a1.unshift([0, threshold]);
             if (actual < threshold) {
-                a2.unshift(actual);
+                a2.unshift([0, actual]);
             } else {
-                a2.unshift(0.0);
+                a2.unshift([0, 0.0]);
             }
-            $.jqplot("chart1", [a0, a1, a2], chartOptions).replot();
+            // Adjust old X values
+            for (i = 1; i < a0.length; i++) {
+                a0[i][0] = i;
+                a1[i][0] = i;
+                a2[i][0] = i;
+            }
+            if (firstTime) {
+                plot1 = $.jqplot("chart1", [a0, a1, a2], chartOptions);
+                firstTime = false;
+            } else {
+                plot1.series[0].data = a0;
+                plot1.series[1].data = a1;
+                plot1.series[2].data = a2;
+                plot1.replot();
+            }
         });
     }, 1000);
     </script>

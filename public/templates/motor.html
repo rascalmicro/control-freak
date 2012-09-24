@@ -6,6 +6,67 @@
     <script src="/static/js/jquery-ui-1.8.16.min.js" type="text/javascript"></script>
     <link rel="stylesheet" href="/static/css/jquery-ui-1.8.16.css" type="text/css" media="all" />
     <link rel="stylesheet" href="/static/css/ui.theme-1.8.16.css" type="text/css" media="all" />
+    <script src="/static/js/jquery.knob-1.2.0.js"></script>
+            <script>
+            $(function() {
+
+                $(".knob").knob({
+                    change : function (value) {
+                        //console.log("change : " + value);
+                    },
+                    release : function (value) {
+                        $.get("/i2cset/0x29/" + (value * 2 + 50) + "/0/C");
+                        console.log("release : " + value);
+                    },
+                    cancel : function () {
+                        console.log("cancel : " + this.value);
+                    },
+                    draw : function () {
+
+                        // "tron" case
+                        if(this.$.data('skin') == 'tron') {
+
+                            var a = this.angle(this.cv)  // Angle
+                                , sa = this.startAngle          // Previous start angle
+                                , sat = this.startAngle         // Start angle
+                                , ea                            // Previous end angle
+                                , eat = sat + a                 // End angle
+                                , r = 1;
+
+                            this.g.lineWidth = this.lineWidth;
+
+                            this.o.cursor
+                                && (sat = eat - 0.3)
+                                && (eat = eat + 0.3);
+
+                            if (this.o.displayPrevious) {
+                                ea = this.startAngle + this.angle(this.v);
+                                this.o.cursor
+                                    && (sa = ea - 0.3)
+                                    && (ea = ea + 0.3);
+                                this.g.beginPath();
+                                this.g.strokeStyle = this.pColor;
+                                this.g.arc(this.xy, this.xy, this.radius - this.lineWidth, sa, ea, false);
+                                this.g.stroke();
+                            }
+
+                            this.g.beginPath();
+                            this.g.strokeStyle = r ? this.o.fgColor : this.fgColor ;
+                            this.g.arc(this.xy, this.xy, this.radius - this.lineWidth, sat, eat, false);
+                            this.g.stroke();
+
+                            this.g.lineWidth = 2;
+                            this.g.beginPath();
+                            this.g.strokeStyle = this.o.fgColor;
+                            this.g.arc( this.xy, this.xy, this.radius - this.lineWidth + 1 + this.lineWidth * 2 / 3, 0, 2 * Math.PI, false);
+                            this.g.stroke();
+
+                            return false;
+                        }
+                    }
+                });
+            });
+        </script>
 </head>
 <body>
     {% include "include/rascal-topbar.html" %}
@@ -14,17 +75,11 @@
             <h1>Motor control demo</h1>
             <p>&nbsp;</p>
             <div id="slider"></div>
+            <div class="demo" style="background-color:#222;">
+                <input class="knob" data-width="200" data-max="100" data-displayPrevious=true data-fgColor="#c6433c" data-skin="tron" value="10">
+            </div>
         </div>
     </div>
 
-    <script type="text/javascript">
-        $(function() {
-            $( "#slider" ).slider({ min: 0, max: 255 });
-        });
-        $( "#slider" ).bind( "slidestop", function(event, ui) {
-            var value = $( "#slider" ).slider( "option", "value" );
-            $.get("/i2cset/0x29/" + value + "/0/C");
-        });
-    </script>
 </body>
 </html>
