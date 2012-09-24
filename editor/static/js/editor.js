@@ -545,11 +545,42 @@ function uploadItems(files, dst) {
 }
 
 // dialog handling
+var template_title = {
+    html: 'Create a new template',
+    doctab: 'Create a new template',
+    markdown: 'Create a new template',
+    other: 'Create a new file'
+};
+
+var template_message = {
+    html: 'The name you type should end in .html',
+    doctab: 'The name you type should end in .html',
+    markdown: 'The name you type should end in .md',
+    other: 'The name will usually end in .css or .js'
+};
+
+var template_note = {
+    html: 'Create an HTML template in the templates folder',
+    doctab: 'Create an HTML template with a Docs tab in the templates folder',
+    markdown: 'Create a Markdown template in the templates/docs folder',
+    other: 'Create an empty file in the static folder. You will be able to drag it to another folder.'
+};
+
+var template_btn = {
+    html: 'Create template',
+    doctab: 'Create template',
+    markdown: 'Create template',
+    other: 'Create file'
+};
+
 $('#new-template').click(function () {
     "use strict";
-    $('#template-message').text('The name you type should end in .html')
+    $('#template-title').text(template_title.html);
+    $('#template-message').text(template_message.html)
         .removeClass('warning');
     $('#template-name').val('');
+    $('#template-note small').text(template_note.html);
+    $('#docHTML').attr('checked', true);
     $('#modal-t').modal('show')
 });
 
@@ -560,11 +591,38 @@ $('#modal-t').on('shown', function () {
 
 $('#template-create').click(function () {
     "use strict";
-    var templateName = $('#template-name').val().trim();
+    var
+        templateName = $('#template-name').val().trim(),
+        templateOption = $('#template-radios input:radio:checked').attr('value'),
+        path;
     if (templateName !== '') {
-        $.post('/editor/new_template', { templateName: templateName }, function (response) {
-            console.log(response);
-            displayTree('/var/www/public/templates/');
+        // If no extension provided, add one for files in the templates folder
+        if (templateName.indexOf('.') == -1) {
+            switch (templateOption) {
+                case 'html':
+                case 'doctab':
+                    templateName += '.html';
+                    break;
+                case 'markdown':
+                    templateName += '.md';
+                    break;
+            }
+        }
+        $.post('/editor/new_template', { templateName: templateName,
+                templateOption: templateOption }, function (response) {
+            switch (templateOption) {
+                case 'html':
+                case 'doctab':
+                    path = '/var/www/public/templates/';
+                    break;
+                case 'markdown':
+                    path = '/var/www/public/templates/docs/';
+                    break;
+                default:
+                    path = '/var/www/public/static/';
+            }
+            console.log('new_template: ' + path);
+            displayTree(path);
             $('#modal-t').modal('hide')
         }).error(function (jqXHR, textStatus, errorThrown) {
             console.log('new_template: ' + textStatus + ': ' + errorThrown);
@@ -580,6 +638,15 @@ $('#template-create').click(function () {
     } else {
         $('#template-name').focus();
     }
+});
+
+$('#template-radios input:radio').click(function() {
+    var val = $(this).attr('value');
+    $('#template-title').text(template_title[val]);
+    $('#template-message').text(template_message[val]);
+    $('#template-note small').text(template_note[val]);
+    $('#template-create').text(template_btn[val]);
+    $('#template-name').focus();
 });
 
 $('#template-cancel').click(function () {

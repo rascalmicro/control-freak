@@ -87,6 +87,7 @@ ul.jqueryFileTree img.selected:hover {
 .jqueryFileTree LI.ext_cfm { background: url(/editor/static/images/file-icons/code.png) left top no-repeat; }
 .jqueryFileTree LI.ext_cgi { background: url(/editor/static/images/file-icons/code.png) left top no-repeat; }
 .jqueryFileTree LI.ext_com { background: url(/editor/static/images/file-icons/application.png) left top no-repeat; }
+.jqueryFileTree LI.ext_conf { background: url(/editor/static/images/file-icons/conf.png) left top no-repeat; }
 .jqueryFileTree LI.ext_cpp { background: url(/editor/static/images/file-icons/code.png) left top no-repeat; }
 .jqueryFileTree LI.ext_css { background: url(/editor/static/images/file-icons/css.png) left top no-repeat; }
 .jqueryFileTree LI.ext_doc { background: url(/editor/static/images/file-icons/doc.png) left top no-repeat; }
@@ -101,8 +102,10 @@ ul.jqueryFileTree img.selected:hover {
 .jqueryFileTree LI.ext_jpeg { background: url(/editor/static/images/file-icons/picture.png) left top no-repeat; }
 .jqueryFileTree LI.ext_js { background: url(/editor/static/images/file-icons/script.png) left top no-repeat; }
 .jqueryFileTree LI.ext_lasso { background: url(/editor/static/images/file-icons/code.png) left top no-repeat; }
+.jqueryFileTree LI.ext_less { background: url(/editor/static/images/file-icons/less.png) left top no-repeat; }
 .jqueryFileTree LI.ext_log { background: url(/editor/static/images/file-icons/txt.png) left top no-repeat; }
 .jqueryFileTree LI.ext_m4p { background: url(/editor/static/images/file-icons/music.png) left top no-repeat; }
+.jqueryFileTree LI.ext_md { background: url(/editor/static/images/file-icons/txt.png) left top no-repeat; }
 .jqueryFileTree LI.ext_mov { background: url(/editor/static/images/file-icons/film.png) left top no-repeat; }
 .jqueryFileTree LI.ext_mp3 { background: url(/editor/static/images/file-icons/music.png) left top no-repeat; }
 .jqueryFileTree LI.ext_mp4 { background: url(/editor/static/images/file-icons/film.png) left top no-repeat; }
