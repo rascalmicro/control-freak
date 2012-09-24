@@ -22,7 +22,7 @@
             $("#colorPicker2").mlColorPicker({'onChange': function(val){
                 $("#colorPicker2Span").css("background-color", "#" + val);
                 $("#text2").text("#" + val);
-                $.post("set-color", "color=" + val);
+                $.post("set-blinkm", "color=" + val);
             }});
         });
     </script>

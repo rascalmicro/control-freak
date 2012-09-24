@@ -189,10 +189,12 @@ def toggle():
 @public.route('/temperature', methods=['POST'])
 def temperature():
     import json, thermostat
+    f = open('/var/www/public/thermostat-target.txt', 'r')
     data = {
         "time" : float(time.time()),
         "actual" : float(thermostat.read_sensor(0x48)),
-        "target" : thermostat.get_target_temp('/var/www/public/static/basic.ics', 'America/New_York')
+        "target" : float(f.read())
+        #"target" : thermostat.get_target_temp('/var/www/public/static/basic.ics', 'America/New_York')
     }
     return json.dumps(data)
 
@@ -235,31 +237,33 @@ def clear_lcd():
     pytronics.serialWrite(chr(0xFE) + chr(0x01), 9600)
     return render_template('/lcd.html')
 
-# ck (Color Kinetics) - also called by blinkm
+# ck (Color Kinetics)
 @public.route('/set-color', methods=['POST'])
 def set_color():
     import colorsys, kinet, subprocess
     color = request.form['color']
     print "RGB = " + str(color)
-    #cmd = 'blinkm set-rgb -d 9 -r ' + str(int(color[0:2], 16)) + ' -g ' + str(int(color[2:4], 16)) + ' -b ' + str(int(color[4:6], 16))
-    #subprocess.Popen([cmd], shell=True)
     pds = kinet.PowerSupply("192.168.10.57")
     pds.append(kinet.FixtureRGB(0))
     hsv = (colorsys.rgb_to_hsv(int(color[0:2], 16)/255.0, int(color[2:4], 16)/255.0, int(color[4:6], 16)/255.0))
     print "HSV = " + str(hsv)
     pds[0].hsv = hsv
     pds.go()
-    return ('color sent to Blinkm and CK box')
+    return ('color sent to Color Kinetics box')
 
-@public.route('/sms', methods=['POST'])
-def parse_sms():
+# BlinkM smart LED
+@public.route('/set-blinkm', methods=['POST'])
+def set_blinkm():
     import subprocess
-    message = request.form['Body']
-    print "Received text message: " + str(message)
-    f = open('/var/www/public/thermostat-target.txt', 'w')
-    f.write(str(message))
-    f.close()
-    return ('Message processed')
+    color = request.form['color']
+    cmd = ('blinkm set-rgb -d 9' +
+           ' -r ' + str(int(color[0:2], 16)) +
+           ' -g ' + str(int(color[2:4], 16)) +
+           ' -b ' + str(int(color[4:6], 16)) +
+           '; blinkm stop-script -d 9')
+    print cmd
+    subprocess.Popen([cmd], shell=True)
+    return ('Color sent to Blinkm')
 
 # sprinkler
 @public.route('/sprinkler', methods=['POST'])
