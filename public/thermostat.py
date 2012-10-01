@@ -56,8 +56,8 @@ def event_is_now(event, now):
 def read_sensor(address):
     import pytronics
     try: 
-         data = pytronics.i2cRead(address, size = 'C')
-    except ValueError:
+        data = pytronics.i2cRead(address, size = 'W')
+    except:
         print 'Couldn\'t get reading from sensor'
-        return float('NaN')
+        return 0.0
     return ((data % 0x0100 * 16) + (data / 0x1000)) * 0.0625
