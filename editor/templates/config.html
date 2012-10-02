@@ -19,6 +19,12 @@
         .TabPanels .tabPanel.active {
             display: block;
         }
+        .tabPanel .bootstrap{
+            display: none;
+        }
+        .tabPanel .bootstrap.active {
+            display: inline;
+        }
         .tabPanel a {
             color: #9FD4FF;
         }
@@ -71,21 +77,21 @@
                             pleasant editor interface for code-like content ― computer programs, HTML markup and similar.
                             If a mode has been written for the language you are editing, the code will be coloured and
                             the editor will optionally help you with indentation.<br />
-                            <a href="static/about/cm-keyboard.html" name="CodeMirror" title="CodeMirror" target="_editor">keyboard shortcuts</a> |
-                            <a href="static/codemirror/index.html" name="CodeMirror" title="CodeMirror" target="_editor">documentation</a> |
-                            <a href="static/bootstrap/docs/index.html" name="bootstrap" title="Bootstrap" target="_editor">bootstrap docs</a>
+                            <a href="static/about/cm-keyboard.html" name="keyboard shortcuts" title="keyboard shortcuts" target="_editor">keyboard shortcuts</a> |
+                            <a href="static/codemirror/index.html" name="CodeMirror" title="CodeMirror" target="_editor">documentation</a>
+                            <span class="bootstrap active">| <a href="static/bootstrap/docs/index.html" name="bootstrap" title="bootstrap" target="_editor">bootstrap docs</a></span>
                             </p>
                         </div>
                        <div id="editor-a-desc" class="tabPanel">
                             <p><a href="http://ace.ajax.org/" name="Ace" title="Ace" target="_editor">Ajax.org Cloud9 Editor</a><br />
                             Ace is a standalone code editor written in JavaScript.
-                            The goal is to create a web based code editor that matches and extends the features, usability and
+                            The goal is to create a web based code editor that matches the features, usability and
                             performance of existing native editors such as TextMate, Vim or Eclipse.
                             Ace is developed as the primary editor for Cloud9 IDE and the successor of the Mozilla Skywriter (Bespin) Project.<br />
-                            <a href="https://github.com/ajaxorg/ace/wiki" name="Ace wiki" title="Ace wiki" target="_editor">wiki</a> |
-                            <a href="https://github.com/ajaxorg/ace/wiki/Default-Keyboard-Shortcuts" name="Keyboard shortcuts" title="keyboard shortcuts" target="_editor">keyboard shortcuts</a> |
-                            <a href="static/ace/build/kitchen-sink.html" name="kitchen sink demo" title="kitchen sink demo" target="_editor">kitchen sink demo</a> |
-                            <a href="static/bootstrap/docs/index.html" name="bootstrap" title="Bootstrap" target="_editor">bootstrap docs</a>
+                            <a href="https://github.com/ajaxorg/ace/wiki/Default-Keyboard-Shortcuts" name="keyboard shortcuts" title="keyboard shortcuts" target="_editor">keyboard shortcuts</a> |
+                            <a href="http://ace.ajax.org/" name="Ace" title="Ace" target="_editor">documentation</a> |
+                            <a href="static/ace/build/kitchen-sink.html" name="kitchen sink demo" title="kitchen sink demo" target="_editor">kitchen sink demo</a>
+                            <span class="bootstrap active">| <a href="static/bootstrap/docs/index.html" name="bootstrap" title="bootstrap" target="_editor">bootstrap docs</a></span>
                             </p>
                         </div>
                     </div>
@@ -103,12 +109,12 @@
         });
         
         function selectEditor(advanced, editor) {
-            $('.heading').removeClass('active');
+            $('.heading, .bootstrap').removeClass('active');
             if (advanced === '0') {
                 $('#heading-' + advanced + ', #' + editor + '-desc').addClass('active');
             } else {
                 $('.tabPanel').removeClass('active');
-                $('#heading-' + advanced + ', #' + editor + ', #' + editor + '-desc').addClass('active');
+                $('#heading-' + advanced + ', #' + editor + ', #' + editor + '-desc, .bootstrap').addClass('active');
             }
         }
         

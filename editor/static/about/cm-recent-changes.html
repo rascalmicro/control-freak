@@ -37,6 +37,35 @@
 
     <div class="container-fluid">
         <h2>Recent Changes to the Editor</h2>
+        
+        <h3>Beriberi</h3>
+        Released September 24, 2012
+        <dl>
+            <dt>Add "Show password" checkbox on editor login page</dt>
+                <dd>Defaults to false. Setting is remembered.</dd>
+            <dt>Changes to Create template</dt>
+            <dd>There are four options:
+                <ol>
+                    <li>Create HTML template</li>
+                    <li>Create HTML template with Docs tab</li>
+                    <li>Create Documentation (Markdown) template</li>
+                    <li>Create an empty file</li>
+                </ol>
+            </dd>
+        </dl>
+        
+        <h3>Anthrax</h3>
+        Released July 13, 2012
+        <dl>
+            <dt>Sort folders before files in file tree</dt>
+            <dt>File tree and location bar matches editor theme</dt>
+                <dd>Supported themes are default, blackboard, night, solarized-light and solarized-dark</dd>
+            <dt>Reload pytronics displays app-server log</dt>
+                <dd>Lines starting with <strong>*</strong>, <strong>#</strong> and error messages are highlighted</dd>
+       </dl>
+        
+        <h3>Control Freak 0.3</h3>
+        Released May 12, 2012
         <dl>
             <dt>Resizes automatically to fit browser window</dt>
             <dt>Scrollable file tree</dt>
@@ -67,23 +96,16 @@
                 <dd>Currently only supported for default, blackboard, night and solarized themes</dd>
             <dt>Rename file</dt>
                 <dd>If a file with the new name already exists, it is overwritten</dd>
-             <dt>Search and Replace (experimental)</dt>
+            <dt>Search and Replace</dt>
                 <dd>Type Cmd-F/Ctrl-F to search or Cmd-Alt-F/Shift-Ctrl-F to search and replace</dd>
        </dl>
         <h3>Known Issues</h3>
         <ol>
-            <li>Doesn't apply Wrap lines or Match brackets preference - fixed</li>
-            <li>Logs incorrect value when applying Visible tabs - fixed</li>
-            <li>Restoring default preferences breaks highlight active line - fixed</li>
-            <li>When line numbers are enabled in solarized themes, gutter theme is not adjusted - fixed</li>
-            <li>Cursor barely visible in solarized-dark - fixed</li>
-            <li>After attempting to create a template or folder that already exists, the error message persists even when the dialogue is cancelled - fixed</li>
-            <li>Button text rendered in serif font in some versions of Linux - fixed</li>
             <li>Changing to a supported theme after using an unsupported theme doesn't update non-editor panes (except when changing to blackboard). Workaround is first to select blackboard then another supported theme, or reload editor</li>
             <li>Dragging a file from the desktop into an open empty folder leaves the folder able to be deleted unless you move the cursor off it (normally only empty folders can be deleted). Deleting folder also deletes file(s) just dragged into it.</li>
-            <li>When dragging and dropping files in the file tree, folders sometimes remain highlighted until you move the mouse over them. This has been the case since drag and drop was introduced.</li> 
+            <li>When dragging and dropping files in the file tree, folders sometimes remain highlighted until you move the mouse over them.</li> 
         </ol>
-        <p><small>Last update 18 September 2012</small></p>
+        <p><small>Last update 2 Oct 2012</small></p>
     </div> <!-- /container -->
     <script language="javascript" type="text/javascript">
     </script>
