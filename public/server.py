@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request
 from uwsgidecorators import *
-import os, pytronics, time
+import pytronics
+import os, time
 
 public = Flask(__name__)
 public.config['PROPAGATE_EXCEPTIONS'] = True
@@ -15,8 +16,11 @@ LIVE_PINS = ['LED', '2', '3', '4', '5', '8', '9', '10', '11', '12', '13']
 @public.route('/')
 @public.route('/index.html')
 def default_page():
-    with open('/etc/hostname', 'r') as f:
-        name = f.read().strip().capitalize()
+    try:
+        with open('/etc/hostname', 'r') as f:
+            name = f.read().strip().capitalize()
+    except:
+        name = 'Rascal'
     return render_template('/index.html', hostname=name, template_list = get_public_templates())
 
 def get_public_templates():
