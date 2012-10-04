@@ -5,9 +5,6 @@
     width: 350px;
     /* left = width + 2 * padding (2 * 19) + 2 * border (2 * 1) = width + 40 */
     left: -390px;
-    color: #333333;
-    background-color: #ffffff;
-    /* font-size: 0.9em; */
 }
 
 .doc-panel a.doc-tab {

@@ -29,10 +29,6 @@ a, a:hover {
     background-image: url("/static/images/glyphicons-halflings-white.png");
 }
 
-/*.jqplot-target { */
-/*    color: #E7E8E9;  Change jQplot default text color because it matches the Rascal bg color */
-/* }*/
-
 /* topbar */
 .navbar-inverse .navbar-inner, .footer {
   background-color: #424242;
@@ -65,6 +61,15 @@ a, a:hover {
 .btn.rascal {
     font-family: "Lucida Grande","Lucida Sans",sans-serif;
     font-size: 16px;
+}
+
+.markdown {
+    color: #333333;
+    background-color: #ffffff;
+}
+
+.markdown a {
+    color: #C6433C;
 }
 
 @font-face {
