@@ -14,14 +14,14 @@ install the markdown2 processor. Log into your Rascal using SSH and from the com
     pip install markdown2
 
 When you view a Markdown page in a web browser, Rascal renders the Markdown into the template
-`markdown.html`. You can edit this template in any way you like, provided that you retain
+`documentation.html`. You can edit this template in any way you like, provided that you retain
 the following [Jinja2][jj2] expressions and variable:
 
     {% autoescape false %}
         {{markdown}}
     {% endautoescape %}
 
-For example, you might want to edit `markdown.html` change the default style.
+For example, you might want to edit `documentation.html` change the default style.
 
 --
 Markdown Cheat Sheet
