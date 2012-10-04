@@ -1,26 +1,103 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title></title>
+    <title>Rascal - Home</title>
     {% include "include/rascal-head.html" %}
+    <style>
+        .well.app {
+            min-height: 190px;
+            color: #333333;
+        }
+        .well.app a {
+            font-size: 1.4em;
+            color: #C6433C;
+        }
+        .columnwrapper ul {
+            float: left;
+            width: 30%;
+            color: #C6433C;
+        }
+        br.endcolumns {
+            clear: left;
+        }
+    </style>
 </head>
 <body>
     {% include "include/rascal-topbar.html" %}
     <div class="container">
         <div class="well rascal">
-            <h1>Victory! You have located the homepage of {{hostname}}.</h1>
+            <div class="row-fluid">
+                <div class="span7">
+                    <h1>Welcome to {{hostname}}</h1>
+                </div>
+                <div class="span5" style="text-align: right">
+                    <h1 id="datetime">&nbsp;</h1>
+                </div>
+            </div>
             <hr />
+            <h2>Useful applications</h2>
+            <div class="row-fluid">
+                <div class="span3">
+                    <div class="well well-small app">
+                        <a class="applink" href="/docs/about-docs.md" target="_app">Documentation</a>
+                        <p>Rascal has a built-in documentation system based on Markdown, a text-to-HTML
+                            conversion tool that lets you to write in plain text and view it in HTML.
+                        </p>
+                    </div>
+                </div>
+                <div class="span3">
+                    <div class="well well-small app">
+                        <a class="applink" href="/test-pins.html" target="_app">Test Pins</a>
+                        <p>Use the test pins page to view I/O pin status,
+                            set pin direction and set output level. Status is updated every second,
+                            allowing you to see changes as they happen.</p>
+                    </div>
+                </div>
+                <div class="span3">
+                    <div class="well well-small app">
+                        <a class="applink" href="/test-i2c.html" target="_app">Test I2C</a>
+                        <p>You can use the test i2c page to see which devices are connected to Rascal's I2C bus.
+                            After selecting a device, you can read data from its registers
+                            or write to them.</p>
+                    </div>
+                </div>
+                <div class="span3">
+                    <div class="well well-small app">
+                        <a class="applink" href="/editor/" target="_app">Editor</a>
+                        <p>The web based editor is your primary means of interacting with Rascal.
+                        Use it to create and edit web pages, upload pictures, check system status and much more.</p>
+                    </div>
+                </div>
+            </div>
             <h2>Templates on your Rascal right now</h2>
-            <ul>
-            {% for file in template_list %}
-                <li><a href="{{ file }}">{{ file }}</a></li>
-            {% endfor %}
-            </ul>
+            <div class="well columnwrapper">
+                {%- for column in template_list|slice(3) %}
+                    <ul class="column-{{ loop.index }}">
+                    {%- for file in column %}
+                        <li><a href="{{ file }}">{{ file }}</a></li>
+                    {%- endfor %}
+                    </ul>
+                {%- endfor %}
+                <br class="endcolumns" />
+            </div>
         </div>
     </div>
     <script type="text/javascript">
-    // You could add some Javascript between these script tags, if you want.
-    // jQuery and jqPlot are already included in the header above.
+        var
+            format = '%a %H:%M',
+            interval = 15000,
+            int_timer;
+
+        function datetime() {
+            $.post('/datetime', { format: format }, function (response) {
+                $('#datetime').text(response);
+             });
+        }
+
+        $(document).ready(function () {
+            datetime();
+            int_timer = setInterval(datetime, interval);
+        });
     </script>
 </body>
 </html>

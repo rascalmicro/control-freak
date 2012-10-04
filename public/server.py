@@ -32,6 +32,20 @@ def get_public_templates():
             r.append(f)
     return sorted(r)
 
+# Format date/time in Jinja template
+@public.template_filter()
+def datetimeformat(value, format='%H:%M / %d-%m-%Y'):
+    return time.strftime(format, value)
+
+# Return current date and time in specified format
+@public.route('/datetime', methods=['POST'])
+def datetime():
+    try:
+        format = request.form['format']
+    except:
+        format = '%d %b %Y %H:%M %Z'
+    return time.strftime(format, time.localtime())
+
 ### Generic HTML and Markdown templates, support for doc tab ###
 @public.route('/<template_name>.html')
 def template(template_name):
@@ -48,7 +62,7 @@ def document_docs(doc_name):
 def render_markdown(path, doc_name):
     import markdown2
     with open('/var/www/public/templates/' + path + doc_name + '.md', 'r') as mdf:
-        return render_template('markdown.html', title=doc_name, markdown=markdown2.markdown(mdf.read()))
+        return render_template('documentation.html', title=doc_name, markdown=markdown2.markdown(mdf.read()))
     return 'Not Found', 404
 
 @public.route('/get_markdown', methods=['POST'])
@@ -172,13 +186,6 @@ def analog():
         "A0" : float(pytronics.analogRead('A0')) * ad_ref / 1024.0
     }
     return json.dumps(data)
-
-@public.route('/<doc_name>.markdown')
-def document(doc_name):
-    import markdown2
-    with open('/var/www/public/templates/' + doc_name + '.markdown', 'r') as mdfile:
-        return render_template('documentation.html', markdown=markdown2.markdown(mdfile.read()))
-    return 'Not Found', 404
 
 # relay (also calls analog)
 @public.route('/relay.html')
