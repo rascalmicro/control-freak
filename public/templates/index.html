@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!-- JSLint 7 Oct 2012 jQuery $ updateTime  -->
 <html lang="en">
 <head>
     <title>Rascal - Home</title>
@@ -30,7 +31,7 @@
                 <div class="span7">
                     <h1>Welcome to {{hostname}}</h1>
                 </div>
-                <div class="span5" style="text-align: right">
+                <div class="span5" style="text-align: right;">
                     <h1 id="datetime">&nbsp;</h1>
                 </div>
             </div>
@@ -39,7 +40,7 @@
             <div class="row-fluid">
                 <div class="span3">
                     <div class="well well-small app">
-                        <a class="applink" href="/docs/about-docs.md" target="_app">Documentation</a>
+                        <a class="applink" href="/docs/about-docs.md">Documentation</a>
                         <p>Rascal has a built-in documentation system based on Markdown, a text-to-HTML
                             conversion tool that lets you write in plain text and view the document as HTML.
                         </p>
@@ -47,7 +48,7 @@
                 </div>
                 <div class="span3">
                     <div class="well well-small app">
-                        <a class="applink" href="/test-pins.html" target="_app">Test Pins</a>
+                        <a class="applink" href="/test-pins.html">Test Pins</a>
                         <p>Use the test pins page to view I/O pin status,
                             set pin direction and set output level. Status is updated every second,
                             allowing you to see changes as they happen.</p>
@@ -55,7 +56,7 @@
                 </div>
                 <div class="span3">
                     <div class="well well-small app">
-                        <a class="applink" href="/test-i2c.html" target="_app">Test I2C</a>
+                        <a class="applink" href="/test-i2c.html">Test I2C</a>
                         <p>You can use the test i2c page to see which devices are connected to Rascal's I2C bus.
                             After selecting a device, you can read data from its registers
                             or write to them.</p>
@@ -63,12 +64,12 @@
                 </div>
                 <div class="span3">
                     <div class="well well-small app">
-                        <a class="applink" href="/editor/" target="_app">Editor</a>
+                        <a class="applink" href="/editor/">Editor</a>
                         <p>The web based editor is your primary means of interacting with Rascal.
                         Use it to create and edit web pages, upload pictures, check system status and much more.</p>
                     </div>
                 </div>
-            </div>
+            </div> <!-- /row-fluid -->
             <h2>Templates on your Rascal right now</h2>
             <div class="well columnwrapper">
                 {%- for column in template_list|slice(3) %}
@@ -79,24 +80,49 @@
                     </ul>
                 {%- endfor %}
                 <br class="endcolumns" />
-            </div>
-        </div>
-    </div>
+            </div> <!-- /well columnwrapper -->
+            <p><small>You can return to this page by clicking the rascal micro logo in the header</small></p>
+        </div> <!-- /well rascal -->
+    </div> <!-- /container -->
     <script type="text/javascript">
+        // Update the time every minute within 10s of it changing
         var
-            format = '%a %H:%M',
-            interval = 15000,
+            format = '%a %H:%M %Z',
+            interval = 10000,
+            lastResponse = '',
             int_timer;
 
-        function datetime() {
+        function setNextInterval(i) {
+            "use strict";
+            interval = i;
+            int_timer = clearInterval(int_timer);
+            int_timer = setInterval(updateTime, interval);
+        }
+
+        function updateTime() {
+            "use strict";
             $.post('/datetime', { format: format }, function (response) {
                 $('#datetime').text(response);
-             });
+                if (lastResponse !== '') {
+                    if (response !== lastResponse) {
+                        if (interval === 10000) {
+                            setNextInterval(59000);
+                        } else {
+                            setNextInterval(interval - 1000);
+                        }
+                    } else if (interval > 10000) {
+                        setNextInterval(10000);
+                    }
+                }
+                lastResponse = response;
+                console.log('last=' + lastResponse + ' int=' + interval);
+            });
         }
 
         $(document).ready(function () {
-            datetime();
-            int_timer = setInterval(datetime, interval);
+            "use strict";
+            updateTime();
+            int_timer = setInterval(updateTime, interval);
         });
     </script>
 </body>

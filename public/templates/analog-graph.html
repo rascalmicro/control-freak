@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!-- JSLint 6 Oct 2012 jQuery $ -->
 <html>
 <head>
     <title>Analog graph demo</title>
@@ -10,14 +11,14 @@
             height: 400px;
             width: 800px;
         }
-        
+
         .jqplot-title, .jqplot-axis {
             color: #ddd;
         }
-        
+
         .jqplot-table-legend-label {
             color: #111;
-        }   
+        }
     </style>
 </head>
 <body>
@@ -26,19 +27,22 @@
         <div class="well rascal">
             <h1>Analog graph demo</h1>
             <div id="chart1"></div>
-            <p>If your readings appear stuck at 3.3 V, it's probably because you haven't connected the ADREF pin to a reference. Try connecting it to 3.3 V or lower. Never connect it to anything above 3.3 V. It will burn out around 3.6 V.</p>
+            <p>If your readings appear stuck at 3.3 V, it's probably because
+                you haven't connected the ADREF pin to a reference. Try
+                connecting it to 3.3 V or lower. Never connect it to anything
+                above 3.3 V. It will burn out around 3.6 V.</p>
         </div>
     </div>
-    
     <script type="text/javascript">
-        
+
         var chartOptions = {
             legend: {
                 show: true,
-                location: "ne" },
+                location: "ne"
+            },
             title: "Channel 0",
             series: [
-                {label: "Channel 0", lineWidth:3, showMarker:false}
+                {label: "Channel 0", lineWidth: 3, showMarker: false}
             ],
             axes: {
                 xaxis: {
@@ -52,33 +56,33 @@
                     label: "Sensor voltage [V]",
                     min: 0,
                     max: 3.5,
-                    numberTicks: 8 },
+                    numberTicks: 8
+                }
             },
             seriesColors: [ "#cd2820" ]
         };
-        
+
         var
-            a0 = new Array(),
+            a0 = [],
             firstTime = true,
             plot1;
-        
-        setInterval(function() {
-            $.post("analog",  { adref: 3.3 }, function(response) {
+
+        setInterval(function () {
+            "use strict";
+            $.post("analog", { adref: 3.3 }, function (response) {
                 var
                     data = $.parseJSON(response),
                     i;
-                
                 // Limit to a0[0..max] i.e. max + 1 elements
-                if(a0.length > chartOptions.axes.xaxis.max) {
+                if (a0.length > chartOptions.axes.xaxis.max) {
                     a0.pop();
                 }
                 // Add new value at beginning
                 a0.unshift([0, data.A0]);
-                 // Adjust old X values
-                for (i = 1; i < a0.length; i++) {
+                // Adjust old X values
+                for (i = 1; i < a0.length; i += 1) {
                     a0[i][0] = i;
                 }
-
                 if (firstTime) {
                     plot1 = $.jqplot("chart1", [ a0 ], chartOptions);
                     firstTime = false;

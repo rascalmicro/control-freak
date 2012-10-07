@@ -1,8 +1,7 @@
 /* Library started by dsmall 2012 v1.03 */
+// JSLint 6 Oct 2012 jQuery $
 
 // NB Event handlers need to be named and static to avoid duplication
-// Uncomment next line before running JSLint
-// var $;
 
 var rascal = {
     // Add drag and drop to jquery.filetree
@@ -46,7 +45,7 @@ var rascal = {
             }
             if (evt.dataTransfer) {
                 src = evt.dataTransfer.getData('Text');
-                if ((typeof(src) !== 'undefined') && (src !== '')) {
+                if ((src !== 'undefined') && (src !== '')) {
                     srcDir = src.match(/.*\//)[0];
                     if (srcDir !== dst) {
                         console.log('handleDrop mv ' + src + ' to ' + dst);
@@ -332,7 +331,8 @@ var rascal = {
                 gap = rp.gap,
                 nw = rp.naturalWidth,
                 nh = rp.naturalHeight,
-                ww, wh;
+                ww,
+                wh;
             ww = nw;
             wh = nh;
             if (nw > (fw - gap)) {
@@ -353,14 +353,14 @@ var rascal = {
                 .height(wh)
                 .css('margin-top', parseInt((fh - wh) * 0.38, 10) + 'px')
                 .css('margin-left', parseInt((fw - ww) * 0.5, 10) + 'px')
-                .fadeIn('fast');           
-           rp.showing = true;
+                .fadeIn('fast');
+            rp.showing = true;
         },
         empty: function () {
+            "use strict";
             var rp = rascal.picture;
             rp.showing = false;
             $('#' + rp.container).children().remove();
         }
     }
 };
-

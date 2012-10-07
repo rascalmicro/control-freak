@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <!-- 18 Jun 2012 dsmall bootstrap jquery rascal-1.03.js -->
+<!-- JSLint 7 Oct 2012 jQuery $ rascal uploadItems -->
 <html lang="en">
 <head>
     <title>File Upload - Drag and Drop</title>
@@ -33,11 +34,11 @@
         <div class="well rascal">
             <h1>Upload using Drag and Drop</h1>
             <p>Drag and drop image files onto the box</p>
-            
+
             <div id="dropzone" class="infobox">Drop files here</div>
-            <p id="progress" /> 
+            <p id="progress"></p> 
             <div id="status"></div>
-            
+
             <h3>Files in the uploads directory:</h3>
             <div id="filelist" class="infobox"></div>
             <input id="clear" type="button" value="Clear Files" class="btn btn-large btn-primary" />
@@ -47,18 +48,20 @@
     <script src="static/js/demo-upload.js"></script>
 
     <script type="text/javascript">
-    
+
         // Called when the "Clear Files" button is clicked
-        $('#clear').click(function() {
+        $('#clear').click(function () {
+            "use strict";
             rascal.directory.clearDirectory(rascal.directory.listDirectory);
         });
 
         // Initialise rascal library after everything is loaded
-        $(document).ready(function() {
+        $(document).ready(function () {
+            "use strict";
 
             // Initialise rascal.dnd 
             rascal.dnd.container = 'dropzone';
-            rascal.dnd.root = 'static/uploads/'
+            rascal.dnd.root = 'static/uploads/';
             rascal.dnd.filesDropped = uploadItems;
             rascal.dnd.init();
 

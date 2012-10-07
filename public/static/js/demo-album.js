@@ -1,7 +1,5 @@
 /* 27 Jun 2012 dsmall for rascal-1.03 (trap error when no folder */
-
-// Uncomment next line for JSLint
-// var $, rascal, console, clearInterval, setInterval;
+// JSLint 6 Oct 2012 jQuery $ rascal {}
 
 var slideChanging = false;
 
@@ -52,15 +50,17 @@ function loadPictures() {
 
 function nextSlidePlease(direction) {
     "use strict";
-    var $active, $next;
-    direction = arguments.length > 0 ? direction : 1;
+    var
+        dir = arguments.length > 0 ? direction : 1,
+        $active,
+        $next;
     $active = $('#slideshow IMG.active');
     if ($active.length === 0) {
         $active = $('#slideshow IMG:last');
     }
     // Show the images in the order they appear in the picture frame
     // Find the next slide forwards or backwards
-    if (direction > 0) {
+    if (dir > 0) {
         // If moving forwards, roll over from last to first
         $next =  $active.next().length ? $active.next()
             : $('#slideshow IMG:first');
@@ -128,20 +128,24 @@ $('#auto').click(function () {
 
 // glue between rascal.dnd and rascal.upload
 function uploadProgress(pc) {
+    "use strict";
     // console.log('progress ' + pc);
     $('#progress').css('background-position', pc + '% 0').css('opacity', 1);
 }
 
-function uploadStatus (msg) {
+function uploadStatus(msg) {
+    "use strict";
     $('#status').html($('#status').html() + msg + '<br />');
 }
 
 function uploadComplete() {
+    "use strict";
     $('#progress').fadeTo(2000, 0);
     loadPictures();
 }
 
 function uploadItems(files, dst) {
+    "use strict";
     var ru = rascal.upload;
     // set up allowed types, progress, status and complete
     ru.allowedTypes = [ 'image/' ];
@@ -151,5 +155,4 @@ function uploadItems(files, dst) {
     $('#status').html('');
     ru.filesDropped(files, dst);
 }
-
 

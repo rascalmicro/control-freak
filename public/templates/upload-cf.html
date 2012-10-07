@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <!-- 18 Jun 2012 dsmall bootstrap jquery rascal-1.03.js -->
+<!-- JSLint 7 Oct 2012 jQuery $ rascal uploadItems -->
 <html lang="en">
 <head>
     <title>File Upload - Choose File</title>
@@ -43,7 +44,7 @@
                 <input id="fakefile" type="button" value="Choose File" class="btn btn-large btn-danger rascal" />
                 <input id="file" type="file" name="file" accept="image/*" multiple="multiple" />
             </span>
-            <p id="progress" /> 
+            <p id="progress"></p> 
             <div id="status"></div>
             
             <h3>Files in the uploads directory:</h3>
@@ -51,30 +52,33 @@
             <input id="clear" type="button" value="Clear Files" class="btn btn-large btn-primary" />
         </div>
     </div>
-    
+
     <script src="static/js/demo-upload.js"></script>
-    
+
     <script type="text/javascript">
-                
+
         // We are using a fake file button to get a better appearance
         // Pass fakefile click to real file button underneath
-        $('#fakefile').click( function() {
+        $('#fakefile').click(function () {
+            "use strict";
             $('#file').click();
         });
 
         // Called when the "Clear Files" button is clicked
-        $('#clear').click( function() {
+        $('#clear').click(function () {
+            "use strict";
             rascal.directory.clearDirectory(rascal.directory.listDirectory);
         });
-        
+
         // Initialise Rascal library after everything is loaded
-        $(document).ready(function() {
+        $(document).ready(function () {
+            "use strict";
 
             // Initialise rascal.dnd 
             rascal.dnd.container = 'file';
-            rascal.dnd.root = 'static/uploads/'
+            rascal.dnd.root = 'static/uploads/';
             rascal.dnd.filesDropped = uploadItems;
-            
+
             // Listen to choose file
             $('#file').change(rascal.dnd.handleDrop);
 
