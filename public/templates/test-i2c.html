@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <!-- 10 Sep 2012 dsmall Changes for bootstrap v2.1.1 - add well border-color -->
+<!-- JSLint 7 Oct 2012 jQuery $ -->
 <html>
 <head>
     <title>Test I2C Bus</title>
@@ -46,7 +47,7 @@
                 This strongly suggests that there is a chip at this address.
             </p>
             <div id="scan_table" class="well i2c">
-                <div style="padding: 151px 400px"><img src="/static/images/ajax-loader.gif" width="32" height="32"></div>
+                <div style="padding: 151px 400px;"><img src="/static/images/ajax-loader.gif" width="32" height="32"></div>
             </div>
             <button id="rescan" class="btn btn-large btn-primary">Rescan</button>
             
@@ -123,8 +124,9 @@
         </div> <!-- /.well rascal -->
     </div> <!-- /.container -->
     <script type="text/javascript">
-        
+
         function showCommand(cmd) {
+            "use strict";
             $('#cmd')
                 .stop(true)
                 .text('Sent command: ' + cmd)
@@ -134,8 +136,9 @@
                 .delay(2000)
                 .fadeTo(1000, 0);
         }
-        
+
         function showStatus(status) {
+            "use strict";
             $('#status')
                 .stop(true)
                 .text('Rascal replied: ' + status)
@@ -149,50 +152,50 @@
 
         function i2cscan() {
             "use strict";
-            showCommand('/i2cscan')
+            showCommand('/i2cscan');
             $.post('/i2cscan', function (response) {
                 var
                     scan = JSON.parse(response),
                     s = '<table class="table table-bordered">',
                     i, j, row, t, hexaddr;
-                s += '<tr><th width="7.2%"></th>';
+                s += '<tr><th width="7.2%"><\/th>';
                 for (j = 0; j < 16; j += 1) {
-                    s += '<th width="5.8%">' + j.toString(16) + '</th>';
+                    s += '<th width="5.8%">' + j.toString(16) + '<\/th>';
                 }
-                s += '</tr>';
+                s += '<\/tr>';
                 for (i = 0; i < 128; i += 16) {
-                    s += '<tr><td>' + i.toString(16) + ':</td>';
+                    s += '<tr><td>' + i.toString(16) + ':<\/td>';
                     row = scan[i];
                     for (j = 0; j < 16; j += 1) {
-                        switch (row[j])
-                        {
-                            case -2:
-                                t = 'U';
-                                break;
-                            case -1:
-                                t = '--';
-                                break;
-                            case 0:
-                                t = '';
-                                break;
-                            default:
-                                hexaddr = row[j].toString(16);
-                                t = '<a href="#" class="chip_addr" onclick="setAddress(' + hexaddr + ');">' + hexaddr +'</a>';
-                                break;
+                        switch (row[j]) {
+                        case -2:
+                            t = 'U';
+                            break;
+                        case -1:
+                            t = '--';
+                            break;
+                        case 0:
+                            t = '';
+                            break;
+                        default:
+                            hexaddr = row[j].toString(16);
+                            t = '<a href="#" class="chip_addr" onclick="setAddress(' + hexaddr + ');">' + hexaddr + '<\/a>';
+                            break;
                         }
-                        s += '<td>' + t + '</td>';
+                        s += '<td>' + t + '<\/td>';
                     }
-                    s += '</tr>';
-                }                     
-                s += '</table>';
+                    s += '<\/tr>';
+                }
+                s += '<\/table>';
                 $('#scan_table').html(s);
                 showStatus('Success');
             }).error(function (jqXHR, textStatus, errorThrown) {
                 showStatus('Error: ' + errorThrown);
             });
         }
-        
+
         $('#rescan').click(function () {
+            "use strict";
             i2cscan();
         });
 
@@ -211,8 +214,8 @@
                 showCommand(cmd);
                 $.get(cmd, function (data, textStatus) {
                     $('#result10').attr('value', data);
-                    $('#result16').attr('value', '0x' + parseInt(data).toString(16));
-                    if (parseInt(data) !== -1) {
+                    $('#result16').attr('value', '0x' + parseInt(data, 10).toString(16));
+                    if (parseInt(data, 10) !== -1) {
                         showStatus(data);
                     } else {
                         showStatus('Couldn\'t read from this address');
@@ -224,7 +227,7 @@
                 showStatus('Chip address required');
             }
         });
-        
+
         $('#write').click(function () {
             "use strict";
             var
@@ -244,8 +247,8 @@
                 showCommand(cmd);
                 $.get(cmd, function (data, textStatus) {
                     $('#result10').attr('value', data);
-                    $('#result16').attr('value', '0x' + parseInt(data).toString(16));
-                    if (parseInt(data) === 0) {
+                    $('#result16').attr('value', '0x' + parseInt(data, 10).toString(16));
+                    if (parseInt(data, 10) === 0) {
                         showStatus('Success');
                     } else {
                         showStatus('Couldn\'t write to this address');
@@ -257,13 +260,15 @@
                 showStatus('Chip address required');
             }
         });
-        
-        function setAddress (hexaddr) {
+
+        function setAddress(hexaddr) {
+            "use strict";
             $('#address').attr('value', '0x' + hexaddr);
         }
-        
+
         $(document).ready(function () {
-            i2cscan ();
+            "use strict";
+            i2cscan();
         });
 
     </script>

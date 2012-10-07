@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!-- JSLint 6 Oct 2012 jQuery $ bitwise true -->
 <html lang="en">
 <head>
     <title>Temperature sensor demo</title>
@@ -41,14 +42,34 @@
     {% include "include/doc-tab.html" %} 
     <script type="text/javascript">
 
+        /* Display the value as a decimal number */
+        function displayTemp(data) {
+            "use strict";
+            var degrees, fraction, strTemp;
+            // Whole degrees are returned in the low byte
+            degrees = data & 0xff;
+            // The fractional part is in the top four bits of high byte
+            fraction = (data >> 12) / 16.0;
+            // Round the fraction to one decimal place
+            fraction = Math.round(fraction * 10) / 10;
+            // Compose string for display (the unicode character \u00b0 is the degree symbol)
+            strTemp = (degrees + fraction).toString() + '\u00b0C';
+            // Fade out previous reading to make it obvious that a new reading has been taken :-)
+            $('.temp').fadeOut(200, 0, function () {
+                $('#temp').text(strTemp);
+                $('.temp').fadeTo(200, 1);
+            });
+        }
+
         /* Read a word from the TMP102 to get the temperature as a 12-bit value */
         $("#read_temp").click(function () {
+            "use strict";
             var
                 addr = '0x48',
                 reg = '0',
                 size = 'W';
             $.get('/i2cget/' + addr + '/' + reg + '/' + size, function (strData, textStatus) {
-                var data = parseInt(strData);
+                var data = parseInt(strData, 10);
                 if (data !== -1) {
                     $('#status').html('&nbsp;');
                     displayTemp(data);
@@ -59,26 +80,6 @@
                 ('#status').text(errorThrown);
             });
         });
-        
-        /* Display the value as a decimal number */
-        function displayTemp(data) {
-            var degrees, fraction, strTemp;
-            // Whole degrees are returned in the low byte
-            degrees = data & 0xff;
-            // The fractional part is in the top four bits of high byte
-            fraction = (data >> 12) / 16.0;
-            // Round the fraction to one decimal place
-            fraction = Math.round(fraction * 10) / 10;
-            // Compose string for display (the unicode character \u00b0 is the degree symbol)
-            strTemp = (degrees + fraction).toString() + '\u00b0C';
-            
-            // Fade out previous reading to make it obvious that a new reading has been taken :-)
-            $('.temp').fadeOut(200, 0, function () {
-                $('#temp').text(strTemp);
-                $('.temp').fadeTo(200, 1);
-            });
-       }
-        
     </script>
 </body>
 </html>

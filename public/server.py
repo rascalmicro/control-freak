@@ -6,6 +6,13 @@ import os, time
 public = Flask(__name__)
 public.config['PROPAGATE_EXCEPTIONS'] = True
 
+# Include "no-cache" header in all POST responses
+@public.after_request
+def add_no_cache(response):
+    if request.method == 'POST':
+        response.cache_control.no_cache = True
+    return response
+
 # config for upload
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
 ALLOWED_DIRECTORIES = set(['static/uploads/', 'static/pictures/'])
@@ -21,7 +28,7 @@ def default_page():
             name = f.read().strip().capitalize()
     except:
         name = 'Rascal'
-    return render_template('/index.html', hostname=name, template_list = get_public_templates())
+    return render_template('/index.html', hostname=name, template_list=get_public_templates())
 
 def get_public_templates():
     r = []
@@ -141,6 +148,53 @@ def i2cset(addr, reg, val, mode):
         import errno
         print '## i2cset ## Error: [{0}] {1}'.format(errno.errorcode[e.errno], e.strerror)
         return str(-1)
+    except Exception as e:
+        return 'Internal server error', 500
+
+@public.route('/i2c_read', methods=['POST'])
+def i2c_read():
+    import json
+    try:
+        params = json.loads(request.form['params'])
+        print '## i2c_read ## ' + str(params)
+        value = pytronics.i2cRead(params['addr'], params['reg'], params['size'], params['length'])
+        result = {
+            'success': True,
+            'value': value
+        }
+        return json.dumps(result)
+    except (OSError, IOError) as e:
+        import errno
+        print '## i2c_read ## Error: [{0}] {1}'.format(errno.errorcode[e.errno], e.strerror)
+        result = {
+            'success': False,
+            'errorCode': errno.errorcode[e.errno],
+            'errorMessage': e.strerror
+        }
+        return json.dumps(result)
+    except Exception as e:
+        return 'Internal server error', 500
+
+@public.route('/i2c_write', methods=['POST'])
+def i2c_write():
+    import json
+    try:
+        params = json.loads(request.form['params'])
+        print '## i2c_write ## ' + str(params)
+        pytronics.i2cWrite(params['addr'], params['reg'], params['value'], params['size'])
+        result = {
+            'success': True
+        }
+        return json.dumps(result)
+    except (OSError, IOError) as e:
+        import errno
+        print '## i2c_write ## Error: [{0}] {1}'.format(errno.errorcode[e.errno], e.strerror)
+        result = {
+            'success': False,
+            'errorCode': errno.errorcode[e.errno],
+            'errorMessage': e.strerror
+        }
+        return json.dumps(result)
     except Exception as e:
         return 'Internal server error', 500
 

@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <!-- 24 Feb 2012, 12 May 2012, 18 Jun 2012 dsmall -->
 <!-- Requires: bootstrap, jquery, rascal-1.03, album.css, album.js, static/pictures folder, server.py support -->
+<!-- JSLint 6 Oct 2012 jQuery $ rascal uploadItems loadPictures -->
+
 <html lang="en">
 <head>
     <title>Rascal Album</title>
@@ -23,7 +25,7 @@
                     <a id="auto" class="btn btn-large btn-primary rascal" href="#">Slideshow <i id="auto-icon" class="icon-play icon-white"></i></a>
                     <a id="next" class="btn btn-large btn-info rascal right" href="#">Next <i class="icon-chevron-right icon-white"></i></a>
                 </div>
-                <p id="progress" /> 
+                <p id="progress"></p>
                 <div id="status"></div>
             </div> <!-- /.album -->
         </div>
@@ -33,11 +35,13 @@
     
     <script type="text/javascript">
         /* Initialise Rascal library */
-        $(document).ready(function() {
+        /* uploadItems and loadPictures are defined in demo-album.js */
+        $(document).ready(function () {
+            "use strict";
             // Initialise rascal-demo upload
             var rd = rascal.dnd;
             rd.container = 'frame';
-            rd.root = 'static/pictures/'
+            rd.root = 'static/pictures/';
             rd.filesDropped = uploadItems;
             rd.init();
             // Load images from the pictures folder

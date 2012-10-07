@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <!-- 19 June 2012 dsmall -->
+<!-- JSLint 6 Oct 2012 jQuery $ Modernizr -->
 <html lang="en">
 <head>
     <title>Browser Test</title>
@@ -7,10 +8,10 @@
     <script src="static/js/modernizr-2.6.1.js"></script>
     <style>
         span.pass {
-            color: LawnGreen;
+            color: lawngreen;
         }
         span.fail {
-            color: OrangeRed;
+            color: orangered;
         }
     </style>
 </head>
@@ -25,21 +26,23 @@
             <div id='what'></div>
         </div>
     </div>
-    
+ 
     <script type="text/javascript">
         var s;
-        
+
         function testfeature(name, result, required) {
-            var status = (result !== undefined);
-            var myClass = required ? ((status === required) ? 'pass' : 'fail') : '';
-            s += '<tr><td>' + name + '</td><td>' + status + '</td><td><span class="' + myClass + '">' + required + '</span></td></tr>';
+            "use strict";
+            var
+                status = (result !== undefined),
+                myClass = required ? ((status === required) ? 'pass' : 'fail') : '';
+            s += '<tr><td>' + name + '<\/td><td>' + status + '<\/td><td><span class="' + myClass + '">' + required + '<\/span><\/td><\/tr>';
         }
-        
+
         function test() {
+            "use strict";
             var xhr = new XMLHttpRequest();
-            // s = '<table border="1" cellspacing="0" cellpadding="5">';
             s = '<table class="table table-bordered">';
-            s += '<thead><tr><th>Feature</th><th>Status</th><th>Required</th></tr></thead>';
+            s += '<thead><tr><th>Feature<\/th><th>Status<\/th><th>Required<\/th><\/tr><\/thead>';
             s += '<tbody>';
             testfeature('Drag and Drop', Modernizr.draganddrop, true);
             testfeature('FileList', window.FileList, true);
@@ -47,12 +50,13 @@
             testfeature('XMLHttpRequest.upload', xhr.upload, true);
             testfeature('FileReader', window.FileReader, false);
             testfeature('Blob', window.Blob, false);
-            s += '</tbody>';
-            s += '</table>';
+            s += '<\/tbody>';
+            s += '<\/table>';
             document.getElementById('what').innerHTML = s;
         }
 
-        $(document).ready(function() {
+        $(document).ready(function () {
+            "use strict";
             test();
         });
     </script>
