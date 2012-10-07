@@ -1,25 +1,32 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <meta charset="utf-8">
     <title>Sprinkler demo</title>
     {% include "include/rascal-head.html" %}
+    <style>
+        button.rascal {
+            width: 120px;
+        }
+    </style>
 </head>
 <body>
     {% include "include/rascal-topbar.html" %}
     <div class="container">
         <div class="well rascal">
-            <button id="sprinkler-on" value="ON" class="btn btn-primary">ON</button>
-            <button id="sprinkler-off" value="OFF" class="btn btn-primary">OFF</button>
+            <button id="sprinkler-on" value="ON" class="btn btn-large btn-danger rascal">ON</button>
+            <button id="sprinkler-off" value="OFF" class="btn btn-large btn-danger rascal">OFF</button>
+            <p></p>
+            <p><small>Click the Docs button for info</small></p>
         </div>
     </div>
+    {% include "include/doc-tab.html" %} 
     <script type="text/javascript">
-    $("#sprinkler-on").click( function() {
-        $.post("/sprinkler", { command: "ON" });
-    });
-    $("#sprinkler-off").click( function() {
-        $.post("/sprinkler", { command: "OFF" });
-    });
+        $("#sprinkler-on").click(function () {
+            $.post("/sprinkler", { command: "ON" });
+        });
+        $("#sprinkler-off").click(function () {
+            $.post("/sprinkler", { command: "OFF" });
+        });
     </script>
 </body>
 </html>

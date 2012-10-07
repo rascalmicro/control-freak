@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <!-- 8 Apr 2012 dsmall Added Sending... -->
 <!-- 12 May 2012 dsmall New static folders -->
+<!-- JSLint 6 Oct 2012 jQuery $ -->
 <html>
 <head>
     <meta charset="utf-8">
@@ -33,9 +34,7 @@
     </div>
     
     <script type="text/javascript">
-        // Uncomment next line for JSLint
-        // var $;
-        
+
         $("#send-email").click(function () {
             "use strict";
             $('#result').empty()
@@ -64,7 +63,7 @@
                     }
                 });
         });
-        
+
         $("#clear-form").click(function () {
             "use strict";
             $('#sender').val('');

@@ -2,7 +2,7 @@ body {
     /* padding-top: 50px; */    /* no gap */
     padding-top: 58px;          /* gap below top bar */
     padding-bottom: 0;
-    font-family: "Molengo","URW Gothic L",sans-serif;
+    font-family: "Molengo", "URW Gothic L", sans-serif;
     font-size: 1em;
     line-height: 1.4em;
     color: #F8F8F8;
@@ -11,7 +11,7 @@ body {
 }
 
 p {
-    font-family: "Molengo","URW Gothic L",sans-serif;
+    font-family: "Molengo", "URW Gothic L", sans-serif;
     font-size: 1em;
     line-height: 1.4em;
 }
@@ -59,7 +59,7 @@ a, a:hover {
 }
 
 .btn.rascal {
-    font-family: "Lucida Grande","Lucida Sans",sans-serif;
+    font-family: "Lucida Grande", "Lucida Sans", sans-serif;
     font-size: 16px;
 }
 
