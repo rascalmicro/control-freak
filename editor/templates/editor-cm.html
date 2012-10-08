@@ -1,4 +1,6 @@
 <!DOCTYPE html>
+<!-- CodeMirror editor -->
+<!-- JSLint 8 Oct 2012 -->
 <html lang="en">
 <head>
     <title>Editor</title>
@@ -42,12 +44,12 @@
             -webkit-box-shadow: 0 0 3px #3A3A3A;
             box-shadow: 0 0 3px #3A3A3A;
         }
-        
+
         .CodeMirror-scroll {
             /* height: 600px; */
             height: 475px;
         }
-        
+
         .visibleTabs .cm-tab:after {
             content: "\21e5";
             display: -moz-inline-block;
@@ -314,16 +316,18 @@
     <script src="/editor/static/js/editor-cm.js"></script>
     <script src="/editor/static/js/editor.js"></script>
     <script type="text/javascript">
-            
+
         var delay = (function () {
+            "use strict";
             var timer = 0;
-            return function(callback, ms) {
-                clearTimeout (timer);
+            return function (callback, ms) {
+                clearTimeout(timer);
                 timer = setTimeout(callback, ms);
             };
         })();
-        
-        function adjustGeometry () {
+
+        function adjustGeometry() {
+            "use strict";
             var w, h, dw, dh;
             if (ADJUSTSIZE) {
                 w = $(window).width();
@@ -342,8 +346,9 @@
                 }
             }
         }
-        
+
         $(document).ready(function () {
+            "use strict";
             initEditor();
             initPreferences();
             adjustGeometry();

@@ -1,4 +1,7 @@
 // Support for CodeMirror2
+// JSLint 8 Oct 2012 jQuery $ applyTheme applyFontSize applyLineHeight applyTabSize
+// applySoftTabs applyVisibleTabs applyIndentUnit applyLineNumbers applyHighlightActive
+// applyLineWrapping applyMatchBrackets CodeMirror editor trackChanges fileChanged preferences
 
 var prefs = {
     defaults: {
@@ -12,7 +15,7 @@ var prefs = {
         lineNumbers: false,
         highlightActive: true,
         lineWrapping: false,
-        matchBrackets: false,
+        matchBrackets: false
     },
     types: {
         theme: 'string',
@@ -42,7 +45,7 @@ var prefs = {
     }
 };
 
-function setPictureFrameSize (frp) {
+function setPictureFrameSize(frp) {
     "use strict";
     frp.height($('.CodeMirror-scroll').height())
         .width($('.CodeMirror-scroll').width());
@@ -53,7 +56,7 @@ var hlActive = false;
 var hlLine = null;
 var hlLineStyle = "activeline-default";
 
-function activeline () {
+function activeline() {
     if (hlActive) {
         if (hlLine !== null) {
             editor.setLineClass(hlLine, null, null);
@@ -75,7 +78,7 @@ function softTabs(cm) {
         ts = cm.getOption('tabSize');
         ns = ts - (ch % ts);
         // console.log('softTabs: inserting ' + ns + ' spaces');
-        cm.replaceSelection(Array(ns + 1).join(' '), "end");
+        cm.replaceSelection([ns + 1].join(' '), "end");
     }
 }
 
@@ -139,7 +142,7 @@ function editorSetMode(ext) {
     case 'css':
         mode = 'css';
         break;
-   case 'js':
+    case 'js':
         mode = 'javascript';
         break;
     case 'py':
@@ -180,16 +183,15 @@ function editorGetText() {
     return editor.getValue();
 }
 
-var THEMES = ['default', 'night', 'solarized-light', 'solarized-dark']
+var THEMES = ['default', 'night', 'solarized-light', 'solarized-dark'];
 
 // Manage preferences
-function applyTheme () {
+function applyTheme() {
     "use strict";
-    var oldTheme = editor.getOption('theme');
-    var newTheme;
+    var oldTheme = editor.getOption('theme'),
+        newTheme;
     // console.log('applyTheme ' + preferences.theme);
     editor.setOption('theme', preferences.theme);
-    
     // Set theme for other panes
     if ($.inArray(preferences.theme, THEMES) >= 0) {
         newTheme = preferences.theme;
@@ -287,7 +289,7 @@ function applyLineNumbers() {
 function applyHighlightActive() {
     "use strict";
     // console.log('applyHighlightActive ' + preferences.highlightActive);
-    if (preferences.highlightActive != hlActive) {
+    if (preferences.highlightActive !== hlActive) {
         hlActive = preferences.highlightActive;
         if (hlActive) {
             // console.log('+ turning on hlActive');
@@ -338,7 +340,7 @@ function setLineHeight() {
 
 function setTabSize() {
     "use strict";
-    preferences.tabSize = parseInt($(this).val());
+    preferences.tabSize = parseInt($(this).val(), 10);
     prefs.apply.tabSize();
 }
 
@@ -356,7 +358,7 @@ function setVisibleTabs() {
 
 function setIndentUnit() {
     "use strict";
-    preferences.indentUnit = parseInt($(this).val());
+    preferences.indentUnit = parseInt($(this).val(), 10);
     prefs.apply.indentUnit();
 }
 
@@ -384,50 +386,50 @@ function setMatchBrackets() {
     prefs.apply.matchBrackets();
 }
 
-function bindEditPreferences () {
+function bindEditPreferences() {
     "use strict";
     $('#theme').change(setTheme)
-        .each (function () {
+        .each(function () {
             $(this).val(preferences.theme);
         });
     $('#fontSize').change(setFontSize)
-        .each (function () {
+        .each(function () {
             this.value = preferences.fontSize;
         });
     $('#lineHeight').change(setLineHeight)
-        .each (function () {
+        .each(function () {
             this.value = preferences.lineHeight;
         });
     $('#tabSize').change(setTabSize)
-        .each (function () {
+        .each(function () {
             this.value = preferences.tabSize;
         });
     $('#softTabs').change(setSoftTabs)
-        .each (function () {
+        .each(function () {
             this.checked = preferences.softTabs;
         });
     $('#visibleTabs').change(setVisibleTabs)
-        .each (function () {
+        .each(function () {
             this.checked = preferences.visibleTabs;
         });
     $('#indentUnit').change(setIndentUnit)
-        .each (function () {
+        .each(function () {
             this.value = preferences.indentUnit;
         });
     $('#lineNumbers').click(setLineNumbers)
-        .each (function () {
+        .each(function () {
             this.checked = preferences.lineNumbers;
         });
     $('#highlightActive').click(setHighlightActive)
-        .each (function () {
+        .each(function () {
             this.checked = preferences.highlightActive;
         });
     $('#lineWrapping').click(setLineWrapping)
-        .each (function () {
+        .each(function () {
             this.checked = preferences.lineWrapping;
         });
     $('#matchBrackets').click(setMatchBrackets)
-        .each (function () {
+        .each(function () {
             this.checked = preferences.matchBrackets;
         });
 }
@@ -435,7 +437,9 @@ function bindEditPreferences () {
 function applyAll() {
     var pa = prefs.apply, f;
     for (f in pa) {
-        pa[f]();
+        if (pa.hasOwnProperty(f)) {
+            pa[f]();
+        }
     }
 }
 
@@ -448,10 +452,11 @@ function savePreferences() {
 
 function defaultPreferences() {
     var pd = prefs.defaults, p;
-    
     for (p in pd) {
-        // console.log('Restoring default ' + p + ': ' + pd[p]);
-        preferences[p] = pd[p];
+        if (pd.hasOwnProperty(p)) {
+            // console.log('Restoring default ' + p + ': ' + pd[p]);
+            preferences[p] = pd[p];
+        }
     }
     applyAll();
     bindEditPreferences();
