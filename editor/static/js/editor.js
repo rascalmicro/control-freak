@@ -1,11 +1,13 @@
-// var $, CodeMirror, rascal;
+// Editor (CodeMirror and ACE)
+// JSLint 8 Oct 2012 jQuery $ rascal setPictureFrameSize DEBUG_ON_MAC editorSetText saveFile
+// saveMsg editorGetText savePreferences initPreferences defaultPreferences
 
 // Set up globals
 var ROOT = '/var/www/public/';
 var IMAGE_EXTENSIONS = [ 'png', 'jpg', 'jpeg', 'gif', 'ico' ];
 var EXCEPTIONS = ['/var/www/public/server.py',
-        '/var/www/public/static/', '/var/www/public/templates/']
-var DEFAULT_PICTURE = 'static/images/picture_help.png'
+        '/var/www/public/static/', '/var/www/public/templates/'];
+var DEFAULT_PICTURE = 'static/images/picture_help.png';
 var editor;
 var preferences = { };
 
@@ -25,6 +27,7 @@ var bTrackChanges = false;
 var bFileChanged = false;
 
 function trackChanges(enable) {
+    "use strict";
     if (enable) {
         bFileChanged = false;
         bTrackChanges = true;
@@ -33,17 +36,8 @@ function trackChanges(enable) {
     }
 }
 
-// Sets global bFileChanged Boolean and indicator
-function fileChanged() {
-    if (bTrackChanges) {
-        if (!bFileChanged) {
-            bFileChanged = true;
-            highlightChanged();
-        }
-    }
-}
-
 function highlightChanged() {
+    "use strict";
     var fpath = ROOT + $('#path').val();
     console.log('HighlightChanged ' + fpath);
     rascal.dnd.changedFile = fpath;
@@ -53,13 +47,26 @@ function highlightChanged() {
 }
 
 function unhighlightChanged() {
+    "use strict";
     rascal.dnd.changedFile = undefined;
     $('LI A').removeClass('changed');
     $('#location-bar').removeClass('changed');
 }
 
+// Sets global bFileChanged Boolean and indicator
+function fileChanged() {
+    "use strict";
+    if (bTrackChanges) {
+        if (!bFileChanged) {
+            bFileChanged = true;
+            highlightChanged();
+        }
+    }
+}
+
 // fileTree operations
 function showPicture(path) {
+    "use strict";
     var rp = rascal.picture,
         fpath = path.split(ROOT).pop(),
         frp = $('#frame-p');
@@ -68,11 +75,11 @@ function showPicture(path) {
         fpath = DEFAULT_PICTURE;
     }
     // Set up geometry and show frame
-    setPictureFrameSize (frp);
+    setPictureFrameSize(frp);
     if (frp.css('visibility') !== 'visible') {
         frp.css('visibility', 'visible')
-        .hide()
-        .fadeTo('fast', 1);
+            .hide()
+            .fadeTo('fast', 1);
     }
     // Set up picture
     if (DEBUG_ON_MAC) {
@@ -85,6 +92,7 @@ function showPicture(path) {
 }
 
 function hidePicture() {
+    "use strict";
     if (rascal.picture.showing) {
         $('#frame-p').css('visibility', 'hidden');
         rascal.picture.empty();
@@ -94,8 +102,8 @@ function hidePicture() {
 // Clears file change indicator, saves path
 function displayLocation(path) {
     "use strict";
-    var fpath = path.split(ROOT).pop();
-    var apath = '#';
+    var fpath = path.split(ROOT).pop(),
+        apath = '#';
     if (fpath.match(/templates\//)) {
         apath = fpath.split('templates').pop();
         if (DEBUG_ON_MAC) {
@@ -137,16 +145,17 @@ function loadFile(path) {
 // status lowered to 1 and then, when the save completes, to 0
 // If the user chooses not to save the file, status is set to 0
 // When status = 0, the callback function is executed
-var SAVE = 0
+var SAVE = 0;
 var REVERT = 1;
 
-querySave = {
+var querySave = {
     callback: function (status) {
-         "use strict";
+        "use strict";
     },
     status: -1,
     int_status: undefined,
     wait: function () {
+        "use strict";
         var qs = querySave;
         if (qs.status === 3) {
             qs.status = 2;
@@ -164,18 +173,18 @@ querySave = {
         qs.callback = callback;
         qs.status = -1;
         if (which === SAVE) {
-            $('#modal-s').modal('show')
+            $('#modal-s').modal('show');
             // $('#overlay-s').css('visibility', 'visible');
             $('#save-file-message').html('Do you want to save the changes you made to the file "' + $('#path').val() + '"?<br/>Your changes will be lost if you don\'t save them.');
         } else {
-            $('#modal-r').modal('show')
+            $('#modal-r').modal('show');
             // $('#overlay-r').css('visibility', 'visible');
             $('#revert-file-message').text('Are you sure you want to revert the file "' + $('#path').val() + '" to its original state?');
         }
         qs.int_status = setInterval(querySave.wait, 500);
         qs.wait();
     }
-}
+};
 
 // The fileTree callback function is executed when the user clicks a file
 function displayTree(path) {
@@ -192,21 +201,21 @@ function displayTree(path) {
         // console.log('New path ' + path.split(ROOT).pop());
         // console.log('Old path ' + $('#path').val());
         // if (path.split(ROOT).pop() !== $('#path').val()) {
-            if (!bFileChanged) {
-                loadFile(path);
+        if (!bFileChanged) {
+            loadFile(path);
+        } else {
+            var which;
+            if (path.split(ROOT).pop() !== $('#path').val()) {
+                which = SAVE;
             } else {
-                var which;
-                if (path.split(ROOT).pop() !== $('#path').val()) {
-                    which = SAVE;
-                } else {
-                    which = REVERT;
-                }
-                querySave.init(which, function (status) {
-                    if (status === 1) {
-                        loadFile(path);
-                    }
-                });
+                which = REVERT;
             }
+            querySave.init(which, function (status) {
+                if (status === 1) {
+                    loadFile(path);
+                }
+            });
+        }
         // }
     });
 }
@@ -215,13 +224,14 @@ function displayTree(path) {
 var FILE = 0;
 var FOLDER = 1;
 
-queryDelete = {
+var queryDelete = {
     callback: function (status) {
-         "use strict";
+        "use strict";
     },
     status: -1,
     int_status: undefined,
     wait: function () {
+        "use strict";
         var qd = queryDelete;
         if ((qd.status === 1) || (qd.status === 0)) {
             qd.int_status = clearInterval(qd.int_status);
@@ -235,7 +245,7 @@ queryDelete = {
         var qd = queryDelete;
         qd.callback = callback;
         qd.status = -1;
-        $('#modal-d').modal('show')
+        $('#modal-d').modal('show');
         // $('#overlay-d').css('visibility', 'visible');
         if (which === FILE) {
             $('#delete-file-message').text('Are you sure you want to delete the file "' + path + '"?');
@@ -245,7 +255,7 @@ queryDelete = {
         qd.int_status = setInterval(queryDelete.wait, 500);
         qd.wait();
     }
-}
+};
 
 var deleteFileBusy = false;     // Use semaphore to avoid repeated deletions
 
@@ -303,35 +313,35 @@ $('li.directory.expanded').live('mouseenter mouseleave', function (event) {
     var fpath;
     if (event.type === 'mouseenter') {
         if ($(this).children('ul').children().size() === 0) {
-                fpath = $(this).children('a').attr('rel');
-                if ($.inArray(fpath, EXCEPTIONS) === -1) {
-                    $(this).children('a').addClass('selected');
-                    $(this).children('img').addClass('selected');
-                    $(this).children('img').click(function () {
-                        var jqel, path;
-                        if (!deleteFileBusy) {
-                            deleteFileBusy = true;
-                            jqel = $(this).parent();
-                            path = fpath.split(ROOT).pop();
-                            queryDelete.init(FOLDER, path, function (status) {
-                                if (status === 1) {
-                                    console.log('DELETE ' + path);
-                                    $.post('/editor/delete_folder', { filename: path }, function (response) {
-                                        console.log('DELETE_FOLDER ' + response);
-                                        jqel.hide('slow');
-                                        saveMsg('Deleted folder');
-                                    }).error(function (jqXHR, textStatus, errorThrown) {
-                                        console.log('DELETE_FOLDER: ' + textStatus + ': ' + errorThrown);
-                                        saveMsg('Delete folder failed');
-                                    });
-                                } else {
-                                    console.log('DELETE cancel');
-                                }
-                                deleteFileBusy = false;
-                            });
-                        }
-                    });
-                }
+            fpath = $(this).children('a').attr('rel');
+            if ($.inArray(fpath, EXCEPTIONS) === -1) {
+                $(this).children('a').addClass('selected');
+                $(this).children('img').addClass('selected');
+                $(this).children('img').click(function () {
+                    var jqel, path;
+                    if (!deleteFileBusy) {
+                        deleteFileBusy = true;
+                        jqel = $(this).parent();
+                        path = fpath.split(ROOT).pop();
+                        queryDelete.init(FOLDER, path, function (status) {
+                            if (status === 1) {
+                                console.log('DELETE ' + path);
+                                $.post('/editor/delete_folder', { filename: path }, function (response) {
+                                    console.log('DELETE_FOLDER ' + response);
+                                    jqel.hide('slow');
+                                    saveMsg('Deleted folder');
+                                }).error(function (jqXHR, textStatus, errorThrown) {
+                                    console.log('DELETE_FOLDER: ' + textStatus + ': ' + errorThrown);
+                                    saveMsg('Delete folder failed');
+                                });
+                            } else {
+                                console.log('DELETE cancel');
+                            }
+                            deleteFileBusy = false;
+                        });
+                    }
+                });
+            }
         }
     } else {
         $(this).children('a').removeClass('selected');
@@ -403,24 +413,15 @@ function moveItem(src, dst) {
     });
 }
 
-function initRascalDnd() {
-    "use strict";
-    var rd = rascal.dnd;
-    rd.root = ROOT;
-    rd.container = 'filetree';
-    rd.notDraggable = EXCEPTIONS;
-    rd.itemDropped = moveItem;
-    rd.filesDropped = uploadItems;
-    rd.init();
-}
-
 // file operations
 function saveProgress(pc) {
+    "use strict";
     console.log('progress ' + pc);
     $('#save-bar').css('width', (100 - pc) + '%');
 }
 
 function saveMsg(msg) {
+    "use strict";
     $('#save-message').text(msg)
         .css('visibility', 'visible')
         .hide()
@@ -430,8 +431,8 @@ function saveMsg(msg) {
 
 function saveFile() {
     "use strict";
-    var p = $('#path').val();
-    var s = editorGetText();
+    var p = $('#path').val(),
+        s = editorGetText();
     $('#save-bar').css('width', '0%');
     if (rascal.picture.showing) {
         saveMsg('Can\'t save pictures');
@@ -490,11 +491,13 @@ $('#save').click(function () {
 });
 
 // glue between fileTree dnd and upload
-function uploadStatus (msg) {
+function uploadStatus(msg) {
+    "use strict";
     editorSetText(editorGetText() + msg + '\n');
 }
 
 function uploadComplete(directory) {
+    "use strict";
     console.log('uploadComplete ' + ROOT + directory);
     $('#save-progress')
         .removeClass('active')
@@ -514,13 +517,14 @@ function uploadComplete(directory) {
 
 // chrome maps javascript files to text/javascript, firefox to application/x-javascript
 function uploadInit(files, dst) {
+    "use strict";
     var ru = rascal.upload;
     // set up postUrl, allowed types, progress, status and complete
     ru.postUrl = '/editor/xupload';
     ru.allowedTypes = [ 'image/', 'text/html', 'text/css', 'text/javascript',
         'application/x-javascript', 'text/x-python-script' ];
     ru.progress = saveProgress;
-    $('#save-bar').css('width', '0%')
+    $('#save-bar').css('width', '0%');
     $('#save-progress')
         .addClass('progress-striped')
         .addClass('active');
@@ -533,6 +537,7 @@ function uploadInit(files, dst) {
 }
 
 function uploadItems(files, dst) {
+    "use strict";
     if (!bFileChanged) {
         uploadInit(files, dst);
     } else {
@@ -542,6 +547,17 @@ function uploadItems(files, dst) {
             }
         });
     }
+}
+
+function initRascalDnd() {
+    "use strict";
+    var rd = rascal.dnd;
+    rd.root = ROOT;
+    rd.container = 'filetree';
+    rd.notDraggable = EXCEPTIONS;
+    rd.itemDropped = moveItem;
+    rd.filesDropped = uploadItems;
+    rd.init();
 }
 
 // dialog handling
@@ -581,13 +597,13 @@ $('#new-template').click(function () {
     $('#template-name').val('');
     $('#template-note small').text(template_note.html);
     $('#docHTML').attr('checked', true);
-    $('#modal-t').modal('show')
+    $('#modal-t').modal('show');
 });
 
 $('#modal-t').on('shown', function () {
     "use strict";
     $('#template-name').focus();
-})
+});
 
 $('#template-create').click(function () {
     "use strict";
@@ -597,33 +613,33 @@ $('#template-create').click(function () {
         path;
     if (templateName !== '') {
         // If no extension provided, add one for files in the templates folder
-        if (templateName.indexOf('.') == -1) {
+        if (templateName.indexOf('.') === -1) {
             switch (templateOption) {
-                case 'html':
-                case 'doctab':
-                    templateName += '.html';
-                    break;
-                case 'markdown':
-                    templateName += '.md';
-                    break;
+            case 'html':
+            case 'doctab':
+                templateName += '.html';
+                break;
+            case 'markdown':
+                templateName += '.md';
+                break;
             }
         }
         $.post('/editor/new_template', { templateName: templateName,
                 templateOption: templateOption }, function (response) {
             switch (templateOption) {
-                case 'html':
-                case 'doctab':
-                    path = '/var/www/public/templates/';
-                    break;
-                case 'markdown':
-                    path = '/var/www/public/templates/docs/';
-                    break;
-                default:
-                    path = '/var/www/public/static/';
+            case 'html':
+            case 'doctab':
+                path = '/var/www/public/templates/';
+                break;
+            case 'markdown':
+                path = '/var/www/public/templates/docs/';
+                break;
+            default:
+                path = '/var/www/public/static/';
             }
             console.log('new_template: ' + path);
             displayTree(path);
-            $('#modal-t').modal('hide')
+            $('#modal-t').modal('hide');
         }).error(function (jqXHR, textStatus, errorThrown) {
             console.log('new_template: ' + textStatus + ': ' + errorThrown);
             if (errorThrown === 'CONFLICT') {
@@ -640,7 +656,8 @@ $('#template-create').click(function () {
     }
 });
 
-$('#template-radios input:radio').click(function() {
+$('#template-radios input:radio').click(function () {
+    "use strict";
     var val = $(this).attr('value');
     $('#template-title').text(template_title[val]);
     $('#template-message').text(template_message[val]);
@@ -651,7 +668,7 @@ $('#template-radios input:radio').click(function() {
 
 $('#template-cancel').click(function () {
     "use strict";
-    $('#modal-t').modal('hide')
+    $('#modal-t').modal('hide');
 });
 
 $('#new-folder').click(function () {
@@ -659,13 +676,13 @@ $('#new-folder').click(function () {
     $('#folder-message').text('You will be able to drag it to another folder')
         .removeClass('warning');
     $('#folder-name').val('');
-    $('#modal-f').modal('show')
+    $('#modal-f').modal('show');
 });
 
 $('#modal-f').on('shown', function () {
     "use strict";
     $('#folder-name').focus();
-})
+});
 
 $('#folder-create').click(function () {
     "use strict";
@@ -674,7 +691,7 @@ $('#folder-create').click(function () {
         $.post('/editor/new_folder', { folderName: folderName }, function (response) {
             console.log(response);
             displayTree('/var/www/public/static/');
-            $('#modal-f').modal('hide')
+            $('#modal-f').modal('hide');
         }).error(function (jqXHR, textStatus, errorThrown) {
             console.log('new_folder: ' + textStatus + ': ' + errorThrown);
             if (errorThrown === 'CONFLICT') {
@@ -693,13 +710,13 @@ $('#folder-create').click(function () {
 
 $('#folder-cancel').click(function () {
     "use strict";
-    $('#modal-f').modal('hide')
+    $('#modal-f').modal('hide');
 });
 
 $('#rename-file').click(function () {
     "use strict";
-    var fpath = $('#path').val();
-    var filename;
+    var fpath = $('#path').val(),
+        filename;
     if (fpath === '') {
         saveMsg('Select a file to rename');
     } else if ($.inArray(ROOT + fpath, EXCEPTIONS) !== -1) {
@@ -716,7 +733,7 @@ $('#rename-file').click(function () {
 $('#modal-n').on('shown', function () {
     "use strict";
     $('#rename-name').focus();
-})
+});
 
 $('#rename-yes').click(function () {
     "use strict";
@@ -739,43 +756,43 @@ $('#rename-yes').click(function () {
             .addClass('warning');
         $('#rename-name').focus();
     } else {
-        $('#modal-n').modal('hide')
+        $('#modal-n').modal('hide');
         moveItem(ROOT + fpath, ROOT + srcDirs + newName);
     }
 });
 
 $('#rename-cancel').click(function () {
     "use strict";
-    $('#modal-n').modal('hide')
+    $('#modal-n').modal('hide');
 });
 
 $('#preferences').click(function () {
     "use strict";
-    $('#modal-p').modal('show')
+    $('#modal-p').modal('show');
     console.log('Preferences ' + JSON.stringify(preferences));
 });
 
 $('#prefs-save').click(function () {
     "use strict";
-    $('#modal-p').modal('hide')
+    $('#modal-p').modal('hide');
     savePreferences();
 });
 
 $('#prefs-cancel').click(function () {
     "use strict";
-    $('#modal-p').modal('hide')
-    initPreferences();    
+    $('#modal-p').modal('hide');
+    initPreferences();
 });
 
 $('#prefs-defaults').click(function () {
     "use strict";
-    defaultPreferences();    
+    defaultPreferences();
 });
 
 $('#save-yes').click(function () {
     "use strict";
     querySave.status = 3;
-    $('#modal-s').modal('hide')
+    $('#modal-s').modal('hide');
 });
 
 $('#save-no').click(function () {
@@ -783,13 +800,13 @@ $('#save-no').click(function () {
     querySave.status = 1;
     bFileChanged = false;
     unhighlightChanged();
-    $('#modal-s').modal('hide')
+    $('#modal-s').modal('hide');
 });
 
 $('#save-cancel').click(function () {
     "use strict";
     querySave.status = 0;
-    $('#modal-s').modal('hide')
+    $('#modal-s').modal('hide');
 });
 
 $('#revert-yes').click(function () {
@@ -797,25 +814,25 @@ $('#revert-yes').click(function () {
     querySave.status = 1;
     bFileChanged = false;
     unhighlightChanged();
-    $('#modal-r').modal('hide')
+    $('#modal-r').modal('hide');
 });
 
 $('#revert-cancel').click(function () {
     "use strict";
     querySave.status = 0;
-    $('#modal-r').modal('hide')
+    $('#modal-r').modal('hide');
 });
 
 $('#delete-yes').click(function () {
     "use strict";
     queryDelete.status = 1;
-    $('#modal-d').modal('hide')
+    $('#modal-d').modal('hide');
 });
 
 $('#delete-cancel').click(function () {
     "use strict";
     queryDelete.status = 0;
-    $('#modal-d').modal('hide')
+    $('#modal-d').modal('hide');
 });
 
 // Reload pytronics
