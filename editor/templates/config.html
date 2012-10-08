@@ -1,4 +1,6 @@
 <!DOCTYPE html>
+<!-- Editor view ifconfig and config -->
+<!-- JSLint 8 Oct 2012 -->
 <html lang="en">
 <head>
     <title>Config</title>
@@ -41,7 +43,7 @@
         &nbsp;<br />
         <p>Some useful configuration info:</p>
         
-        <pre style="background-color: #F5F5F5">
+        <pre style="background-color: #F5F5F5;">
 {{ processes }}
         </pre>
         <hr />
@@ -58,7 +60,7 @@
                 <p>(What this really does is to return the Git repository in /var/www to its last committed state.)</p>
             </div> <!-- /span6 -->
             <div class="span6">
-                <div style="display: block">
+                <div style="display: block;">
                     <div class="TabPanels">
                         <div id="heading-0" class="heading active">
                             <p>About the editor:</p>
@@ -66,8 +68,8 @@
                         <div id="heading-1" class="heading">
                             <p>Choose editor:</p>
                             <div class="btn-group" data-toggle="buttons-radio">
-                                <button id="editor-cm" class="btn btn-large btn-primary rascal" style="width: 180px">CodeMirror 2</button>
-                                <button id="editor-a" class="btn btn-large btn-primary rascal" style="width: 120px">Ace</button>
+                                <button id="editor-cm" class="btn btn-large btn-primary rascal" style="width: 180px;">CodeMirror 2</button>
+                                <button id="editor-a" class="btn btn-large btn-primary rascal" style="width: 120px;">Ace</button>
                             </div>
                         </div>  
                     
@@ -104,11 +106,13 @@
     <div id="editor" style="display: none;">{{ editor }}</div>
     
     <script type="text/javascript">
-        $("#reset").click( function() {
+        $("#reset").click(function () {
+            "use strict";
             $.post("/editor/reset", "text");
         });
-        
+
         function selectEditor(advanced, editor) {
+            "use strict";
             $('.heading, .bootstrap').removeClass('active');
             if (advanced === '0') {
                 $('#heading-' + advanced + ', #' + editor + '-desc').addClass('active');
@@ -117,8 +121,9 @@
                 $('#heading-' + advanced + ', #' + editor + ', #' + editor + '-desc, .bootstrap').addClass('active');
             }
         }
-        
-        function setEditor (editor) {
+
+        function setEditor(editor) {
+            "use strict";
             $.post('/editor/set_editor', { editor: editor }, function (response) {
                 console.log('set_editor ' + editor + ': ' + response);
                 selectEditor('1', editor);
@@ -126,14 +131,17 @@
         }
 
         $('#editor-cm').click(function () {
+            "use strict";
             setEditor('editor-cm');
         });
 
         $('#editor-a').click(function () {
+            "use strict";
             setEditor('editor-a');
         });
 
         $(document).ready(function () {
+            "use strict";
             selectEditor($('#advanced').text(), $('#editor').text());
         });
     </script>

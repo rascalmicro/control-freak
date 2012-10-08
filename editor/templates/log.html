@@ -1,4 +1,6 @@
 <!DOCTYPE html>
+<!-- Editor view logs -->
+<!-- JSLint 8 Oct 2012 -->
 <html lang="en">
 <head>
     <title>Log</title>
@@ -33,13 +35,15 @@
     </div>
 
     <script type="text/javascript">
-        $(document).ready(function (){
-            $(".zebra tr").mouseover(function () {$(this).addClass("over");}).mouseout(function(){$(this).removeClass("over");});
+        $(document).ready(function () {
+            "use strict";
+            $(".zebra tr").mouseover(function () { $(this).addClass("over"); }).mouseout(function () { $(this).removeClass("over"); });
             $(".zebra tr:even").addClass("alt");
         });
 
-        $("#mark").click( function () {
-            $.post("/editor/mark",{ fake: "hat" });
+        $("#mark").click(function () {
+            "use strict";
+            $.post("/editor/mark", { fake: "hat" });
         });
      </script>
 </body>
