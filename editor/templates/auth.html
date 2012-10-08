@@ -1,4 +1,6 @@
 <!DOCTYPE html>
+<!-- Editor login -->
+<!-- JSLint 8 Oct 2012 -->
 <html lang="en">
 <head>
     <title>Log in</title>
@@ -38,16 +40,18 @@
     </div>
     <script>
         $('.flash').delay(5000).fadeOut('slow');
-        
+
         $('#mode').click(function () {
+            "use strict";
             if ($('#password-field').prop('type') === 'text') {
                 $('#password-field').prop('type', 'password');
             } else {
                 $('#password-field').prop('type', 'text');
             }
         });
-    
+
         $(document).ready(function () {
+            "use strict";
             if ($('#password-field').prop('type') === 'text') {
                 $('#mode').attr('checked', 'checked');
             }
