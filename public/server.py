@@ -432,7 +432,7 @@ def list_directory():
     except OSError:
         return 'Not Found', 404
     except Exception, e:
-        print '## list_directory ## {}'.format(e)
+        print '## list_directory ## {0}'.format(e)
     return 'Bad request', 400
 
 @public.route('/clear-directory', methods=['POST'])
@@ -450,13 +450,13 @@ def clear_directory():
                 if os.path.isfile(file_path):
                     os.unlink(file_path)
             except Exception, e:
-                print '## clear_directory ## {}'.format(e)
+                print '## clear_directory ## {0}'.format(e)
                 return 'Bad request', 400
         return 'OK', 200
     except OSError:
         return 'Not Found', 404
     except Exception, e:
-        print '## clear_directory ## {}'.format(e)
+        print '## clear_directory ## {0}'.format(e)
     return 'Bad request', 400
 ### End of upload procedures ###
 
