@@ -10,6 +10,13 @@ CONFIG_FILE = '/var/www/editor/static/editor.conf'
 
 editor = Flask(__name__)
 
+# Include "no-cache" header in all POST responses
+@editor.after_request
+def add_no_cache(response):
+    if request.method == 'POST':
+        response.cache_control.no_cache = True
+    return response
+
 class User(UserMixin):
     def __init__(self, name, id, active=True):
         self.name = name
