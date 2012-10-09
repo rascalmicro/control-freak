@@ -78,7 +78,7 @@ function softTabs(cm) {
         ts = cm.getOption('tabSize');
         ns = ts - (ch % ts);
         // console.log('softTabs: inserting ' + ns + ' spaces');
-        cm.replaceSelection([ns + 1].join(' '), "end");
+        cm.replaceSelection(Array(ns + 1).join(' '), "end");
     }
 }
 
