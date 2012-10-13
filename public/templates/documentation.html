@@ -9,9 +9,7 @@
     {% include "include/rascal-topbar.html" %}
     <div class="container">
         <div class="well markdown">
-            {% autoescape false %}
-                {{markdown}}
-            {% endautoescape %}
+            {{ markdown|safe }}
         </div>
     </div>
 </body>
