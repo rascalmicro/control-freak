@@ -15,11 +15,9 @@ install the markdown2 processor. Log into your Rascal using SSH and from the com
 
 When you view a Markdown page in a web browser, Rascal renders the Markdown into the template
 `documentation.html`. You can edit this template in any way you like, provided that you retain
-the following [Jinja2][jj2] expressions and variable:
+the following [Jinja2][jj2] variable which receives the formatted HTML:
 
-    {% autoescape false %}
-        {{markdown}}
-    {% endautoescape %}
+    {{ markdown|safe }}
 
 For example, you might want to edit `templates/documentation.html` change the default style.
 
