@@ -117,7 +117,12 @@ def update_pin(pin, state):
 @public.route('/read-pins', methods=['POST'])
 def read_pins():
     import json
-    return json.dumps(pytronics.readPins(LIVE_PINS))
+    # return json.dumps(pytronics.readPins(LIVE_PINS))
+    pins = pytronics.readPins(LIVE_PINS)
+    analog = {}
+    for chan in ['A0', 'A1', 'A2', 'A3']:
+        analog[chan] = pytronics.analogRead(chan)
+    return json.dumps({ 'pins': pins, 'analog': analog })
         
 ### Support for i2c ###
 @public.route('/i2cget/<addr>/<reg>/<mode>')
