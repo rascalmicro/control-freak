@@ -16,7 +16,7 @@ def add_no_cache(response):
 # config for upload
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
 ALLOWED_DIRECTORIES = set(['static/uploads/', 'static/pictures/'])
-LIVE_PINS = ['LED', '2', '3', '4', '5', '8', '9', '10', '11', '12', '13']
+LIVE_PINS = ['LED', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13']
 # public.config['MAX_CONTENT_LENGTH'] = 4 * 1024 * 1024
 
 ### Home page ###
