@@ -97,6 +97,11 @@ function initEditor() {
 //        electricChars: false,
         onChange: fileChanged
     });
+    if (CodeMirror.version !== undefined) {
+        console.log('CodeMirror version: ' + CodeMirror.version);
+    } else {
+        console.log('CodeMirror version: v2.33 or earlier');
+    }
 }
 
 //   CodeMirror.defaults = {
