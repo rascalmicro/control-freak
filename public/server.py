@@ -150,6 +150,12 @@ def i2cscan():
     import json
     return json.dumps(scanBus())
 
+### Support for serial ###
+@public.route('/serial/<port>/<speed>/<message>', methods=['POST'])
+def serial_write(port, speed, message):
+    pytronics.serialWrite(message, speed, port)
+    return 'Tried to write serial data.'
+
 ### Support for SPI bus ###
 @public.route('/spi/<channel>/read')
 def spi_read(channel):
@@ -240,12 +246,15 @@ def update_relay(num):
 
 @public.route('/sms', methods=['POST'])
 def parse_sms():
-    import subprocess
+    import subprocess, webcolors
     message = request.form['Body']
     print "Received text message: " + str(message)
-    f = open('/var/www/public/thermostat-target.txt', 'w')
-    f.write(str(message))
-    f.close()
+    color = webcolors.name_to_rgb(message)
+    cmd = 'blinkm set-rgb -d 9 -r ' + str(color[0]) + ' -g ' + str(color[1]) + ' -b ' + str(color[2])
+    subprocess.Popen([cmd], shell=True)
+    #f = open('/var/www/public/thermostat-target.txt', 'w')
+    #f.write(str(message))
+    #f.close()
     return ('Message processed')
 
 # lcd (serial)
