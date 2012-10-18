@@ -4,26 +4,29 @@
         <div class="doc-loader"><img src="static/images/ajax-loader.gif" width="32" height="32"></div>
     </div>
 </div>
+
 <script type="text/javascript">
+    // JSLint 6 Oct 2012 jQuery $ 
     var docTab = {
-        
+    
         docName: window.location.href.toString().split('/').pop().split('.').shift(),
         speed: 300,
         containerWidth: $('.doc-panel').outerWidth(),
-        
-        init: function() {
+    
+        init: function () {
+            "use strict";
             var loaderPadding;
-            
-            $('.doc-panel').css('left', '-' + (parseInt($('.doc-panel').css('width')) + 40).toString() + 'px');
-            
-            loaderPadding = Math.round(((parseInt($('#doc-content').css('width')) - 32) / 2)).toString() + 'px';
+    
+            $('.doc-panel').css('left', '-' + (parseInt($('.doc-panel').css('width'), 10) + 40).toString() + 'px');
+    
+            loaderPadding = Math.round(((parseInt($('#doc-content').css('width'), 10) - 32) / 2)).toString() + 'px';
             $('.doc-loader').css('padding-left', loaderPadding);
             $('.doc-loader').css('padding-right', loaderPadding);
-
-            $('a.doc-tab').click(function(event){
+    
+            $('a.doc-tab').click(function (event) {
                 if ($('.doc-panel').hasClass('open')) {
                     $('.doc-panel')
-                        .animate({left:'-' + docTab.containerWidth}, docTab.speed)
+                        .animate({left: '-' + docTab.containerWidth}, docTab.speed)
                         .removeClass('open');
                 } else {
                     $.post("/get_markdown", { docName: docTab.docName }, function (response) {
@@ -32,7 +35,7 @@
                         $('#doc-content').html('<h2>' + errorThrown + '</h2>');
                     });
                     $('.doc-panel')
-                        .animate({left:'0'},  docTab.speed)
+                        .animate({left: '0'},  docTab.speed)
                         .addClass('open');
                 }
                 event.preventDefault();

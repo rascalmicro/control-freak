@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!-- JSLint 6 Oct 2012 jQuery $ -->
 <html>
 <head>
     <title>BlinkM Demo</title>
@@ -11,18 +12,19 @@
     <div class="container">
         <div class="well rascal">
             <h1>BlinkM LED color demo</h1>
-            <div id="colorPicker2"style="padding:10px;clear:both;border:1px solid black;vertical-align:middle;">
-                <span id="colorPicker2Span" style="float:left; border:1px solid black; width:20px; height:20px;margin:5px;"></span>
+            <div id="colorPicker2" style="padding:10px; clear:both; border:1px solid black; vertical-align:middle;">
+                <span id="colorPicker2Span" style="float:left; border:1px solid black; width:20px; height:20px; margin:5px;"></span>
                 <span id="text2" style="">Click anywhere in the box.</span>			
             </div>
         </div>
     </div>
     <script type="text/javascript">
-        $(function(){
-            $("#colorPicker2").mlColorPicker({'onChange': function(val){
+        $(function () {
+            "use strict";
+            $("#colorPicker2").mlColorPicker({'onChange': function (val) {
                 $("#colorPicker2Span").css("background-color", "#" + val);
                 $("#text2").text("#" + val);
-                $.post("set-blinkm", "color=" + val);
+                $.post("set-blinkm", { color: val });
             }});
         });
     </script>

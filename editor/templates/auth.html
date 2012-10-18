@@ -1,4 +1,6 @@
 <!DOCTYPE html>
+<!-- Editor login -->
+<!-- JSLint 8 Oct 2012 -->
 <html lang="en">
 <head>
     <title>Log in</title>
@@ -10,7 +12,7 @@
     <div class="navbar navbar-fixed-top navbar-inverse">
         <div class="navbar-inner">
             <div class="container-fluid">
-                <a class="brand rascal" href="/editor/"><img id="rascallogo" src="/editor/static/images/rm-logo-words-only-light.png" /></a>
+                <a class="brand rascal" href="/"><img id="rascallogo" src="/editor/static/images/rm-logo-words-only-light.png" /></a>
             </div>
         </div>
     </div>
@@ -38,16 +40,18 @@
     </div>
     <script>
         $('.flash').delay(5000).fadeOut('slow');
-        
+
         $('#mode').click(function () {
+            "use strict";
             if ($('#password-field').prop('type') === 'text') {
                 $('#password-field').prop('type', 'password');
             } else {
                 $('#password-field').prop('type', 'text');
             }
         });
-    
+
         $(document).ready(function () {
+            "use strict";
             if ($('#password-field').prop('type') === 'text') {
                 $('#mode').attr('checked', 'checked');
             }

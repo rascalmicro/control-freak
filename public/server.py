@@ -6,10 +6,17 @@ import os, time
 public = Flask(__name__)
 public.config['PROPAGATE_EXCEPTIONS'] = True
 
+# Include "no-cache" header in all POST responses
+@public.after_request
+def add_no_cache(response):
+    if request.method == 'POST':
+        response.cache_control.no_cache = True
+    return response
+
 # config for upload
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
 ALLOWED_DIRECTORIES = set(['static/uploads/', 'static/pictures/'])
-LIVE_PINS = ['LED', '2', '3', '4', '5', '8', '9', '10', '11', '12', '13']
+LIVE_PINS = ['LED', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13']
 # public.config['MAX_CONTENT_LENGTH'] = 4 * 1024 * 1024
 
 ### Home page ###
@@ -21,7 +28,7 @@ def default_page():
             name = f.read().strip().capitalize()
     except:
         name = 'Rascal'
-    return render_template('/index.html', hostname=name, template_list = get_public_templates())
+    return render_template('/index.html', hostname=name, template_list=get_public_templates())
 
 def get_public_templates():
     r = []
@@ -110,7 +117,12 @@ def update_pin(pin, state):
 @public.route('/read-pins', methods=['POST'])
 def read_pins():
     import json
-    return json.dumps(pytronics.readPins(LIVE_PINS))
+    # return json.dumps(pytronics.readPins(LIVE_PINS))
+    pins = pytronics.readPins(LIVE_PINS)
+    analog = {}
+    for chan in ['A0', 'A1', 'A2', 'A3']:
+        analog[chan] = pytronics.analogRead(chan)
+    return json.dumps({ 'pins': pins, 'analog': analog })
         
 ### Support for i2c ###
 @public.route('/i2cget/<addr>/<reg>/<mode>')
@@ -141,6 +153,53 @@ def i2cset(addr, reg, val, mode):
         import errno
         print '## i2cset ## Error: [{0}] {1}'.format(errno.errorcode[e.errno], e.strerror)
         return str(-1)
+    except Exception as e:
+        return 'Internal server error', 500
+
+@public.route('/i2c_read', methods=['POST'])
+def i2c_read():
+    import json
+    try:
+        params = json.loads(request.form['params'])
+        print '## i2c_read ## ' + str(params)
+        value = pytronics.i2cRead(params['addr'], params['reg'], params['size'], params['length'])
+        result = {
+            'success': True,
+            'value': value
+        }
+        return json.dumps(result)
+    except (OSError, IOError) as e:
+        import errno
+        print '## i2c_read ## Error: [{0}] {1}'.format(errno.errorcode[e.errno], e.strerror)
+        result = {
+            'success': False,
+            'errorCode': errno.errorcode[e.errno],
+            'errorMessage': e.strerror
+        }
+        return json.dumps(result)
+    except Exception as e:
+        return 'Internal server error', 500
+
+@public.route('/i2c_write', methods=['POST'])
+def i2c_write():
+    import json
+    try:
+        params = json.loads(request.form['params'])
+        print '## i2c_write ## ' + str(params)
+        pytronics.i2cWrite(params['addr'], params['reg'], params['value'], params['size'])
+        result = {
+            'success': True
+        }
+        return json.dumps(result)
+    except (OSError, IOError) as e:
+        import errno
+        print '## i2c_write ## Error: [{0}] {1}'.format(errno.errorcode[e.errno], e.strerror)
+        result = {
+            'success': False,
+            'errorCode': errno.errorcode[e.errno],
+            'errorMessage': e.strerror
+        }
+        return json.dumps(result)
     except Exception as e:
         return 'Internal server error', 500
 
@@ -387,7 +446,7 @@ def list_directory():
     except OSError:
         return 'Not Found', 404
     except Exception, e:
-        print '## list_directory ## {}'.format(e)
+        print '## list_directory ## {0}'.format(e)
     return 'Bad request', 400
 
 @public.route('/clear-directory', methods=['POST'])
@@ -405,13 +464,13 @@ def clear_directory():
                 if os.path.isfile(file_path):
                     os.unlink(file_path)
             except Exception, e:
-                print '## clear_directory ## {}'.format(e)
+                print '## clear_directory ## {0}'.format(e)
                 return 'Bad request', 400
         return 'OK', 200
     except OSError:
         return 'Not Found', 404
     except Exception, e:
-        print '## clear_directory ## {}'.format(e)
+        print '## clear_directory ## {0}'.format(e)
     return 'Bad request', 400
 ### End of upload procedures ###
 

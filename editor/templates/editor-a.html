@@ -1,4 +1,6 @@
 <!DOCTYPE html>
+<!-- ACE editor -->
+<!-- JSLint 8 Oct 2012 -->
 <html lang="en">
 <head>
     <title>Editor</title>
@@ -303,16 +305,18 @@
     <script src="/editor/static/js/editor-a.js"></script>
     <script src="/editor/static/js/editor.js"></script>
     <script type="text/javascript">
-    
+
         var delay = (function () {
+            "use strict";
             var timer = 0;
-            return function(callback, ms) {
-                clearTimeout (timer);
+            return function (callback, ms) {
+                clearTimeout(timer);
                 timer = setTimeout(callback, ms);
             };
         })();
-        
-        function adjustGeometry () {
+
+        function adjustGeometry() {
+            "use strict";
             var w, h, dw, dh;
             if (ADJUSTSIZE) {
                 w = $(window).width();
@@ -335,12 +339,13 @@
                 }
             }
         }
-        
+
         $(document).ready(function () {
+            "use strict";
             initEditor();
             initPreferences();
             adjustGeometry();
-            initRascalDnd ();
+            initRascalDnd();
             displayTree('/var/www/public/templates/');
             $(window).resize(function () {
                 delay(function () {

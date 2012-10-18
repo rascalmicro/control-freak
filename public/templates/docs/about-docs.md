@@ -15,19 +15,17 @@ install the markdown2 processor. Log into your Rascal using SSH and from the com
 
 When you view a Markdown page in a web browser, Rascal renders the Markdown into the template
 `documentation.html`. You can edit this template in any way you like, provided that you retain
-the following [Jinja2][jj2] expressions and variable:
+the following [Jinja2][jj2] variable which receives the formatted HTML:
 
-    {% autoescape false %}
-        {{markdown}}
-    {% endautoescape %}
+    {{ markdown|safe }}
 
-For example, you might want to edit `documentation.html` change the default style.
+For example, you might want to edit `templates/documentation.html` change the default style.
 
 --
 Markdown Cheat Sheet
 --------------------
 It is best to view this section both in the editor to see the Markdown source and in a web browser
-to see the rendered result.
+to see the rendered result. The source file can be found at `templates/docs/about-docs.md`.
 
 ### Formatted Text
 The subtitle above begins with `###` which generates an `<h3>` tag
@@ -73,7 +71,7 @@ Here is an image of a LED ![LED](/static/images/led.gif)
 
 ### Code Examples
 You can include a block of code by indenting with four spaces.
-The following example shows the code that renders this page:
+The following is the code in `server.py` that renders this page:
 
     @public.route('/docs/<doc_name>.md')
     def document_docs(doc_name):
@@ -82,7 +80,7 @@ The following example shows the code that renders this page:
     def render_markdown(path, doc_name):
         import markdown2
         with open('/var/www/public/templates/' + path + doc_name + '.md', 'r') as mdf:
-            return render_template('markdown.html', title=doc_name, markdown=markdown2.markdown(mdf.read()))
+            return render_template('documentation.html', title=doc_name, markdown=markdown2.markdown(mdf.read()))
         return 'Not Found', 404
 
 ### Further Reading

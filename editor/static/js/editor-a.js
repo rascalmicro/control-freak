@@ -1,4 +1,7 @@
 // Support for ACE
+// JSLint 8 Oct 2012 jQuery $ applyTheme applyFontSize applyLineHeight applyTabSize applySoftTabs
+// applyVisibleTabs applyLineWrapping applyLineNumbers applyMatchBrackets applyHighlightSelectedWord
+// trackChanges editor ace editorSetMode fileChanged preferences
 
 var prefs = {
     defaults: {
@@ -39,7 +42,7 @@ var prefs = {
     }
 };
 
-function setPictureFrameSize (frp) {
+function setPictureFrameSize(frp) {
     "use strict";
     frp.height($('#ace-editor').height())
         .width($('#ace-editor').width());
@@ -73,38 +76,38 @@ function initEditor() {
 
 function editorSetMode(ext) {
     "use strict";
-    var mode;
+    var Mode;
     switch (ext.toLowerCase()) {
     case 'css':
-        mode = ace.require("ace/mode/css").Mode;
+        Mode = ace.require("ace/mode/css").Mode;
         console.log('Mode css');
         break;
     case 'js':
-        mode = ace.require("ace/mode/javascript").Mode;
+        Mode = ace.require("ace/mode/javascript").Mode;
         console.log('Mode javascript');
         break;
     case 'py':
-        mode = ace.require("ace/mode/python").Mode;
+        Mode = ace.require("ace/mode/python").Mode;
         console.log('Mode python');
         break;
     case 'html':
-        mode = ace.require("ace/mode/html").Mode;
+        Mode = ace.require("ace/mode/html").Mode;
         console.log('Mode html');
         break;
     case 'xml':
-        mode = ace.require("ace/mode/xml").Mode;
+        Mode = ace.require("ace/mode/xml").Mode;
         console.log('Mode xml');
         break;
     case 'less':
-        mode = ace.require("ace/mode/less").Mode;
+        Mode = ace.require("ace/mode/less").Mode;
         console.log('Mode less');
         break;
     default:
-        mode = ace.require("ace/mode/text").Mode;
+        Mode = ace.require("ace/mode/text").Mode;
         console.log('Mode txt');
         break;
     }
-    editor.getSession().setMode(new mode());
+    editor.getSession().setMode(new Mode());
 }
 
 function editorSetText(s, ext) {
@@ -116,14 +119,22 @@ function editorSetText(s, ext) {
     editorSetMode(ext);
 }
 
-function editorGetText () {
+function editorGetText() {
     "use strict";
     return editor.getSession().getValue();
 }
 
+function initEditor() {
+    trackChanges(false);
+    editor = ace.edit("ace-editor");
+    editor.setTheme("ace/theme/textmate");
+    editorSetMode('txt');
+    editor.getSession().on('change', fileChanged);
+}
+
 
 // Manage preferences
-function applyTheme () {
+function applyTheme() {
     "use strict";
     console.log('applyTheme ' + preferences.theme.toLowerCase());
     editor.setTheme('ace/theme/' + preferences.theme.toLowerCase());
@@ -132,14 +143,13 @@ function applyTheme () {
 function applyFontSize() {
     "use strict";
     console.log('applyFontSize ' + preferences.fontSize);
-     $('#ace-editor').css('font-size', preferences.fontSize + 'px');
-    // editor.setFontSize(preferences.fontSize)
+    $('#ace-editor').css('font-size', preferences.fontSize + 'px');
 }
 
 function applyLineHeight() {
     "use strict";
     console.log('applyLineHeight ' + preferences.lineHeight);
-     $('#ace-editor').css('line-height', preferences.lineHeight + 'em');
+    $('#ace-editor').css('line-height', preferences.lineHeight + 'em');
 }
 
 function applyTabSize() {
@@ -162,8 +172,8 @@ function applyVisibleTabs() {
 
 function applyLineWrapping() {
     "use strict";
-    var lw = preferences.lineWrapping;
-    var es = editor.getSession();
+    var lw = preferences.lineWrapping,
+        es = editor.getSession();
     console.log('applyLineWrapping ' + lw);
     if (lw === 2) {
         es.setWrapLimitRange(80, 80);
@@ -218,7 +228,7 @@ function setLineHeight() {
 
 function setTabSize() {
     "use strict";
-    preferences.tabSize = parseInt($(this).val());
+    preferences.tabSize = parseInt($(this).val(), 10);
     prefs.apply.tabSize();
 }
 
@@ -236,7 +246,7 @@ function setVisibleTabs() {
 
 function setLineWrapping() {
     "use strict";
-    preferences.lineWrapping = parseInt($(this).val());
+    preferences.lineWrapping = parseInt($(this).val(), 10);
     // console.log('lineWrapping ' + preferences.lineWrapping);
     prefs.apply.lineWrapping();
 }
@@ -259,54 +269,54 @@ function setHighlightSelectedWord() {
     prefs.apply.highlightSelectedWord();
 }
 
-function bindEditPreferences () {
+function bindEditPreferences() {
     "use strict";
     $('#theme').change(setTheme)
-        .each (function () {
+        .each(function () {
             $(this).val(preferences.theme);
         });
     $('#fontSize').change(setFontSize)
-        .each (function () {
+        .each(function () {
             this.value = preferences.fontSize;
         });
     $('#lineHeight').change(setLineHeight)
-        .each (function () {
+        .each(function () {
             this.value = preferences.lineHeight;
         });
     $('#tabSize').change(setTabSize)
-        .each (function () {
+        .each(function () {
             this.value = preferences.tabSize;
         });
     $('#softTabs').change(setSoftTabs)
-        .each (function () {
+        .each(function () {
             this.checked = preferences.softTabs;
         });
     $('#visibleTabs').change(setVisibleTabs)
-        .each (function () {
+        .each(function () {
             this.checked = preferences.visibleTabs;
         });
     $('#wrapOff').click(setLineWrapping)
-         .each (function () {
-            this.checked = (preferences.lineWrapping === 0)
+         .each(function () {
+            this.checked = (preferences.lineWrapping === 0);
         });
     $('#wrapOn').click(setLineWrapping)
-         .each (function () {
-            this.checked = (preferences.lineWrapping === 1)
+         .each(function () {
+            this.checked = (preferences.lineWrapping === 1);
         });
     $('#wrap80').click(setLineWrapping)
-         .each (function () {
-            this.checked = (preferences.lineWrapping === 2)
+         .each(function () {
+            this.checked = (preferences.lineWrapping === 2);
         });
     $('#lineNumbers').click(setLineNumbers)
-        .each (function () {
+        .each(function () {
             this.checked = preferences.lineNumbers;
         });
     $('#matchBrackets').click(setMatchBrackets)
-        .each (function () {
+        .each(function () {
             this.checked = preferences.matchBrackets;
         });
     $('#highlightSelectedWord').click(setHighlightSelectedWord)
-        .each (function () {
+        .each(function () {
             this.checked = preferences.highlightSelectedWord;
         });
 }
@@ -314,7 +324,9 @@ function bindEditPreferences () {
 function applyAll() {
     var pa = prefs.apply, f;
     for (f in pa) {
-        pa[f]();
+        if (pa.hasOwnProperty(f)) {
+            pa[f]();
+        }
     }
 }
 
@@ -327,10 +339,11 @@ function savePreferences() {
 
 function defaultPreferences() {
     var pd = prefs.defaults, p;
-    
     for (p in pd) {
-        console.log('Restoring default ' + p + ': ' + pd[p]);
-        preferences[p] = pd[p];
+        if (pd.hasOwnProperty(p)) {
+            console.log('Restoring default ' + p + ': ' + pd[p]);
+            preferences[p] = pd[p];
+        }
     }
     applyAll();
     bindEditPreferences();
@@ -346,4 +359,3 @@ function initPreferences() {
         bindEditPreferences();
     });
 }
-
