@@ -51,6 +51,7 @@ function unhighlightChanged() {
     rascal.dnd.changedFile = undefined;
     $('LI A').removeClass('changed');
     $('#location-bar').removeClass('changed');
+    $('#location-bar A').removeClass('changed');
 }
 
 // Sets global bFileChanged Boolean and indicator
