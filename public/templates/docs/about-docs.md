@@ -22,6 +22,33 @@ the following [Jinja2][jj2] variable which receives the formatted HTML:
 For example, you might want to edit `templates/documentation.html` change the default style.
 
 --
+Adding a Docs tab
+-----------
+As well as using Markdown to format a complete page, you can also add
+a **Docs** button to your templates. Clicking the Docs button slides out a documentation tab
+whose content is formatted using Markdown.
+For an example, see the [sprinkler](/sprinkler.html) demo.
+
+Adding a Docs tab to a new template involves three steps:
+
+1. When creating a new template, choose the option "HTML with Docs tab"
+2. View your new template in a browser and click its Docs tab
+3. Follow the instructions in the tab for creating the documentation template.
+
+To add a Docs tab to an existing HTML template, uncomment the line:
+
+    <!-- {% include "include/doc-tab.html" %} --> 
+
+by changing it to:
+
+    {% include "include/doc-tab.html" %} 
+
+If you want to add a Docs tab to an older template, create a new temporary template
+as in step 1, copy the line above into the corresponding position in your older template, then
+continue at step 2 with your template. The instructions for creating Docs tab
+content can also be found [here](/docs/default.md).
+
+--
 Markdown Cheat Sheet
 --------------------
 It is best to view this section both in the editor to see the Markdown source and in a web browser

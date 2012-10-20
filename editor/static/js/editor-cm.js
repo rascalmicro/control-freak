@@ -160,6 +160,9 @@ function editorSetMode(ext) {
     case 'less':
         mode = 'less';
         break;
+    case 'md':
+        mode = 'markdown';
+        break;
     case 'log':
         mode = 'log';
         break;
@@ -168,6 +171,7 @@ function editorSetMode(ext) {
     }
     // console.log('mode ' + mode);
     editor.setOption('mode', mode);
+    editor.setOption('readOnly', (ext === 'log'));
 }
 
 function editorSetText(s, ext) {

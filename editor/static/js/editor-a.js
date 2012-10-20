@@ -102,12 +102,17 @@ function editorSetMode(ext) {
         Mode = ace.require("ace/mode/less").Mode;
         console.log('Mode less');
         break;
+    case 'md':
+        Mode = ace.require("ace/mode/markdown").Mode;
+        console.log('Mode markdown');
+        break;
     default:
         Mode = ace.require("ace/mode/text").Mode;
         console.log('Mode txt');
         break;
     }
     editor.getSession().setMode(new Mode());
+    editor.setReadOnly(ext === 'log');
 }
 
 function editorSetText(s, ext) {
