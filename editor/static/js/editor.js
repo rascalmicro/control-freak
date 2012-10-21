@@ -427,6 +427,7 @@ function saveMsg(msg) {
         .css('visibility', 'visible')
         .hide()
         .fadeTo(500, 1)
+        .delay(1500)
         .fadeTo(2000, 0);
 }
 
@@ -437,6 +438,8 @@ function saveFile() {
     $('#save-bar').css('width', '0%');
     if (rascal.picture.showing) {
         saveMsg('Can\'t save pictures');
+    } else if (isReadOnly()) {
+        saveMsg('File is read only');
     } else if (p === '') {
         saveMsg('Nothing to save');
     } else {

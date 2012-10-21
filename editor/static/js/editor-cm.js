@@ -192,6 +192,10 @@ function editorGetText() {
     return editor.getValue();
 }
 
+function isReadOnly() {
+    return editor.getOption('readOnly');
+}
+
 var THEMES = ['default', 'night', 'solarized-light', 'solarized-dark'];
 
 // Manage preferences

@@ -129,6 +129,10 @@ function editorGetText() {
     return editor.getSession().getValue();
 }
 
+function isReadOnly() {
+    return editor.getReadOnly();
+}
+
 function initEditor() {
     trackChanges(false);
     editor = ace.edit("ace-editor");
