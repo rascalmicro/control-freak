@@ -1,13 +1,13 @@
 Adding Documentation
 --------------------
 
-1. Create a new documentation template with the same name as your HTML file but with
-the extension `.md`. By default, this will be saved in the `templates/docs` folder.
-For example, if your document is called `mydoc.html`, create a new documentation
+1. Create a new Documentation template with the same name as your HTML file but with
+the extension `.md`. This will be saved in the `templates/docs` folder.
+For example, if your document is called `mydoc.html`, create a new Documentation
 template called `mydoc.md`.
 
 2. Write your documentation using the Markdown language.
-See the [Markdown web page][mwp] for more information.
+See the [About page][about] and [Markdown web site][mws] for more information.
 
 3. You can preview your Markdown page from the editor by clicking the link above the edit pane.
 
@@ -21,4 +21,5 @@ element to your HTML template after the "rascal-head" include:
             }
         </style>
 
-[mwp]: http://daringfireball.net/projects/markdown/
+[about]: /docs/about-docs.md
+[mws]: http://daringfireball.net/projects/markdown/
