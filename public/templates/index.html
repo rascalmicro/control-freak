@@ -2,7 +2,7 @@
 <!-- JSLint 7 Oct 2012 jQuery $ updateTime  -->
 <html lang="en">
 <head>
-    <title>Rascal - Home</title>
+    <title>{{ hostname }} - Home</title>
     {% include "include/rascal-head.html" %}
     <style>
         .well.app {
@@ -29,7 +29,7 @@
         <div class="well rascal">
             <div class="row-fluid">
                 <div class="span7">
-                    <h1>Welcome to {{hostname}}</h1>
+                    <h1>Welcome to {{ hostname }}</h1>
                 </div>
                 <div class="span5" style="text-align: right;">
                     <h1 id="datetime">&nbsp;</h1>
