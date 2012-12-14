@@ -5,7 +5,7 @@ from flask.ext.login import (LoginManager, current_user, login_required,
 from jinja2 import TemplateNotFound
 from werkzeug import secure_filename
 
-ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif', 'ico', 'html', 'css', 'js', 'py'])
+ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif', 'ico', 'html', 'css', 'js', 'py', 'c'])
 CONFIG_FILE = '/var/www/editor/static/editor.conf'
 
 editor = Flask(__name__)
