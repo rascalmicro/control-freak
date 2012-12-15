@@ -485,6 +485,34 @@ def flash_led():
         message = "LED on"
     return (message)
 
+# datalogger stuff
+# @rbtimer(30)
+def log_value(num):
+    import datalogger
+    artemp = pytronics.i2cRead(0x48, 0, 'I', 2)
+    ftemp = ((artemp[0] << 4) | (artemp[1] >> 4)) * 0.0625
+    # print '## temp_log ## ' + str(ftemp)
+    datalogger.log(ftemp)
+
+#@cron(-30, -1, -1, -1, -1)
+def update_byhour(num):
+    import datalogger
+    rows = datalogger.update_byhour()
+    if rows != 0:
+        print '## updatelog ## added {0} row(s)'.format(rows)
+
+@public.route('/datalogger.html')
+def datalogger():
+    return render_template('datalogger.html', title='Temperature Log', label0='Temp {0}C'.format(unichr(176)))
+
+@public.route('/getlog', methods=['POST'])
+def getlog():
+    import datalogger
+    try:
+        period = request.form['period']
+    except KeyError:
+        period = 'live'
+    return datalogger.getlog(period)
 
 if __name__ == "__main__":
     public.run(host='127.0.0.1:5000', debug=True)

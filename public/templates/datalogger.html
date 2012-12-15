@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Datalogger demo</title>
+    {% include "include/rascal-head.html" %}
+    <script type="text/javascript" src="/static/js/jqplot-plugins/jqplot.dateAxisRenderer.js"></script>
+    <script type="text/javascript" src="/static/js/jqplot-plugins/jqplot.highlighter.js"></script>
+    <style>
+        #chart1 {
+            margin-top: 20px;
+            height: 400px;
+            width: 800px;
+        }
+        .jqplot-title, .jqplot-axis, .status {
+            color: #ddd;
+        }
+        .jqplot-table-legend-label {
+            color: #111;
+        }
+        .btn-group {
+            margin-top: 10px;
+        }
+        img.led {
+            opacity: 0.4;
+        }
+        img.led.active {
+            opacity: 1;
+        }
+        .close {
+            opacity: 0.6;
+        }
+        .close:hover {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    {% include "include/rascal-topbar.html" %}
+    <div class="container">
+        <div class="well rascal">
+            <h1>{{ title }}</h1>
+            <div id="chart1"></div>
+            <div class="row-fluid">
+                <div class="span8">
+                    <div class="btn-group" data-toggle="buttons-radio">
+                        <button value="live" class="btn btn-default rascal active" style="width: 120px;">Live</button>
+                        <button value="pastday" class="btn btn-default rascal" style="width: 120px;">Past Day</button>
+                        <button value="pastweek" class="btn btn-default rascal" style="width: 120px;">Past Week</button>
+                        <button value="pastyear" class="btn btn-default rascal" style="width: 120px;">Past Year</button>
+                    </div>
+                    <img id="LED" src="static/images/led.gif" width="10" class="led" />
+                    <small id="status" class="status"></small>
+                </div>
+                <div class="span4">
+                    <div class="btn-group">
+                        <button id="capture" value="capture" class="btn btn-default rascal" style="float: right;">Capture Image</button>
+                    </div>
+                </div>
+            </div> <!-- /row-fluid -->
+        </div> <!-- /well -->
+
+        <div id="captured-image" class="well rascal alert fade in" style="display:none;">
+            <!-- <button type="button" class="close"><img src="/editor/static/images/file-icons/delete.png"></button> -->
+            <img class="close" src="/editor/static/images/file-icons/delete.png">
+            <p><small class="status">Right-click chart and choose Save Image As...</small></p>
+            <div id="img-container"></div>
+        </div> <!-- /well -->
+    </div> <!-- /container -->
+    <!-- {% include "include/doc-tab.html" %} -->
+    <script type="text/javascript">
+
+        var chartOptions = {
+            legend: {
+                show: true,
+                location: "ne"
+            },
+            series: [
+                { label: "{{ label0 }}", lineWidth: 3, showMarker: false, rendererOptions: { smooth: true } }
+            ],
+            axes: {
+                xaxis: {
+                    renderer: $.jqplot.DateAxisRenderer,
+                    tickOptions: {formatString: '%a%n%H:%M'}
+                },
+                yaxis: {
+                    min: 13.0,
+                    max: 21.0
+                    // tickOptions: {formatString: '%0.2f'}
+                }
+            },
+            highlighter: {
+                show: true,
+                sizeAdjust: 7.5
+            },
+            seriesColors: [ "#cd2820" ]
+        };
+
+        var
+            period = 'live',
+            interval = { live: 30*1000, pastday: 5*30*1000, pastweek: 30*60*1000, pastyear: 30*60*1000 },
+            tickFormat = { live: '%a%n%H:%M', pastday: '%a%n%H:%M', pastweek: '%a%n%H:%M', pastyear: '%e %b%n%Y' },
+            int_timer,
+            capture_timeout,
+            plot1;
+
+        function updateGraph() {
+            $('#LED').addClass('active');
+            $.post("/getlog", { period: period }, function (response) {
+                var data = $.parseJSON(response),
+                    series = data.series,
+                    band = data.band;
+                // console.log(response);
+                console.log('updateGraph last data ' + series[series.length - 1][0]);
+                if (band !== undefined) {
+                    chartOptions.series[0].rendererOptions.bandData = band;
+                } else {
+                    delete chartOptions.series[0].rendererOptions.bandData;
+                }
+                $('#chart1').empty();
+                plot1 = $.jqplot('chart1', [series], chartOptions);
+                $('#status').text('Last update ' + new Date());
+                setTimeout(function () {
+                    $('#LED').removeClass('active');
+                }, 500);
+            }).error(function (jqXHR, textStatus, errorThrown) {
+                $('#status').text('Update failed (' + errorThrown + ') ' + new Date());
+                console.log('updateGraph: getlog: ' + textStatus + ': ' + errorThrown);
+            });
+        }
+
+        function captureImage() {
+            var options = {
+                    x_offset: 0,
+                    y_offset: 0,
+                    backgroundColor: $('.well.rascal').css('background-color')
+                },
+                imgElem = $('#chart1').jqplotToImageElem(options);
+            $('#img-container')
+                .empty()
+                .append(imgElem);
+            $("#captured-image").fadeTo(250, 1);
+        }
+
+        // If update in progress, wait until finished (max 10s)
+        function captureIfYouCan() {
+            var isBusy = $('#LED').hasClass('active');
+            if (!isBusy) {
+                captureImage();
+            } else {
+                if (capture_timeout < 20) {
+                    capture_timeout += 1;
+                    console.log('Capture Image: waiting for update ' + capture_timeout);
+                    setTimeout(captureIfYouCan, 500);
+                } else {
+                    console.log('Capture Image: timed out waiting for update');
+                }
+            }
+        }
+
+        $('.btn').click(function () {
+            var which = $(this).attr('value');
+            if (which === 'capture') {
+                capture_timeout = 0;
+                captureIfYouCan();
+            } else {
+                int_timer = clearInterval(int_timer);
+                period = which;
+                console.log('Period set to ' + period + ' (refresh ' + (interval[period] / 1000).toString() + 's)');
+                chartOptions.axes.xaxis.tickOptions.formatString = tickFormat[period];
+                console.log(chartOptions.axes.xaxis.tickOptions.formatString);
+                updateGraph();
+                int_timer = setInterval(updateGraph, interval[period]);
+            }
+        });
+
+        $(document).ready(function () {
+            "use strict";
+            period = 'live'
+            updateGraph();
+            int_timer = setInterval(updateGraph, interval[period]);
+            $('.alert .close').live("click", function(e) {
+                $(this).parent().fadeTo(350, 0, function () {
+                    $(this).hide();
+                });
+            });
+        });
+    </script>
+</body>
+</html>
