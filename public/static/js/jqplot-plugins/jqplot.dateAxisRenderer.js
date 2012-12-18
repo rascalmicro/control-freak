@@ -480,9 +480,11 @@
                 var tempti = ret[0];
                 this._autoFormatString = ret[1];
 
-                min = Math.floor(min/tempti) * tempti;
+                // https://bitbucket.org/cleonello/jqplot/pull-request/24/added-suggested-fix-in-comment-8-for-issue/diff
+                // min = Math.floor(min/tempti) * tempti;
                 min = new $.jsDate(min);
-                min = min.getTime() + min.getUtcOffset();
+                min = Math.floor((min.getTime() - min.getUtcOffset())/tempti) * tempti + min.getUtcOffset();
+                // min = min.getTime() + min.getUtcOffset();
 
                 nttarget = Math.ceil((max - min) / tempti) + 1;
                 this.min = min;
@@ -734,4 +736,3 @@
     };
    
 })(jQuery);
-
