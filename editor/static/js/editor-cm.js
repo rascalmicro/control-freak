@@ -144,6 +144,8 @@ function editorSetMode(ext) {
     "use strict";
     var mode;
     switch (ext.toLowerCase()) {
+    case 'c':
+        mode = 'c';
     case 'css':
         mode = 'css';
         break;
