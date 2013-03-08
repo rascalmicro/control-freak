@@ -4,6 +4,7 @@ import pytronics
 import os, time
 
 public = Flask(__name__)
+public.register_blueprint(blinkm.public)
 public.config['PROPAGATE_EXCEPTIONS'] = True
 
 # Include "no-cache" header in all POST responses
@@ -38,6 +39,16 @@ def get_public_templates():
         if os.path.isfile(ff):
             r.append(f)
     return sorted(r)
+
+@public.route('/fd/clear-lcd', methods=['GET', 'POST'])
+def fd_clear_lcd():
+    fd.clear_lcd()
+    return  '4DSystems LCD cleared'
+
+@public.route('/fd/draw-filled-rectangle/<x1>/<y1>/<x2>/<y2>/<color>', methods=['GET', 'POST'])
+def fd_draw_filled_rectangle(x1, y1, x2, y2, color):
+    fd.draw_filled_rectangle(int(x1), int(y1), int(x2), int(y2), color)
+    return  'Rectangle drawn'
 
 # Format date/time in Jinja template
 @public.template_filter()
