@@ -1,11 +1,12 @@
 from flask import Flask, render_template, request
-import blinkm
+import blinkm, voltage_shield
 from uwsgidecorators import *
 import pytronics
 import os, time
 
 public = Flask(__name__)
 public.register_blueprint(blinkm.public)
+public.register_blueprint(voltage_shield.public)
 public.config['PROPAGATE_EXCEPTIONS'] = True
 
 # Include "no-cache" header in all POST responses
