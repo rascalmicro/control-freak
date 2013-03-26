@@ -1,6 +1,9 @@
 from flask import Blueprint, render_template, request
+import pytronics
 
 public = Blueprint('api', __name__, template_folder='templates')
+
+LIVE_PINS = ['LED', '2', '3', '4', '5', '6', '7']
 
 ### Support for pins ###
 def toggle_pin(pin):
