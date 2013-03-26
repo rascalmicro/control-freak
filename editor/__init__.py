@@ -255,6 +255,17 @@ See the [Markdown web page][mwp] for more information.
 [mwp]: http://daringfireball.net/projects/markdown/
 """
 
+PYTHON_BOILERPLATE ="""from flask import Blueprint, render_template, request
+public = Blueprint('{0}', __name__, template_folder='templates')
+
+@public.route('/example/<variable>')
+def example(variable):
+    try:
+        return variable * request.form['data']
+    except:
+        return variable * data
+"""
+
 @editor.route('/editor/new_template', methods=['POST'])
 @login_required
 def new_template():
@@ -265,6 +276,8 @@ def new_template():
         path = '/var/www/public/static/' + name
     elif option == 'markdown':
         path = '/var/www/public/templates/docs/' + name
+    elif option == 'python':
+        path = '/var/www/public/' + name
     else:
         path = '/var/www/public/templates/' + name
     if os.path.exists(path):
@@ -277,6 +290,8 @@ def new_template():
             f.write(BOILERPLATE.replace('<!-- DOCTAB -->', DOCTAB))
         elif option == 'markdown':
             f.write(MARKDOWN)
+        elif option == 'python':
+            f.write(PYTHON_BOILERPLATE.format(name.split('.')[0]))
         f.close()
     return 'OK', 200
 

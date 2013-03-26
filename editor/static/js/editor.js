@@ -576,6 +576,7 @@ var template_title = {
     html: 'Create a new template',
     doctab: 'Create a new template',
     markdown: 'Create a new template',
+    python: 'Create a new template',
     other: 'Create a new file'
 };
 
@@ -583,6 +584,7 @@ var template_message = {
     html: 'The name you type should end in .html',
     doctab: 'The name you type should end in .html',
     markdown: 'The name you type should end in .md',
+    python: 'The name you type should end in .py',
     other: 'The name will usually end in .css or .js'
 };
 
@@ -590,6 +592,7 @@ var template_note = {
     html: 'Create an HTML template in the templates folder',
     doctab: 'Create an HTML template with a Docs tab in the templates folder',
     markdown: 'Create a Markdown template in the templates/docs folder',
+    python: 'Create a Python file in the top-level directory',
     other: 'Create an empty file in the static folder. You will be able to drag it to another folder.'
 };
 
@@ -597,6 +600,7 @@ var template_btn = {
     html: 'Create template',
     doctab: 'Create template',
     markdown: 'Create template',
+    python: 'Create template',
     other: 'Create file'
 };
 
@@ -633,6 +637,9 @@ $('#template-create').click(function () {
             case 'markdown':
                 templateName += '.md';
                 break;
+            case 'python':
+                templateName += '.py';
+                break;
             }
         }
         $.post('/editor/new_template', { templateName: templateName,
@@ -644,6 +651,9 @@ $('#template-create').click(function () {
                 break;
             case 'markdown':
                 path = '/var/www/public/templates/docs/';
+                break;
+            case 'python':
+                path = '/var/www/public/';
                 break;
             default:
                 path = '/var/www/public/static/';
