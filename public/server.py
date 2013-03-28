@@ -210,15 +210,6 @@ def set_blinkm():
     subprocess.Popen([cmd], shell=True)
     return ('Color sent to Blinkm')
 
-# sprinkler
-@public.route('/sprinkler', methods=['POST'])
-def sprinkler():
-    command = request.form['command']
-    if(command == "ON"):
-        pytronics.digitalWrite(2, 'HIGH')
-    else:
-        pytronics.digitalWrite(2, 'LOW')
-    return ('Sprinkler toggled')
 ### End of specific demo procedures
 
 ### The following procedures support sending email via SMTP ###
@@ -328,17 +319,6 @@ def clear_directory():
         print '## clear_directory ## {0}'.format(e)
     return 'Bad request', 400
 ### End of upload procedures ###
-
-# Called from hello.html
-@public.route('/flash_led', methods=['POST'])
-def flash_led():
-    if pytronics.digitalRead('LED') == '1':
-        pytronics.digitalWrite('LED', 'LOW')
-        message = "LED off"
-    else:
-        pytronics.digitalWrite('LED', 'HIGH')
-        message = "LED on"
-    return (message)
 
 # datalogger stuff
 # @rbtimer(30)

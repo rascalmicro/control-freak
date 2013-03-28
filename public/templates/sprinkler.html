@@ -22,10 +22,10 @@
     {% include "include/doc-tab.html" %} 
     <script type="text/javascript">
         $("#sprinkler-on").click(function () {
-            $.post("/sprinkler", { command: "ON" });
+            $.post("/digital/write/2", { data: "ON" });
         });
         $("#sprinkler-off").click(function () {
-            $.post("/sprinkler", { command: "OFF" });
+            $.post("/digital/write/2", { data: "OFF" });
         });
     </script>
 </body>

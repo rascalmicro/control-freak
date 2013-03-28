@@ -3,39 +3,73 @@ import pytronics
 
 public = Blueprint('api', __name__, template_folder='templates')
 
-LIVE_PINS = ['LED', '2', '3', '4', '5', '6', '7']
+ANALOG_PINS = ['A0', 'A1', 'A2', 'A3']
+DIGITAL_PINS = ['LED', '2', '3', '4', '5', '6', '7']
+DIGITAL_PIN_NAME_ERROR = "You seem to be trying to read from digital pin {0}, which does not work. Try 'LED', '2', '3', '4', '5', '6', or '7'."
+DIGITAL_PIN_STATE_ERROR = "You seem to be trying to set digital pin {0} to state {1}, which does not work. Try 'LOW' or 'HIGH'."
 
 ### Support for pins ###
-def toggle_pin(pin):
-    if pytronics.digitalRead(pin) == '1':
-        pytronics.digitalWrite(pin, 'LOW')
-    else:
-        pytronics.digitalWrite(pin, 'HIGH')
 
-@public.route('/pin/<pin>/<state>')
-def update_pin(pin, state):
-    try:
-        if state.lower() == 'on':
-            pytronics.digitalWrite(pin, 'HIGH')
-            return 'Set pin %s high' % pin
-        elif state.lower() == 'off':                       
-            pytronics.digitalWrite(pin, 'LOW')
-            return 'Set pin %s low' % pin
-        elif state.lower() == 'in':
-            pytronics.pinMode(pin,'INPUT')
-            return 'Set pin %s input' % pin
-        elif state.lower() == 'out':
-            pytronics.pinMode(pin,'OUTPUT')
-            return 'Set pin %s output' % pin
-        return "Something's wrong with your syntax. You should send something like: /pin/2/on"
-    except:
-        return 'Forbidden', 403
+@public.route('/analog/read/<pin_name>', methods=['GET', 'POST'])
+def analog_read(pin_name):
+    if pin_name not in ANALOG_PINS:
+        return "You seem to be trying to read from analog pin {0}, which does not exist. Try A0, A1, A2, or A3.".format(pin_name)
+    else:
+        return pytronics.analogRead(pin_name)
+
+@public.route('/digital/read/<pin_name>', methods=['GET', 'POST'])
+def digital_read(pin_name):
+    if pin_name not in DIGITAL_PINS:
+        return DIGITAL_PIN_NAME_ERROR.format(pin_name)
+    else:
+        return pytronics.digitalRead(pin_name)
+
+@public.route('/digital/write/<pin_name>', methods=['GET', 'POST'])
+def digital_write(pin_name):
+    if pin_name in DIGITAL_PINS:
+        data = request.form['data'].upper()
+        if data in ['1', 'ON', 'HIGH']:
+            pytronics.digitalWrite(pin_name, 'HIGH')
+            return 'Set pin {0} to HIGH'.format(pin_name)
+        elif data in ['0', 'OFF', 'LOW']:
+            pytronics.digitalWrite(pin_name, 'LOW')
+            return 'Set pin {0} to LOW'.format(pin_name)
+        else:
+            return DIGITAL_PIN_STATE_ERROR.format(pin_name, data)
+    else:
+        return DIGITAL_PIN_NAME_ERROR.format(pin_name)
+    
+@public.route('/digital/toggle/<pin_name>', methods=['GET', 'POST'])
+def digital_toggle(pin_name):
+    if pin_name in DIGITAL_PINS:
+        if pytronics.digitalRead(pin_name) == '1':
+            pytronics.digitalWrite(pin_name, 'LOW')
+            return 'Set pin {0} to LOW'.format(pin_name)
+        else:
+            pytronics.digitalWrite(pin_name, 'HIGH')
+            return 'Set pin {0} to HIGH'.format(pin_name)
+    else:
+        return DIGITAL_PIN_NAME_ERROR.format(pin_name)
+
+@public.route('/digital/write/<pin_name>/<state>')
+def digital_write_shortcut(pin_name, state):
+    if pin_name in DIGITAL_PINS:
+        if state.upper() in ['1', 'ON', 'HIGH']:
+            pytronics.digitalWrite(pin_name, 'HIGH')
+            return 'Set pin {0} to HIGH'.format(pin_name)
+        elif state.upper() in ['0', 'OFF', 'LOW']:                       
+            pytronics.digitalWrite(pin_name, 'LOW')
+            return 'Set pin {0} to LOW'.format(pin_name)
+        else:
+            return DIGITAL_PIN_STATE_ERROR.format(pin_name, data)
+    else:
+        return DIGITAL_PIN_NAME_ERROR.format(pin_name)
 
 @public.route('/read-pins', methods=['POST'])
 def read_pins():
     import json
-    # return json.dumps(pytronics.readPins(LIVE_PINS))
-    pins = pytronics.readPins(LIVE_PINS)
+    # return json.dumps(pytronics.readPins(DIGITAL_PINS))
+    pins = pytronics.readPins(DIGITAL_PINS)
     analog = {}
     for chan in ['A0', 'A1', 'A2', 'A3']:
         analog[chan] = pytronics.analogRead(chan)
@@ -127,10 +161,15 @@ def i2cscan():
     return json.dumps(scanBus())
 
 ### Support for serial ###
-@public.route('/serial/<port>/<speed>/<message>', methods=['POST'])
-def serial_write(port, speed, message):
-    pytronics.serialWrite(message, speed, port)
-    return 'Tried to write serial data.'
+@public.route('/serial/read/<channel>/<speed>/<num_bytes>', methods=['GET', 'POST'])
+def serial_read(channel, speed, num_bytes):
+    return 'Fake data' # pytronics.serialRead(num_bytes, speed, channel)
+
+@public.route('/serial/write/<channel>/<speed>', methods=['GET', 'POST'])
+def serial_write(channel, speed):
+    data = request.form['data']
+    pytronics.serialWrite(data, speed, channel)
+    return 'Sent to serial port {0} at {1} bps: {2}'.format(channel, speed, data)
 
 ### Support for SPI bus ###
 @public.route('/spi/<channel>/read')

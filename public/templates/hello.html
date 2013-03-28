@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-<!-- 20 Jun 2012 dsmall -->
 <html lang="en">
 <head>
     <title>Hello World</title>
@@ -10,16 +9,12 @@
     <div class="container">
         <div class="well rascal">
             <h1>hello world</h1>
-            <p>&nbsp;</p>
             <input id="flash_led" type="button" value="Flash LED" class="btn btn-large btn-danger rascal" />
-            <span id="message"></span>
         </div>
     </div>
     <script type="text/javascript">
         $("#flash_led").click(function () {
-            $.post("/flash_led", function (response) {
-                $("#message").text(response);
-            });
+            $.post("/digital/toggle/LED");
         });
     </script>
 </body>
