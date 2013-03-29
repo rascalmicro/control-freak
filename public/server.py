@@ -196,20 +196,6 @@ def set_color():
     pds.go()
     return ('color sent to Color Kinetics box')
 
-# BlinkM smart LED
-@public.route('/set-blinkm', methods=['POST'])
-def set_blinkm():
-    import subprocess
-    color = request.form['color']
-    cmd = ('blinkm set-rgb -d 9' +
-           ' -r ' + str(int(color[0:2], 16)) +
-           ' -g ' + str(int(color[2:4], 16)) +
-           ' -b ' + str(int(color[4:6], 16)) +
-           '; blinkm stop-script -d 9')
-    print cmd
-    subprocess.Popen([cmd], shell=True)
-    return ('Color sent to Blinkm')
-
 ### End of specific demo procedures
 
 ### The following procedures support sending email via SMTP ###

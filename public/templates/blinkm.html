@@ -14,17 +14,20 @@
             <h1>BlinkM LED color demo</h1>
             <div id="colorPicker2" style="padding:10px; clear:both; border:1px solid black; vertical-align:middle;">
                 <span id="colorPicker2Span" style="float:left; border:1px solid black; width:20px; height:20px; margin:5px;"></span>
-                <span id="text2" style="">Click anywhere in the box.</span>			
+                <span id="colorLabel" style="">Click anywhere in the box.</span>
             </div>
         </div>
     </div>
     <script type="text/javascript">
         $(function () {
             "use strict";
-            $("#colorPicker2").mlColorPicker({'onChange': function (val) {
-                $("#colorPicker2Span").css("background-color", "#" + val);
-                $("#text2").text("#" + val);
-                $.post("set-blinkm", { color: val });
+            $("#colorPicker2").mlColorPicker({'onChange': function (color) {
+                $("#colorPicker2Span").css("background-color", "#" + color);
+                $("#colorLabel").text("#" + color);
+                var red = parseInt(color.substring(0,2), 16);
+                var green = parseInt(color.substring(2,4), 16);
+                var blue = parseInt(color.substring(4,6), 16);
+                $.post("/blinkm/rgb/9/" + red + "/"  + green + "/" + blue);
             }});
         });
     </script>

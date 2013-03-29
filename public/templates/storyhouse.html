@@ -216,7 +216,7 @@
         
         function updateLED(address) {
             "use strict";
-             $.post("/blinkm/" + address + "/hsb/" + parseInt($('#knob_hue').val(), 10) + "/255/" + parseInt($('#knob_brightness').val(), 10));
+            $.post("/blinkm/hsb/" + address + "/" + parseInt($('#knob_hue').val(), 10) + "/255/" + parseInt($('#knob_brightness').val(), 10));
         }
 
         $('input').change(function () {
