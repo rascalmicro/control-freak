@@ -1,14 +1,13 @@
 from flask import Flask, render_template, request
-import api, blinkm, fourdsystems, voltage_shield
+import api, os, pytronics, time
+import libblinkm, libfourdsystems, libvoltageshield
 from uwsgidecorators import *
-import pytronics
-import os, time
 
 public = Flask(__name__)
 public.register_blueprint(api.public)
-public.register_blueprint(blinkm.public)
-public.register_blueprint(fourdsystems.public)
-public.register_blueprint(voltage_shield.public)
+public.register_blueprint(libblinkm.public)
+public.register_blueprint(libfourdsystems.public)
+public.register_blueprint(libvoltageshield.public)
 public.config['PROPAGATE_EXCEPTIONS'] = True
 
 # Include "no-cache" header in all POST responses
@@ -106,25 +105,6 @@ def analog():
         "A0" : float(pytronics.analogRead('A0')) * ad_ref / 1024.0
     }
     return json.dumps(data)
-
-# relay (also calls analog)
-@public.route('/relay.html')
-def index():
-    pin = pytronics.digitalRead(2)
-    (chan0, chan1, chan2, chan3) = [pytronics.analogRead(chan) for chan in ['A0', 'A1', 'A2', 'A3']]
-    return render_template('/relay.html', chan0=chan0, chan1=chan1, chan2=chan2, chan3=chan3, pin=pin)
-
-@public.route('/toggle', methods=['POST'])
-def toggle():
-    if(request.form['target_state'] == '1'):
-        pytronics.digitalWrite(2, 'HIGH')
-        result = 'Pins set high'
-    elif(request.form['target_state'] == '0'):
-        pytronics.digitalWrite(2, 'LOW')
-        result = 'Pins set low'
-    else:
-        result = 'Target_state is screwed up'
-    return result
 
 # thermostat
 #@rbtimer(60)
