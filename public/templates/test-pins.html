@@ -408,7 +408,7 @@
 
         $(":button").click( function() {
              // create URL like /pin/2/ON
-            var cmd = "/pin/" + $(this).attr("id") + "/" + $(this).attr("value");
+            var cmd = "/digital/write/" + $(this).attr("id") + "/" + $(this).attr("value");
             $('#cmd')
                 .stop(true)
                 .text('Sent command: ' + cmd)
