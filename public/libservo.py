@@ -16,7 +16,7 @@ def set_target_speed(channel, speed):
     data += POLOLU_PROTOCOL
     data += chr(0x0C)
     data += SET_TARGET
-    if channel == '1':
+    if int(channel) == 1:
         data += chr(0x01)
     else:
         data += chr(0x02)
