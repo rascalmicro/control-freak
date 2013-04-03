@@ -25,6 +25,12 @@
 
 # The Rascal talks to a Roboteq MDC2200 motor controller over serial port 1.
 
+from flask import Blueprint, render_template, request
+
+public = Blueprint('joystick', __name__, template_folder='templates')
+
+MAX_SPEED = 400
+
 class Motor:
     SERIAL_SPEED = 115200
     TIMEOUT_INTERVAL = 3
@@ -53,21 +59,23 @@ class Motor:
 
     def send_command(self, left, right):
         import time
-
-        if (abs(left) > 1000) or (abs(right) > 1000):
+        import libservo
+        if (abs(left) > MAX_SPEED) or (abs(right) > MAX_SPEED):
             raise ValueError("Motor command out of range")
 
         self.last_command_time = time.time()
         self.timed_out = False
 
         command_string = "!M %d %d\r" % (-right, left)
-        self.send_command_string(command_string)
+        #self.send_command_string(command_string)
+        libservo.set_target_speed(1, -right)
+        libservo.set_target_speed(2, left)
 
 def interpret_joystick_command(x, y):
     """Accepts a joystick position (x, y) where x and y represent a point within the unit circle.
        Returns a tuple (left, right) of the corresponding motor speeds for a left and right motor in
        a differential drive setup. For convenient use with the MDC2200, left and right are integers
-       in the range -1000..1000"""
+       in the range -MAX_SPEED..MAX_SPEED"""
 
     from math import atan2, sin, cos, pi, sqrt
     angle = atan2(y, x) - pi/4
@@ -81,7 +89,7 @@ def interpret_joystick_command(x, y):
     right = cos(angle)
     # scale the motor speeds so that, if the joystick is pushed to its maximum distance from the
     # center, the faster motor is at max speed regardless of the angle
-    scale = 1000 * speed / max(abs(left), abs(right))
+    scale = MAX_SPEED * speed / max(abs(left), abs(right))
     return (int(scale * left + 0.5), int(scale * right + 0.5))
 
 motor = Motor()

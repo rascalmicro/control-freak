@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request
 import api, os, pytronics, time
-import libblinkm, libfourdsystems, libvoltageshield
+import libblinkm, libfourdsystems, libvoltageshield, libservo, joystick
 from uwsgidecorators import *
 
 public = Flask(__name__)
@@ -8,6 +8,8 @@ public.register_blueprint(api.public)
 public.register_blueprint(libblinkm.public)
 public.register_blueprint(libfourdsystems.public)
 public.register_blueprint(libvoltageshield.public)
+public.register_blueprint(libservo.public)
+public.register_blueprint(joystick.public)
 public.config['PROPAGATE_EXCEPTIONS'] = True
 
 # Include "no-cache" header in all POST responses
