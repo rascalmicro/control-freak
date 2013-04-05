@@ -8,7 +8,7 @@ SERVO_ZERO_TIME = 6000
 
 @public.route('/pmservo/<channel>/<speed>', methods=['GET', 'POST'])
 def set_target_speed(channel, speed):
-    ispeed = max(min(int(speed), 200), -200)
+    ispeed = int(speed)
     lsb = ispeed + SERVO_ZERO_TIME & 0x7F
     msb = (ispeed + SERVO_ZERO_TIME >> 7) & 0x7F
     

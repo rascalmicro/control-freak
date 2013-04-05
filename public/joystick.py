@@ -69,7 +69,7 @@ class Motor:
         command_string = "!M %d %d\r" % (-right, left)
         #self.send_command_string(command_string)
         libservo.set_target_speed(1, -right)
-        libservo.set_target_speed(2, left)
+        libservo.set_target_speed(2, -left)
 
 def interpret_joystick_command(x, y):
     """Accepts a joystick position (x, y) where x and y represent a point within the unit circle.
